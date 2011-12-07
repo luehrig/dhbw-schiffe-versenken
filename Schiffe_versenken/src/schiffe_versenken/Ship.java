@@ -1,0 +1,22 @@
+package schiffe_versenken;
+
+public abstract class Ship {
+
+	// variables for all child classes
+	private String name;
+	private int[][] position;
+	
+	public Ship( String iv_name, int iv_size ) {
+		this.name = iv_name;
+		this.position = new int[iv_size][iv_size];
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int[][] getPosition() {
+		return this.position;
+	}
+	
+}
