@@ -5,10 +5,11 @@ public abstract class Ship {
 	// variables for all child classes
 	private String name;
 	private int[][] position;
+	private final int positionLength = 2;
 	
 	public Ship( String iv_name, int iv_size ) {
 		this.name = iv_name;
-		this.position = new int[iv_size][iv_size];
+		this.position = new int[positionLength][iv_size];
 	}
 	
 	public String getName() {
@@ -17,6 +18,10 @@ public abstract class Ship {
 	
 	public int[][] getPosition() {
 		return this.position;
+	}
+		
+	public void sink() {
+		
 	}
 	
 }
