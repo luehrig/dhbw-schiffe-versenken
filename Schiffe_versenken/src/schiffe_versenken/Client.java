@@ -82,6 +82,8 @@ public class Client implements Runnable, NetworkConnection {
 			
 		}
 		
+		this.writerOut.print("BYE");
+		
 		this.finalize();
 	}
 }

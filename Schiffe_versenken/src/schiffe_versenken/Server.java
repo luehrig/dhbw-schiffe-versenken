@@ -75,11 +75,16 @@ public class Server implements Runnable, NetworkConnection {
 		}
 
 		while (true) {
-			if (this.readerIn.equals("BYE")) {
+			try {
+				if (this.readerIn.readLine().equals("BYE")) {
 
-				this.writerOut.write("BYE");
+					this.writerOut.write("BYE");
 
-				break;
+					break;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 
