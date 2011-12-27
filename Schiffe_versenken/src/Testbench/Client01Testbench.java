@@ -2,7 +2,7 @@ package Testbench;
 
 import schiffe_versenken.Client;
 
-public class ClientTestbench {
+public class Client01Testbench {
 
 	/**
 	 * @param args[0] - IP

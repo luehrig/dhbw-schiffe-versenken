@@ -24,9 +24,10 @@ public class Battlefield {
  * 
  * */
 	
-	private String titel;
-	private boolean[][] battlefield;
+	private String title;
+	private boolean[][] tiles;
 	private LinkedList<Ship> shipList;
+	private LinkedList<Shot> shots;
 	
 	/*
 	 * Constructor
@@ -34,21 +35,21 @@ public class Battlefield {
 	 * Creates battlefield with custom count of columns and rows
 	 * Includes linked list for ships that were set on battlefield
 	 */
-	public Battlefield( String iv_titel, int iv_cols, int iv_rows ) {
-		this.titel = iv_titel;
-		this.battlefield = new boolean[iv_cols][iv_rows];
+	public Battlefield( String iv_title, int iv_cols, int iv_rows ) {
+		this.title = iv_title;
+		this.tiles = new boolean[iv_cols][iv_rows];
 		this.shipList = new LinkedList<Ship>();
 	}
 	
 	public String getTitle() {
-		return this.titel;
+		return this.title;
 	}
 	
 	/*
 	 * Check if specific position on battlefield contains part of a ship
 	 */
 	public boolean isSet( int iv_col, int iv_row ) {
-		if( this.battlefield[iv_col][iv_row] == true ) {
+		if( this.tiles[iv_col][iv_row] == true ) {
 			return true;
 		}
 		else {
@@ -74,7 +75,7 @@ public class Battlefield {
 		for( int[] coordinate: io_ship.getPosition() ) {
 			int x_pos = coordinate[0];
 			int y_pos = coordinate[1];
-			this.battlefield[x_pos][y_pos] = true;
+			this.tiles[x_pos][y_pos] = true;
 		}
 		// put ship to linked list
 		this.shipList.add(io_ship);
