@@ -1,18 +1,21 @@
 package schiffe_versenken;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-
 public interface NetworkConnection {
 
 	/*
-	 * get bus from me to connection partner
-	 **/
-	public PrintWriter getOutbound();
+	 * send command
+	 * */
+	public void sendCommand(String iv_command);
+
 	
 	/*
-	 * get bus from connection partner to me
-	 **/
-	public BufferedReader getInbound();
-		
+	 * receive command
+	 * @return null if no command was received
+	 * */
+	public String receiveCommand();
+	
+	/*
+	 * method to check if incoming command has correct hash
+	 * */
+	public boolean isCommandValid(String iv_command);
 }

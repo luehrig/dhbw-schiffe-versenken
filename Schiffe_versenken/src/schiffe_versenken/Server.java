@@ -1,6 +1,8 @@
 package schiffe_versenken;
 
 import java.net.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.io.*;
 
 public class Server implements Runnable, NetworkConnection {
@@ -19,20 +21,6 @@ public class Server implements Runnable, NetworkConnection {
 	}
 
 	/*
-	 * get bus from server to client
-	 */
-	public PrintWriter getOutbound() {
-		return this.writerOut;
-	}
-
-	/*
-	 * get bus from client to server
-	 */
-	public BufferedReader getInbound() {
-		return this.readerIn;
-	}
-
-	/*
 	 * Set up server socket for incoming clients
 	 */
 	private ServerSocket initiate() {
@@ -45,7 +33,7 @@ public class Server implements Runnable, NetworkConnection {
 		}
 
 		System.out.println("Server successfully initiated");
-		
+
 		return rr_serverSocket;
 	}
 
@@ -110,5 +98,75 @@ public class Server implements Runnable, NetworkConnection {
 	public void run() {
 		this.serverSocket = this.initiate();
 		this.listen();
+	}
+
+	/*
+	 * send command
+	 */
+	public void sendCommand(String iv_command) {
+		this.writerOut.print(iv_command);
+	}
+
+	/*
+	 * receive command
+	 * 
+	 * @return null if no command was received
+	 */
+	public String receiveCommand() {
+		String rv_command = null;
+		try {
+			rv_command = this.readerIn.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return rv_command;
+	}
+
+	public boolean isCommandValid(String iv_command) {
+
+		MessageDigest hashProcessor;
+		String commandToHash;
+		String receivedHashValue;
+		String calculatedHashValue;
+		String[] receivedHash;
+		byte[] bytesOfCommand;
+		byte[] calculatedHashedValues;
+
+		// extract hash from received command
+		receivedHash = iv_command.split(",");
+		receivedHashValue = receivedHash[receivedHash.length - 1];
+
+		commandToHash = iv_command.replace(","
+				+ receivedHash[receivedHash.length - 1], "");
+
+		// do new hashing
+		try {
+			// get instance of hash processor for MD5
+			hashProcessor = MessageDigest.getInstance("MD5");
+			hashProcessor.reset();
+			// convert incoming command to single bytes
+			bytesOfCommand = commandToHash.getBytes("UTF-8");
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			return false;
+		}
+
+		// calculate hash
+		calculatedHashedValues = hashProcessor.digest(bytesOfCommand);
+		calculatedHashValue = ""
+				+ Helper.ByteArraytoInt(calculatedHashedValues);
+
+		if (receivedHashValue.equals(calculatedHashValue)) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	/*
+	 * process incoming action and send reply to clients
+	 */
+	public void processAction() {
+
 	}
 }
