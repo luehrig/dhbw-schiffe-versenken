@@ -69,11 +69,11 @@ public class BattleshipGame extends JFrame {
 		
 		
 		
-		// Vielleicht gibt es einen anderen Weg auf die Battlefields zuzugreifen?
-		Schuss schuss = new Schuss(2, 2);
-		
-		game.center.getPartnerBattleField().setSchuss(schuss, false);
-		game.center.getMyBattleField().setSchuss(schuss, true);
+//		// Vielleicht gibt es einen anderen Weg auf die Battlefields zuzugreifen?
+//		Schuss schuss = new Schuss(2, 2);
+//		
+//		game.center.getPartnerBattleField().setSchuss(schuss, false);
+//		game.center.getMyBattleField().setSchuss(schuss, true);
 
 		
 	}

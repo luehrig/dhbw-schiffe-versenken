@@ -60,7 +60,7 @@ public class Field implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new Schuss(this.x, this.y);
+//		new Shot(this.x, this.y);
 	}
 
 }

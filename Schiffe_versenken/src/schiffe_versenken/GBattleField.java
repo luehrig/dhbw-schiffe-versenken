@@ -39,26 +39,33 @@ public class GBattleField extends JPanel {
 			}
 		}
 	}
-																		// auf Partner Battlefield!
-	public void setSchuss(Schuss schuss, boolean bool) {				// wir haben geschossen, warten auf Antwort und setzten dann Hit oder Fail
-		if(bool == true){												
-			board[schuss.x][schuss.y].setHit();
-		} else {
-			board[schuss.x][schuss.y].setFail();
-		}
-		board[schuss.x][schuss.y].button.setEnabled(false);
-	}
-																		// auf My Battlefield!
-	public boolean getSchuss(Schuss schuss) {							// wir erhalten einen Schuss, schauen nach ob getroffen wurde, senden Antwort zurück und setzten Hit oder Fail 
-		if(board[schuss.x][schuss.y].status == Field.Status.SHIP) {
-			board[schuss.x][schuss.y].setHit();
-			board[schuss.x][schuss.y].button.setEnabled(false);
-			return true;
-		} else {
-			board[schuss.x][schuss.y].setFail();
-			board[schuss.x][schuss.y].button.setEnabled(false);
-			return false;
-		}
-	}
+	
+	
+	
+//																		// auf Partner Battlefield!
+//	public void setSchuss(Shot shot, boolean bool) {				// wir haben geschossen, warten auf Antwort und setzten dann Hit oder Fail
+//		if(bool == true){												
+//			board[shot.x][shot.y].setHit();
+//		} else {
+//			board[shot.x][shot.y].setFail();
+//		}
+//		board[shot.x][shot.y].button.setEnabled(false);
+//	}
+//																		// auf My Battlefield!
+//	public boolean getSchuss(Shot shot) {							// wir erhalten einen Schuss, schauen nach ob getroffen wurde, senden Antwort zurück und setzten Hit oder Fail 
+//		if(board[shot.x][shot.y].status == Field.Status.SHIP) {
+//			board[shot.x][shot.y].setHit();
+//			board[shot.x][shot.y].button.setEnabled(false);
+//			return true;
+//		} else {
+//			board[shot.x][shot.y].setFail();
+//			board[shot.x][shot.y].button.setEnabled(false);
+//			return false;
+//		}
+//	}
+	
+//	public boolean isShip(Field field) {
+//		if(field.status == )
+//	}
 }
 
