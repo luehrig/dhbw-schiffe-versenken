@@ -9,22 +9,31 @@ import javax.swing.JPanel;
 public class GBattleField extends JPanel {
 	
 	// das Spielfeld besteht aus Feldern mit dem Typ: WATER, SHIP, HIT oder FAIL
-	public Field[][] board = new Field[10][10];
+	public Field[][] board;
+	private int col = 10;
+	private int row = 10;
 	
 	public GBattleField() {
-		
 		this.initLayout();
 		this.initBattleField();
 		
 	}
 	
+	public GBattleField(int col, int row) {
+		this.col = col;
+		this.row = row;
+		this.initLayout();
+		this.initBattleField();
+	}
+	
 	private void initLayout() {
-		this.setLayout(new GridLayout(board.length, board.length, 0, 0));
+		this.setLayout(new GridLayout(col, row, 0, 0));
 	}
 	
 	private void initBattleField() {
-		for(int x = 0; x < board.length; x++) {
-			for(int y = 0; y < board.length; y++) {
+		this.board = new Field[col][row];
+		for(int x = 0; x < col; x++) {
+			for(int y = 0; y < row; y++) {
 				board[x][y] = new Field(x, y);
 				this.add(board[x][y].button);
 			}
@@ -37,19 +46,19 @@ public class GBattleField extends JPanel {
 		} else {
 			board[schuss.x][schuss.y].setFail();
 		}
-		
+		board[schuss.x][schuss.y].button.setEnabled(false);
 	}
 																		// auf My Battlefield!
 	public boolean getSchuss(Schuss schuss) {							// wir erhalten einen Schuss, schauen nach ob getroffen wurde, senden Antwort zurück und setzten Hit oder Fail 
 		if(board[schuss.x][schuss.y].status == Field.Status.SHIP) {
 			board[schuss.x][schuss.y].setHit();
+			board[schuss.x][schuss.y].button.setEnabled(false);
 			return true;
 		} else {
 			board[schuss.x][schuss.y].setFail();
+			board[schuss.x][schuss.y].button.setEnabled(false);
 			return false;
 		}
-	
 	}
-
 }
 

@@ -6,8 +6,10 @@ public abstract class Ship {
 	private String name;
 	private int[][] position;
 	private final int positionLength = 2;
+	private int size;
 	
 	public Ship( String iv_name, int iv_size ) {
+		this.size = iv_size;
 		this.name = iv_name;
 		this.position = new int[positionLength][iv_size];
 	}
@@ -22,6 +24,10 @@ public abstract class Ship {
 		
 	public void sink() {
 		
+	}
+	
+	public int getSize() {
+		return this.size;
 	}
 	
 }

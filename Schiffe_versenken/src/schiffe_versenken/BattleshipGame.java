@@ -24,8 +24,7 @@ public class BattleshipGame extends JFrame {
 	
 	// initialisiert den ganzen Frame
 	private void initLayout() {
-
-		this.setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout(4, 4));
 		this.add(center = new GuiCenter(), BorderLayout.CENTER);
 		this.add(new GuiNorth(), BorderLayout.NORTH);
 		this.add(new GuiEast(), BorderLayout.EAST);
@@ -34,7 +33,7 @@ public class BattleshipGame extends JFrame {
 		
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setBounds(200, 200, 800, 600);
+		this.setBounds(50, 50, 800, 600);
 		this.setResizable(false);
 		this.setVisible(true);
 	}

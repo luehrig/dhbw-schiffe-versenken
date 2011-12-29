@@ -37,21 +37,18 @@ public class Field implements ActionListener {
 		this.button.setBackground(Color.RED);
 		this.button.setText("H");
 		this.status = Status.HIT;
-		this.button.setEnabled(false);
 	}
 	
 	public void setShip(){
 		this.button.setBackground(Color.BLACK);
 		this.button.setText("S");
 		this.status = Status.SHIP;
-		this.button.setEnabled(false);
 	}
 	
 	public void setFail(){
 		this.button.setBackground(Color.WHITE);
 		this.button.setText("F");
 		this.status = Status.FAIL;
-		this.button.setEnabled(false);
 	}
 	
 	public enum Status {
