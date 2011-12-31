@@ -1,10 +1,11 @@
 package Testbench;
 
-import schiffe_versenken.Client;
 import schiffe_versenken.Helper;
 
 import java.io.UnsupportedEncodingException;
 import java.security.*;
+
+import network.Client;
 
 public class HashTestbench {
 

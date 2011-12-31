@@ -1,6 +1,6 @@
 package Testbench;
 
-import schiffe_versenken.Client;
+import network.Client;
 
 public class Client02Testbench {
 
