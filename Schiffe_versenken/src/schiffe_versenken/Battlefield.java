@@ -1,88 +1,72 @@
 package schiffe_versenken;
 
-import java.util.LinkedList;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Point;
 
-/**
- * @author Max
- *
- */
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 public class Battlefield {
-
-/*	example for battleship
- * 
- * 	 A B C D E F G H I J
- * 1
- * 2
- * 3
- * 4
- * 5
- * 6
- * 7
- * 8
- * 9
- * 10
- * 
- * */
 	
-	private String title;
-	private boolean[][] tiles;
-	private LinkedList<Ship> shipList;
-	private LinkedList<Shot> shots;
+	private Field[][] board;
+	public JPanel panel = new JPanel();
+	private final int row = 10;
+	private final int col = 10;
 	
-	/*
-	 * Constructor
-	 * 
-	 * Creates battlefield with custom count of columns and rows
-	 * Includes linked list for ships that were set on battlefield
-	 */
-	public Battlefield( String iv_title, int iv_cols, int iv_rows ) {
-		this.title = iv_title;
-		this.tiles = new boolean[iv_cols][iv_rows];
-		this.shipList = new LinkedList<Ship>();
-	}
-	
-	public String getTitle() {
-		return this.title;
-	}
-	
-	/*
-	 * Check if specific position on battlefield contains part of a ship
-	 */
-	public boolean isSet( int iv_col, int iv_row ) {
-		if( this.tiles[iv_col][iv_row] == true ) {
-			return true;
+	public Battlefield() {
+		board = new Field[10][10];
+		panel.setLayout(new GridLayout(row, col, 0, 0));
+		for(int x = 0; x < row; x ++) {
+			for(int y = 0; y < col; y ++) {
+				board[x][y] = new Field(x, y, Field.Status.WATER);
+				panel.add(board[x][y]);
+			}
 		}
-		else {
+	}
+	
+	public void setButtonsDisable() {
+		for(int i = 0; i < row; i++) {
+			for(int j = 0; j < col ; j ++) {
+				board[i][j].setEnabled(false);
+				board[i][j].setMargin(new Insets(3,3,3,3));
+			}
+		}
+	}
+	
+	public void setButtonsEnable() {
+		for(int i = 0; i < row; i++) {
+			for(int j = 0; j < col ; j ++) {
+				board[i][j].setEnabled(true);
+				board[i][j].setMargin(new Insets(6,6,6,6));
+			}
+		}
+	}
+	
+	public Field[][] getBoard() {
+		return this.board;
+	}
+	
+	public boolean setShot(Shot schuss) {
+		if(board[schuss.x][schuss.y].isShip()) {
+			this.board[schuss.x][schuss.y].setHit();
+			return true;
+		} else {
+			this.board[schuss.x][schuss.y].setFail();
 			return false;
 		}
 	}
 	
-	/*
-	 * Set one ship to the battlefield
-	 * @return true if set was successful
-	 * @return false if position is already assigned
-	 *
-	 */
-	public boolean setShip( Ship io_ship ) {
-		// check if position is free (not set with other ship)
-		for( int[] coordinate: io_ship.getPosition() ) {
-			if( this.isSet(coordinate[0], coordinate[1]) != true ) {
-				// position is already assigned with other ship
-				return false;
+	
+	public Point getFieldCoords(Field field) {
+		for(int x = 0; x < row; x ++) {
+			for(int y = 0; y < col; y ++) {
+				if(field == board[x][y]) {
+					return new Point(x,y);
+				}
 			}
 		}
-		// set position as assigned
-		for( int[] coordinate: io_ship.getPosition() ) {
-			int x_pos = coordinate[0];
-			int y_pos = coordinate[1];
-			this.tiles[x_pos][y_pos] = true;
-		}
-		// put ship to linked list
-		this.shipList.add(io_ship);
-		
-		// ship was successfully added to battlefield
-		return true;
+		return new Point(-1, -1);
 	}
-	
-	
 }
+

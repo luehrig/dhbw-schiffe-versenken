@@ -7,60 +7,85 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-public class Field implements ActionListener {
-
+public class Field extends JButton {
+	
 	public int x;
 	public int y;
 	public Status status;
-	public JButton button;
+	public boolean isBoardShootable = false;
 	
-	public Field(int x, int y) {
+	public Field(int x, int y, Status status) {
 		this.x = x;
 		this.y = y;
-		this.initButton();
+		this.initField();
+	}
+	
+	private void initField() {
 		this.setWater();
+		this.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				if(isBoardShootable) {
+					new Shot(x, y);
+				}
+			}
+		});
+		
+		switch(status) {
+		case FAIL: this.setFail(); break;
+		case WATER: this.setWater(); break;
+		case HIT: this.setHit(); break;
+		case SHIP: this.setShip(); break;
+		}
 	}
 	
-	private void initButton(){
-		button = new JButton();
-		this.button.setMargin(new Insets(1, 1, 1, 1));
-		this.button.addActionListener(this);
-	}
-	
-	public void setWater(){
-		this.button.setBackground(Color.BLUE);
-		this.button.setText("W");
+	public void setWater() {
+		this.setBackground(Color.BLUE);
 		this.status = Status.WATER;
 	}
 	
-	public void setHit(){
-		this.button.setBackground(Color.RED);
-		this.button.setText("H");
-		this.status = Status.HIT;
+	public boolean isShip() {
+		if(this.status == Status.SHIP) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
-	public void setShip(){
-		this.button.setBackground(Color.BLACK);
-		this.button.setText("S");
+	public void setShip() {
+		this.setBackground(Color.BLACK);
 		this.status = Status.SHIP;
 	}
 	
-	public void setFail(){
-		this.button.setBackground(Color.WHITE);
-		this.button.setText("F");
+	public void setHit() {
+		this.setBackground(Color.RED);
+		this.status = Status.HIT;
+	}
+	
+	public void setFail() {
+		this.setBackground(Color.WHITE);
 		this.status = Status.FAIL;
+	}
+	
+	public void setSelected() {
+		this.setBackground(Color.LIGHT_GRAY);
+		this.status = Status.SELECTED;
+	}
+	
+	public boolean isSelected() {
+		if(this.status == Status.SELECTED) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public enum Status {
 		WATER,
+		SHIP,
 		HIT,
 		FAIL,
-		SHIP;
+		SELECTED;
 	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-//		new Shot(this.x, this.y);
-	}
-
 }

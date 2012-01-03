@@ -11,30 +11,35 @@ import javax.swing.*;
 
 public class BattleshipGame extends JFrame {
 	
-	public GuiCenter center;
-
-
 	private static final long serialVersionUID = 1L;
+	
+	Player player1;
+	Player player2;
 	
 	public BattleshipGame(){
 		super("Battleship Game");
-		this.initLayout();
+		this.newPlayer();
+		this.initGUI();
 		this.initMenu();
 	}
 	
+	private void newPlayer( ) {
+		player1 = new Player("Erol");
+		player2 = new Player("Max");
+	}
+	
 	// initialisiert den ganzen Frame
-	private void initLayout() {
-		this.setLayout(new BorderLayout(4, 4));
-		this.add(center = new GuiCenter(), BorderLayout.CENTER);
-		this.add(new GuiNorth(), BorderLayout.NORTH);
-		this.add(new GuiEast(), BorderLayout.EAST);
-		this.add(new GuiSouth(), BorderLayout.SOUTH);
-		this.add(new GuiWest(), BorderLayout.WEST);
-		
-		
+	private void initGUI() {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setBounds(50, 50, 800, 600);
-		this.setResizable(false);
+		this.setBounds(100, 100, 680, 450);
+		
+		FrameLayout border = new FrameLayout(player1, player2);
+		this.setLayout(new BorderLayout());
+		this.add(border.north, BorderLayout.NORTH);
+		this.add(border.east, BorderLayout.EAST);
+		this.add(border.south, BorderLayout.SOUTH);
+		this.add(border.west, BorderLayout.WEST);
+		this.add(border.center, BorderLayout.CENTER);
 		this.setVisible(true);
 	}
 	
@@ -66,16 +71,7 @@ public class BattleshipGame extends JFrame {
 		
 		// startet das Spiel
 		BattleshipGame game = new BattleshipGame();
-		
-		
-		
-//		// Vielleicht gibt es einen anderen Weg auf die Battlefields zuzugreifen?
-//		Schuss schuss = new Schuss(2, 2);
-//		
-//		game.center.getPartnerBattleField().setSchuss(schuss, false);
-//		game.center.getMyBattleField().setSchuss(schuss, true);
 
-		
 	}
 
 }

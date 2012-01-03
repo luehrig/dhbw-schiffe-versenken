@@ -1,29 +1,26 @@
 package schiffe_versenken;
 
+import java.awt.Color;
+
+import javax.swing.JButton;
+
 public abstract class Ship {
 
 	// variables for all child classes
 	private String name;
-	private int[][] position;
-	private final int positionLength = 2;
 	private int size;
+	public JButton button;
 	
 	public Ship( String iv_name, int iv_size ) {
 		this.size = iv_size;
 		this.name = iv_name;
-		this.position = new int[positionLength][iv_size];
+		this.button = new JButton(iv_name);
+		this.button.setBackground(Color.BLACK);
+		this.button.setForeground(Color.WHITE);
 	}
 	
 	public String getName() {
 		return this.name;
-	}
-	
-	public int[][] getPosition() {
-		return this.position;
-	}
-		
-	public void sink() {
-		
 	}
 	
 	public int getSize() {
