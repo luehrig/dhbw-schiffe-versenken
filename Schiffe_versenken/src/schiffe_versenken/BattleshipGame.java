@@ -2,6 +2,8 @@ package schiffe_versenken;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -43,7 +45,7 @@ public class BattleshipGame extends JFrame {
 		this.setVisible(true);
 	}
 	
-	// initialisiert due Menüleiste
+	// initialisiert die Menüleiste
 	private void initMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.ORANGE);
@@ -51,11 +53,30 @@ public class BattleshipGame extends JFrame {
 		menuBar.add( fileMenu );
 		this.setJMenuBar( menuBar );
 			
-		fileMenu.add( new JMenuItem("Neues Spiel") );
-		fileMenu.add( new JMenuItem("Neue Verbindung herstellen") );
+		// Menu New Game
+		JMenuItem newGame = new JMenuItem("Neues Spiel");
+		newGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new BattleshipGame();
+			}
+			
+		});
+		fileMenu.add(newGame);
+		
+		// Menu new Connection
+		fileMenu.add(new JMenuItem("Neue Verbindung herstellen"));
 		fileMenu.add( new JMenuItem("Verbindung abbrechen") );
+		
+		
 		fileMenu.addSeparator();
-		fileMenu.add( new JMenuItem("Beenden") );
+		
+		JMenuItem exitGame = new JMenuItem("Beenden");
+		exitGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		fileMenu.add(exitGame);
 	}
 	
 	
