@@ -1,10 +1,19 @@
 package schiffe_versenken;
 
+import java.awt.AWTEvent;
+import java.awt.event.ActionEvent;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Helper {
+
+	/*
+	 * global constants
+	 */
+	public static final String fire 	= "FIRE";
+	public static final String ok 		= "OK";
+	public static final String resend	= "RESEND";
 
 	/*
 	 * convert a byte array in integer value
@@ -58,6 +67,73 @@ public class Helper {
 		} else {
 			return false;
 		}
+	}
+
+	/*
+	 * convert String command to Event object
+	 */
+	public static AWTEvent commandToEvent(String iv_command) {
+		// variables
+		AWTEvent rr_event = null;
+		Action action;
+		String[] commandParts;
+		String origin = null;
+		String key = null;
+		int x_pos = 0;
+		int y_pos = 0;
+		String misc = null;
+
+		// split command to single values (separated by ',')
+		commandParts = iv_command.split("\\,");
+
+		for (int i = 0; i < commandParts.length; i++) {
+			switch (i) {
+			case 0:
+				// first value = origin
+				origin = commandParts[i];
+				break;
+			case 1:
+				// second value = keyword for command
+				key = commandParts[i];
+				break;
+			case 2:
+				// third value = x position
+				x_pos = Integer.parseInt(commandParts[i]);
+				break;
+			case 3:
+				// fourth value = y position
+				y_pos = Integer.parseInt(commandParts[i]);
+				break;
+			default:
+				// other values are optional parameters
+				misc = misc.concat(commandParts[i]);
+				break;
+			}
+		}
+
+		// build event object with information
+		action = new Action(origin, key, x_pos, y_pos, misc);
+		rr_event = new ActionEvent(action, 0, key);
+
+		return rr_event;
+	}
+
+	/*
+	 * convert Event object to String command
+	 */
+	public static String eventToCommand(AWTEvent ir_event) {
+
+		Action action;
+
+		action = (Action) ir_event.getSource();
+		return action.toString();
+	}
+
+	/*
+	 * convert AWTEvent object to own Action object
+	 */
+	public static Action awtEventToAction(AWTEvent ir_event) {
+		return (Action) ir_event.getSource();
 	}
 
 }

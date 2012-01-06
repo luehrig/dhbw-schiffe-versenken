@@ -1,10 +1,10 @@
 package network;
 
 import java.net.*;
+import java.awt.AWTEvent;
 import java.io.*;
 
 import schiffe_versenken.Helper;
-import schiffe_versenken.NetworkConnection;
 
 public class Server implements Runnable {
 
@@ -13,10 +13,12 @@ public class Server implements Runnable {
 	 * 
 	 * this thread is talking with a single client
 	 */
-	private class ServerThread extends Thread implements NetworkConnection {
+	private class ServerThread extends NetworkObject implements Runnable {
 		private Socket socket = null;
+		private int threadID;
 		private PrintWriter writerOut;
 		private BufferedReader readerIn;
+		private MessageProcessor msgProcessor;
 		private String receivedCommand;
 		private int errorCount;
 
@@ -25,9 +27,10 @@ public class Server implements Runnable {
 		/*
 		 * constructor buffer socket reference in object
 		 */
-		public ServerThread(Socket ir_socket) {
-			super("ServerThread");
+		public ServerThread(int iv_threadID, Socket ir_socket) {
+			this.threadID = iv_threadID;
 			this.socket = ir_socket;
+			this.msgProcessor = new MessageProcessor(this);
 		}
 
 		/*
@@ -43,49 +46,8 @@ public class Server implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			serverThreads[this.threadID] = null;
 			clientCounter--;
-		}
-
-		/*
-		 * send command
-		 */
-		public void sendCommand(String iv_command) {
-			this.writerOut.print(iv_command);
-		}
-
-		/*
-		 * receive command
-		 * 
-		 * @return null if no command was received
-		 */
-		public String receiveCommand() {
-			String rv_command = null;
-			try {
-				rv_command = this.readerIn.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			// check if message was correct, if not:
-			// send command to partner and wait for next response
-			if (this.isCommandValid(rv_command) != true) {
-				this.sendCommand("RESEND");
-				rv_command = this.receiveCommand();
-			}
-
-			this.sendCommand("OK");
-			return rv_command;
-
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see
-		 * schiffe_versenken.NetworkConnection#isCommandValid(java.lang.String)
-		 */
-		public boolean isCommandValid(String iv_command) {
-			return Helper.isCommandValid(iv_command);
 		}
 
 		public void run() {
@@ -103,43 +65,67 @@ public class Server implements Runnable {
 				// report success
 				System.out.println("Client: " + this.socket.getInetAddress()
 						+ " successfully connected!");
+			} catch (IOException e) {
+				System.err.println("An error occurred during connecting...!");
+				return;
+			}
 
-				// poll commands
-				while (powerSwitch == true) {
-					try {
-						this.receivedCommand = this.readerIn.readLine();
-						this.errorCount = 0;
-
-						System.out.println("Client received command: "
-								+ this.receivedCommand);
-						// close connection if partner sends "BYE"
-						if (this.receivedCommand.equals("BYE")) {
-
-							this.writerOut.println("BYE");
-							break;
-						}
-						// send "PING" back if "PING" was send
-						if (this.receivedCommand.equals("PING")) {
-							this.writerOut.println("PING");
-							System.out
-									.println("Server received Ping command and sent it back!");
-						}
-
-						// command handling is still missing
-
-					} catch (SocketException e) {
-						if (this.errorCount < this.maxErrorCount) {
-							this.errorCount++;
-						} else {
-							this.writerOut.println("BYE");
-							break;
-						}
+			// poll commands
+			while (powerSwitch == true) {
+				// try {
+				try {
+					this.receivedCommand = this.readerIn.readLine();
+				} catch (IOException e) {
+					System.err.println("Could not read from network!");
+					if (this.errorCount < this.maxErrorCount) {
+						this.errorCount++;
+					} else {
+						this.writerOut.println("BYE");
+						break;
 					}
 				}
 
-			} catch (IOException e) {
-				System.err.println("An error occurred!");
+				this.errorCount = 0;
+
+				System.out.println("Client received command: "
+						+ this.receivedCommand);
+				// close connection if partner sends "BYE"
+				if (this.receivedCommand.equals("BYE")) {
+
+					this.writerOut.println("BYE");
+					break;
+				}
+				// send "PING" back if "PING" was send
+				else if (this.receivedCommand.equals("PING")) {
+					this.writerOut.println("PING");
+					System.out
+							.println("Server received Ping command and sent it back!");
+				} else {
+					AWTEvent event = Helper.commandToEvent(receivedCommand);
+
+					this.msgProcessor.handleEvent(event);
+				}
+
+				// command handling is still missing
+
+				// } catch (SocketException e) {
+				// if (this.errorCount < this.maxErrorCount) {
+				// this.errorCount++;
+				// } else {
+				// this.writerOut.println("BYE");
+				// break;
+				// }
+				// }
+
 			}
+
+			try {
+				this.socket.close();
+			} catch (IOException e) {
+				System.err.println("Could not shutdown server thread "
+						+ this.threadID);
+			}
+
 		}
 	} // end inner class ServerThread
 
@@ -155,6 +141,7 @@ public class Server implements Runnable {
 	private ServerSocket communicationSocket;
 	private int clientCounter = 0;
 	private boolean powerSwitch = true;
+	private ServerThread[] serverThreads = new ServerThread[this.maxClients];
 
 	private final int maxClients = 2;
 
@@ -175,7 +162,7 @@ public class Server implements Runnable {
 		} catch (IOException e) {
 			System.err.println("Could not listen on port: "
 					+ this.communicationport);
-			System.exit(1);
+			this.switchOff();
 		}
 
 		System.out.println("Communication Server successfully initiated");
@@ -186,8 +173,17 @@ public class Server implements Runnable {
 	/*
 	 * this method shutdown the server that listens for new clients
 	 */
-	public void switchServerOff() {
+	public void switchOff() {
 		this.powerSwitch = false;
+	}
+
+	/*
+	 * send broadcast message to all connected clients
+	 */
+	public void sendBroadcastMessage(String iv_command) {
+		for (int i = 0; i < this.clientCounter; i++) {
+			this.serverThreads[i].sendCommand(iv_command);
+		}
 	}
 
 	/*
@@ -199,17 +195,23 @@ public class Server implements Runnable {
 			if (this.clientCounter < this.maxClients) {
 				try {
 					// create new ServerThread for every incoming client
-					new ServerThread(this.communicationSocket.accept()).start();
+					// this.serverThreads[this.clientCounter] = new
+					// ServerThread(this.clientCounter
+					// ,this.communicationSocket.accept() );
+					// this.serverThreads[this.clientCounter].start();
+					this.serverThreads[this.clientCounter] = new ServerThread(
+							this.clientCounter,
+							this.communicationSocket.accept());
+					new Thread(this.serverThreads[this.clientCounter]).start();
 					this.clientCounter++;
 				} catch (IOException e) {
 					// if an error occurred escape whole server thread
 					System.err.println("Accept failed.");
-					System.exit(1);
+					return;
 				}
 			}
 
 		}
-
 	}
 
 	/*
@@ -220,7 +222,8 @@ public class Server implements Runnable {
 			this.communicationSocket.close();
 		} catch (IOException e) {
 			System.out.println("Could not close server socket");
-			System.exit(-1);
+			// System.exit(-1);
+			return;
 		}
 	}
 
@@ -228,6 +231,7 @@ public class Server implements Runnable {
 	public void run() {
 		this.communicationSocket = this.initiateCommunicationSocket();
 		this.listen();
+		this.finalize();
 	}
 
 }

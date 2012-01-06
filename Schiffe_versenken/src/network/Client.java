@@ -4,9 +4,8 @@ import java.io.*;
 import java.net.*;
 
 import schiffe_versenken.Helper;
-import schiffe_versenken.NetworkConnection;
 
-public class Client implements Runnable, NetworkConnection {
+public class Client extends NetworkObject implements Runnable {
 
 	/*
 	 * inner class that realize a keep alive service
@@ -41,7 +40,6 @@ public class Client implements Runnable, NetworkConnection {
 					e.printStackTrace();
 				}
 			}
-
 		}
 
 	}
@@ -49,8 +47,9 @@ public class Client implements Runnable, NetworkConnection {
 	private String ip;
 	private int communicationPort;
 	private Socket communicationSocket;
-	private PrintWriter writerOut;
-	private BufferedReader readerIn;
+	//private PrintWriter writerOut;
+	//private BufferedReader readerIn;
+	private MessageProcessor msgProcessor;
 	private boolean powerSwitch = true;
 	private KeepAliveThread keepAliveThread = null;
 	private String receivedCommand;
@@ -65,12 +64,13 @@ public class Client implements Runnable, NetworkConnection {
 	public Client(String iv_ip, int iv_port) {
 		this.ip = iv_ip;
 		this.communicationPort = iv_port;
+		this.msgProcessor = new MessageProcessor(this);
 	}
 
 	/*
 	 * this method shutdown the client
 	 */
-	public void switchServerOff() {
+	public void switchOff() {
 		this.powerSwitch = false;
 	} 
 	
@@ -107,7 +107,7 @@ public class Client implements Runnable, NetworkConnection {
 	// listen for commands from partner
 	private void listen() {
 		// poll commands
-		while (true) {
+		while (this.powerSwitch == true) {
 			try {
 				try {
 					this.receivedCommand = this.readerIn.readLine();
@@ -148,57 +148,18 @@ public class Client implements Runnable, NetworkConnection {
 			this.readerIn.close();
 			this.communicationSocket.close();
 		} catch (IOException e) {
-			System.out.println("Could not close socket");
+			System.err.println("Could not close socket");
 			System.exit(-1);
 		}
 
 		System.out.println("Connection to host lost...");
 	}
-
+	
 	@Override
 	public void run() {
 		this.communicationSocket = this.initiateCommunicationSocket();
-
-
+		
 		this.listen();
-
-		System.exit(0);
 	}
 
-	/*
-	 * send command
-	 */
-	public void sendCommand(String iv_command) {
-		this.writerOut.print(iv_command);
-	}
-
-	/*
-	 * receive command
-	 * 
-	 * @return null if no command was received
-	 */
-	public String receiveCommand() {
-		String rv_command = null;
-		try {
-			rv_command = this.readerIn.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// check if message was correct, if not:
-		// send command to partner and wait for next response
-		if (this.isCommandValid(rv_command) != true) {
-			this.sendCommand("RESEND");
-			rv_command = this.receiveCommand();
-		}
-
-		this.sendCommand("OK");
-		return rv_command;
-
-	}
-
-	@Override
-	public boolean isCommandValid(String iv_command) {
-		return Helper.isCommandValid(iv_command);
-	}
 }
