@@ -3,8 +3,6 @@ package network;
 import java.io.*;
 import java.net.*;
 
-import schiffe_versenken.Helper;
-
 public class Client extends NetworkObject implements Runnable {
 
 	/*
@@ -47,8 +45,6 @@ public class Client extends NetworkObject implements Runnable {
 	private String ip;
 	private int communicationPort;
 	private Socket communicationSocket;
-	//private PrintWriter writerOut;
-	//private BufferedReader readerIn;
 	private MessageProcessor msgProcessor;
 	private boolean powerSwitch = true;
 	private KeepAliveThread keepAliveThread = null;

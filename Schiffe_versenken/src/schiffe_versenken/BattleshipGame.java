@@ -69,6 +69,10 @@ public class BattleshipGame extends JFrame {
 		this.client = (Client) client;
 	}
 	
+	
+	/*
+	 * terminate client connection and shutdown local server if is running
+	 */
 	public void cancelGame() {
 		// shutdown client
 		client.switchOff();

@@ -53,8 +53,6 @@ public class Server implements Runnable {
 		public void run() {
 			// do some TCP protocol settings
 			try {
-				// this.socket.setKeepAlive(true);
-				// this.socket.setTcpNoDelay(true);
 				// set connection timeout to 30sec
 				this.socket.setSoTimeout(30000);
 
@@ -107,15 +105,6 @@ public class Server implements Runnable {
 				}
 
 				// command handling is still missing
-
-				// } catch (SocketException e) {
-				// if (this.errorCount < this.maxErrorCount) {
-				// this.errorCount++;
-				// } else {
-				// this.writerOut.println("BYE");
-				// break;
-				// }
-				// }
 
 			}
 
@@ -195,10 +184,6 @@ public class Server implements Runnable {
 			if (this.clientCounter < this.maxClients) {
 				try {
 					// create new ServerThread for every incoming client
-					// this.serverThreads[this.clientCounter] = new
-					// ServerThread(this.clientCounter
-					// ,this.communicationSocket.accept() );
-					// this.serverThreads[this.clientCounter].start();
 					this.serverThreads[this.clientCounter] = new ServerThread(
 							this.clientCounter,
 							this.communicationSocket.accept());
@@ -222,7 +207,6 @@ public class Server implements Runnable {
 			this.communicationSocket.close();
 		} catch (IOException e) {
 			System.out.println("Could not close server socket");
-			// System.exit(-1);
 			return;
 		}
 	}
