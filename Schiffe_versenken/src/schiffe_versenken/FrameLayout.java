@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -149,6 +151,16 @@ public class FrameLayout implements MouseListener {
 		south.setFont(new Font("Arial", Font.BOLD, 20));
 		south.setOpaque(true);
 		south.setText("Statusleiste");
+		
+		InetAddress ipAdr = null;
+		try {
+			ipAdr = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		south.setText("My IP: " + ipAdr.getHostAddress());
+		
 	}
 	
 	// initialize the West
