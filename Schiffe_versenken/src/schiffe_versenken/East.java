@@ -17,7 +17,6 @@ public class East extends JPanel {
 	public East(final Player player1, final Player player2) {
 		this.player1 = player1;
 		this.player2 = player2;
-		final int i;
 		this.setLayout(new GridBagLayout());
 		this.setBackground(Color.DARK_GRAY);
 		GridBagConstraints c = new GridBagConstraints();

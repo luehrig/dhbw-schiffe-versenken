@@ -2,6 +2,7 @@ package schiffe_versenken;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,6 +22,9 @@ import network.Server;
 public class BattleshipGame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	
+	private int x;
+	private int y;
 
 	Player player1;
 	Player player2;
@@ -34,11 +38,31 @@ public class BattleshipGame extends JFrame {
 		this.newPlayer();
 		this.initGUI();
 		this.initMenu();
+		this.setTileActionListener();
 	}
 
 	private void newPlayer() {
 		player1 = new Player("Erol");
 		player2 = new Player("Max");
+	}
+	
+	private void setTileActionListener() {
+
+		for( x = 0; x < 10; x++ ) {
+			for( y = 0; y < 10; y++ ) {
+				player2.getBattlefield().getBoard()[x][y].addActionListener(new ActionListener() 
+				{
+					public void actionPerformed(ActionEvent e) 
+					{
+						Point point = player2.getBattlefield().getTileCoords((Tile)e.getSource());
+						if(player2.getBattlefield().getBoard()[point.x][point.y].isBoardShootable) {
+							new Shot(point.x, point.y);
+						}
+					}
+				});
+				
+			}
+ 		}
 	}
 
 	/*

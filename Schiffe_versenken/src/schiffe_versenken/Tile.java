@@ -22,16 +22,6 @@ public class Tile extends JButton {
 	
 	private void initField() {
 		this.setWater();
-		this.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				if(isBoardShootable) {
-					new Shot(x, y);
-				}
-			}
-		});
-		
 		switch(status) {
 		case FAIL: this.setFail(); break;
 		case WATER: this.setWater(); break;

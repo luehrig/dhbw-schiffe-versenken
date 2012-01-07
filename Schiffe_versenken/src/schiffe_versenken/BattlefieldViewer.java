@@ -164,7 +164,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 						player1.getBattlefield().getBoard()[point.x][point.y+3].setShip();
 						
 						player1.isMouseListenerActive = false;
-						player1.isShipSet(player1.battleship);
+						player1.setShip(player1.battleship);
 						player1.getShips()[player1.battleship].button.setEnabled(false);
 						}
 					} else if (!horizontal) {
