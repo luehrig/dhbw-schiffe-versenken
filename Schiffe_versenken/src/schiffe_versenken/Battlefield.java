@@ -9,17 +9,17 @@ import javax.swing.JPanel;
 
 public class Battlefield {
 	
-	private Field[][] board;
+	private Tile[][] board;
 	public JPanel panel = new JPanel();
 	private final int row = 10;
 	private final int col = 10;
 	
 	public Battlefield() {
-		board = new Field[10][10];
+		board = new Tile[10][10];
 		panel.setLayout(new GridLayout(row, col, 0, 0));
 		for(int x = 0; x < row; x ++) {
 			for(int y = 0; y < col; y ++) {
-				board[x][y] = new Field(x, y, Field.Status.WATER);
+				board[x][y] = new Tile(x, y, Tile.Status.WATER);
 				panel.add(board[x][y]);
 			}
 		}
@@ -43,7 +43,7 @@ public class Battlefield {
 		}
 	}
 	
-	public Field[][] getBoard() {
+	public Tile[][] getBoard() {
 		return this.board;
 	}
 	
@@ -58,10 +58,10 @@ public class Battlefield {
 	}
 	
 	
-	public Point getFieldCoords(Field field) {
+	public Point getTileCoords(Tile tile) {
 		for(int x = 0; x < row; x ++) {
 			for(int y = 0; y < col; y ++) {
-				if(field == board[x][y]) {
+				if(tile == board[x][y]) {
 					return new Point(x,y);
 				}
 			}

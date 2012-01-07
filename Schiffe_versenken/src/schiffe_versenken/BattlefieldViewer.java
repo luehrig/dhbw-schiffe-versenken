@@ -51,9 +51,9 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		
 		if(e.getButton()== MouseEvent.BUTTON1) {
-			if(e.getSource() instanceof Field) {
+			if(e.getSource() instanceof Tile) {
 				
-				Point point =player1.getBattlefield().getFieldCoords((Field)e.getSource());
+				Point point =player1.getBattlefield().getTileCoords((Tile)e.getSource());
 				
 				if(player1.selectedShip instanceof ships.AircraftCarrier && !player1.isShipSet(player1.aircraftcarrier)) {
 					
@@ -209,9 +209,9 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 	if(player1.isMouseListenerActive) {
 	
 		
-		if(e.getSource() instanceof Field && !((Field)e.getSource()).isShip()) {
+		if(e.getSource() instanceof Tile && !((Tile)e.getSource()).isShip()) {
 			
-			Point point =player1.getBattlefield().getFieldCoords((Field)e.getSource());
+			Point point =player1.getBattlefield().getTileCoords((Tile)e.getSource());
 			
 			if(player1.selectedShip instanceof ships.AircraftCarrier) {
 				
@@ -343,7 +343,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		if(e.getSource() instanceof Field) {
+		if(e.getSource() instanceof Tile) {
 			for(int i = 0; i < 10; i ++ ) {
 				for(int j = 0; j < 10; j++) {
 					if(player1.getBattlefield().getBoard()[i][j].isSelected()) {

@@ -7,14 +7,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-public class Field extends JButton {
+public class Tile extends JButton {
 	
 	public int x;
 	public int y;
 	public Status status;
 	public boolean isBoardShootable = false;
 	
-	public Field(int x, int y, Status status) {
+	public Tile(int x, int y, Status status) {
 		this.x = x;
 		this.y = y;
 		this.initField();
