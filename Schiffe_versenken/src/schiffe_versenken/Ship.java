@@ -17,6 +17,7 @@ public abstract class Ship {
 		this.button = new JButton(iv_name);
 		this.button.setBackground(Color.BLACK);
 		this.button.setForeground(Color.WHITE);
+		this.button.setEnabled(false);
 	}
 	
 	public String getName() {

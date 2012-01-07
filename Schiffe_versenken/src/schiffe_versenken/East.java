@@ -30,7 +30,7 @@ public class East extends JPanel {
 		});
 		c.gridy = 0;	
 		this.add(player1.getShips()[player1.aircraftcarrier].button, c);
-		
+	
 		player1.getShips()[1].button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				player1.selectedShip = player1.getShips()[player1.destroyer];

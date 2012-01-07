@@ -23,22 +23,25 @@ public class BattleshipGame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-	private int x;
-	private int y;
-
+	JFrame popupFrame;
+	Popup popup;
+	
 	Player player1;
 	Player player2;
 	Server server;
 	Client client;
 	Thread clientThread;
 	Thread serverThread;
+	
+	String ipAdress;
+	JTextField ipTextField;
 
 	public BattleshipGame() {
 		super("Battleship Game");
 		this.newPlayer();
 		this.initGUI();
 		this.initMenu();
-		this.setTileActionListener();
+		this.addTileActionListener();
 	}
 
 	private void newPlayer() {
@@ -46,10 +49,12 @@ public class BattleshipGame extends JFrame {
 		player2 = new Player("Max");
 	}
 	
-	private void setTileActionListener() {
+	
+	// adds every Tile in the Battlefied of Player 2 an ActionListener
+	private void addTileActionListener() {
 
-		for( x = 0; x < 10; x++ ) {
-			for( y = 0; y < 10; y++ ) {
+		for(int x = 0; x < 10; x++ ) {
+			for(int y = 0; y < 10; y++ ) {
 				player2.getBattlefield().getBoard()[x][y].addActionListener(new ActionListener() 
 				{
 					public void actionPerformed(ActionEvent e) 
@@ -122,10 +127,20 @@ public class BattleshipGame extends JFrame {
 		this.add(new BattlefieldViewer(player1, player2), BorderLayout.CENTER);
 		this.setVisible(true);
 	}
+	
+	public void whenConnectionIsSetButtonsEnable() {
+		for(int i = 0; i < 5; i++) {
+			player1.getShips()[i].button.setEnabled(true);
+		}
+	}
+	
+	
+	
 
 
 	// initialisiert die Menüleiste
 	private void initMenu() {
+		// init JMenuBar
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.ORANGE);
 		JMenu fileMenu = new JMenu("Optionen");
@@ -143,7 +158,41 @@ public class BattleshipGame extends JFrame {
 		fileMenu.add(newGame);
 
 		// Menu new Connection
-		fileMenu.add(new JMenuItem("Neue Verbindung herstellen"));
+		
+		popupFrame = new JFrame("Verbindung herstellen");
+		popupFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		popupFrame.setBounds(this.getX(), this.getY(), 180, 100);
+		
+		JPanel popupPanel = new JPanel();
+		
+		ipTextField = new JTextField("000.000.0.0");
+		JButton connectButton = new JButton("verbinden");
+		connectButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ipAdress = ipTextField.getText();
+				popupFrame.setVisible(false);
+				
+			}
+			
+		});
+		popupPanel.add(ipTextField);
+		popupPanel.add(connectButton);
+		popupFrame.add(popupPanel);
+		
+		JMenuItem newConnection = new JMenuItem("Neue Verbindung herstellen");
+		newConnection.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				popupFrame.setVisible(true);
+			}
+		});
+		fileMenu.add(newConnection);
+		
+		
+		// Menu cancel Connection
 		JMenuItem cancelConnection = new JMenuItem("Verbindung abbrechen");
 		// Action Listener definition for cancel connection
 		cancelConnection.addActionListener(new ActionListener() {
@@ -154,8 +203,10 @@ public class BattleshipGame extends JFrame {
 		fileMenu.add(cancelConnection);
 
 		
-		fileMenu.addSeparator();
+		
 
+		// Menu Exit Game
+		fileMenu.addSeparator();
 		JMenuItem exitGame = new JMenuItem("Beenden");
 		exitGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
