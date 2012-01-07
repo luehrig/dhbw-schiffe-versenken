@@ -90,13 +90,12 @@ public class BattleshipGame extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setBounds(100, 100, 680, 450);
 
-		FrameLayout border = new FrameLayout(player1, player2);
 		this.setLayout(new BorderLayout());
-		this.add(border.north, BorderLayout.NORTH);
-		this.add(border.east, BorderLayout.EAST);
-		this.add(border.south, BorderLayout.SOUTH);
-		this.add(border.west, BorderLayout.WEST);
-		this.add(border.center, BorderLayout.CENTER);
+		this.add(new North(), BorderLayout.NORTH);
+		this.add(new East(player1, player2), BorderLayout.EAST);
+		this.add(new South(), BorderLayout.SOUTH);
+		this.add(new West(), BorderLayout.WEST);
+		this.add(new BattlefieldViewer(player1, player2), BorderLayout.CENTER);
 		this.setVisible(true);
 	}
 

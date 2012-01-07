@@ -10,17 +10,18 @@ public class Player {
 							new ships.PatrolBoat(),
 							new ships.Submarine(),
 							new ships.BattleShip()};
-							
-							
-							
-//	private Client client;
 	
-//	public Player( String iv_name, Battlefield iv_battlefield, String iv_ip, Client ir_client) {
-//		this.name = iv_name;
-//		this.battlefield = iv_battlefield;
-//		this.ipAddress = iv_ip;
-//		this.client = ir_client;
-//	}
+	private boolean[] isShipSet = { false, false, false, false, false };
+	public int aircraftcarrier = 0;
+	public int destroyer = 1;
+	public int patrolboat = 2;
+	public int submarine = 3;
+	public int battleship = 4;
+	
+	public Ship selectedShip;
+	
+	public boolean isMouseListenerActive = true;
+							
 	
 	public Player(String iv_name) {
 		this.name = iv_name;
@@ -42,6 +43,28 @@ public class Player {
 	
 	public Ship[] getShips() {
 		return this.ships;
+	}
+	
+	public boolean isShipSet(int ship) {
+		if(isShipSet[ship] == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void setShip(int ship) {
+		this.isShipSet[ship] =  true;
+	}
+	
+	public boolean areAllShipsSet() {
+		boolean bool = true;
+		for(int i = 0; i < 5; i++) {
+			if(isShipSet[i] == false) {
+				bool = false;
+			}
+		}
+		return bool;
 	}
 	
 	
