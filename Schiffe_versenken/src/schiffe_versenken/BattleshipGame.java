@@ -33,7 +33,7 @@ public class BattleshipGame extends JFrame {
 	Thread clientThread;
 	Thread serverThread;
 	
-	String ipAdress;
+	String ipAddress;
 	JTextField ipTextField;
 
 	public BattleshipGame() {
@@ -86,6 +86,7 @@ public class BattleshipGame extends JFrame {
 			System.err.println("local network error!");
 			return;
 		}
+		whenConnectionIsSetButtonsEnable();
 	}
 
 	/*
@@ -165,15 +166,30 @@ public class BattleshipGame extends JFrame {
 		
 		JPanel popupPanel = new JPanel();
 		
-		ipTextField = new JTextField("000.000.0.0");
+		ipTextField = new JTextField("127.0.0.1");
+
 		JButton connectButton = new JButton("verbinden");
 		connectButton.addActionListener(new ActionListener() {
 			
+			/*
+			 * 
+			 * When button is pushed, connect to entered IP address
+			 * 
+			 * (non-Javadoc)
+			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ipAdress = ipTextField.getText();
-				popupFrame.setVisible(false);
+				ipAddress = ipTextField.getText();
+				if(ipAddress != null) {
+					popupFrame.setVisible(false);
+					connectToPartner(ipAddress, 6200);
+					
+				}
+				else {
+					System.err.println("No IP address was entered!"); 
+				}
 				
 			}
 			
