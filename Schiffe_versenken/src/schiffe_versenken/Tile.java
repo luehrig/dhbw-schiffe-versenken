@@ -17,10 +17,10 @@ public class Tile extends JButton {
 	public Tile(int x, int y, Status status) {
 		this.x = x;
 		this.y = y;
-		this.initField();
+		this.initTile();
 	}
 	
-	private void initField() {
+	private void initTile() {
 		this.setWater();
 		switch(status) {
 		case FAIL: this.setFail(); break;

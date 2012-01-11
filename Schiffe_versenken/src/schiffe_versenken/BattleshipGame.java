@@ -33,18 +33,21 @@ public class BattleshipGame extends JFrame {
 	Client client;
 	Thread clientThread;
 	Thread serverThread;
+	East east;
 	
 	String ipAddress;
 	JTextField ipTextField;
 
+	// BattleshipGame Constructor
 	public BattleshipGame() {
 		super("Battleship Game");
 		this.newPlayer();
 		this.initGUI();
 		this.initMenu();
 		this.addTileActionListener();
-	}
+	}// BattleshipGame Constructor
 
+	// creates new player
 	private void newPlayer() {
 		player1 = new Player("Erol");
 		player2 = new Player("Max");
@@ -84,7 +87,7 @@ public class BattleshipGame extends JFrame {
 				
 			}
  		}
-	}
+	}// addTileActionListener
 
 	/*
 	 * transmit battlefield to server
@@ -162,7 +165,8 @@ public class BattleshipGame extends JFrame {
 
 		this.setLayout(new BorderLayout());
 		this.add(new North(), BorderLayout.NORTH);
-		this.add(new East(player1, player2), BorderLayout.EAST);
+		this.add(east = new East(player1, player2), BorderLayout.EAST);
+		this.addReadyButtonActionListener();
 		this.add(new South(), BorderLayout.SOUTH);
 		this.add(new West(), BorderLayout.WEST);
 		this.add(new BattlefieldViewer(player1, player2), BorderLayout.CENTER);
@@ -182,7 +186,7 @@ public class BattleshipGame extends JFrame {
 	
 
 
-	// initialisiert die Menüleiste
+	// initializes taskbar
 	private void initMenu() {
 		// init JMenuBar
 		JMenuBar menuBar = new JMenuBar();
@@ -273,6 +277,27 @@ public class BattleshipGame extends JFrame {
 			}
 		});
 		fileMenu.add(exitGame);
+	}// initMenu
+	
+	
+	// adds ready button on east panel an action listener
+	public void addReadyButtonActionListener() {
+		east.ready.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(	player1.areAllShipsSet()) {
+					
+					player1.getBattlefield().setButtonsDisable();
+					player2.getBattlefield().setButtonsEnable();
+					east.ready.setEnabled(false);
+					
+					for(int i = 0; i < 10; i ++) {
+						for(int j = 0; j < 10; j++) {
+							player2.getBattlefield().getBoard()[i][j].isBoardShootable = true;
+						}
+					}	
+				}
+			}
+		});
 	}
 
 	/**
@@ -285,5 +310,7 @@ public class BattleshipGame extends JFrame {
 		BattleshipGame game = new BattleshipGame();
 
 	}
+	
+
 
 }
