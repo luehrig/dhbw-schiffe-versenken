@@ -45,7 +45,7 @@ public class Action extends AbstractAction {
 	public String toString() {
 		String result = this.origin + "," + this.key + "," + this.x_pos + "," + this.y_pos;
 		if(this.misc != null) {
-			result.concat( "," + this.misc );
+			result = result.concat( "," + this.misc );
 		}
 		return result;
 	}

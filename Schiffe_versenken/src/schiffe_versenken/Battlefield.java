@@ -68,5 +68,47 @@ public class Battlefield {
 		}
 		return new Point(-1, -1);
 	}
+	
+	/*
+	 * transform battlefield to one String
+	 * 
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		String rv_result = "";
+		String singleTile = null;
+		
+		
+		for(int x_pos = 0; x_pos < this.row; x_pos++) {
+			for(int y_pos = 0; y_pos < this.col; y_pos++) {
+				if(rv_result == "") {
+					singleTile = Integer.toString(x_pos) + "," + Integer.toString(y_pos) + "," + this.board[x_pos][y_pos].getStatus();
+				}
+				else {
+					singleTile = "," + Integer.toString(x_pos) + "," + Integer.toString(y_pos) + "," + this.board[x_pos][y_pos].getStatus();	
+				}
+				rv_result = rv_result.concat(singleTile);
+			}
+		}
+		
+		
+		return rv_result;
+	}
+	
+	/*
+	 * return number of battlefield rows 
+	 */
+	public int getRowNumber() {
+		return this.row;
+	}
+	
+	/*
+	 * return number of battlefield cols 
+	 */
+	public int getColNumber() {
+		return this.col;
+	}
 }
 

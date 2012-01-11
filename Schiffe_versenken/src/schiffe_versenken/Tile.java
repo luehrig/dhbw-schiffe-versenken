@@ -71,6 +71,10 @@ public class Tile extends JButton {
 		}
 	}
 	
+	public String getStatus() {
+		return this.status.name().toString();
+	}
+	
 	public enum Status {
 		WATER,
 		SHIP,

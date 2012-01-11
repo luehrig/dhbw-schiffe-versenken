@@ -72,10 +72,12 @@ public class BattleshipGame extends JFrame {
 							AWTEvent rr_event = new ActionEvent(fireAction, 0, Helper.fire);
 							
 							String cmd = Helper.eventToCommand(rr_event);
-							
-							// only to test the Message Processor at server side
-							//String cmd = player1.getName() + ",FIRE," + point.x + "," + point.y;
+							// send action string to server
 							client.sendCommand(cmd);
+							
+							
+							// only for testing!
+							transmitBattlefield();
 						}
 					}
 				});
@@ -84,6 +86,24 @@ public class BattleshipGame extends JFrame {
  		}
 	}
 
+	/*
+	 * transmit battlefield to server
+	 */
+	public void transmitBattlefield() {
+		String battlefieldAsString = this.player1.getBattlefield().toString();
+		
+		Action transmitAction = null;
+		try {
+			transmitAction = new Action( InetAddress.getLocalHost().getHostAddress().toString(), Helper.transmit, this.player1.getBattlefield().getColNumber(), this.player1.getBattlefield().getRowNumber(), battlefieldAsString);
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+		AWTEvent rr_event = new ActionEvent(transmitAction, 0, Helper.transmit);
+		
+		String cmd = Helper.eventToCommand(rr_event);
+		client.sendCommand(cmd);
+	}
+	
 	/*
 	 * creates server on local machine (incl. save reference for Server object) 
 	 * and connect local user to server
