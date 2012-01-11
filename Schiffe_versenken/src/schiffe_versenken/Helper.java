@@ -14,6 +14,7 @@ public class Helper {
 	public static final String fire 	= "FIRE";
 	public static final String ok 		= "OK";
 	public static final String resend	= "RESEND";
+	public static final String transmit = "TRANSMITFIELD";
 
 	/*
 	 * convert a byte array in integer value

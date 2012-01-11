@@ -1,6 +1,10 @@
 package schiffe_versenken;
 
-public class Action {
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
+public class Action extends AbstractAction {
 
 	private String origin;
 	private String key;
@@ -44,6 +48,12 @@ public class Action {
 			result.concat( "," + this.misc );
 		}
 		return result;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

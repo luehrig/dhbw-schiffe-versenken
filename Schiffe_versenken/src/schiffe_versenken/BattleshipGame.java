@@ -62,8 +62,19 @@ public class BattleshipGame extends JFrame {
 					{
 						Point point = player2.getBattlefield().getTileCoords((Tile)e.getSource());
 						if(player2.getBattlefield().getBoard()[point.x][point.y].isBoardShootable) {
+							
+							Action fireAction = null;
+							try {
+								fireAction = new Action( InetAddress.getLocalHost().getHostAddress().toString(), Helper.fire, point.x, point.y, "");
+							} catch (UnknownHostException e1) {
+								e1.printStackTrace();
+							}
+							AWTEvent rr_event = new ActionEvent(fireAction, 0, Helper.fire);
+							
+							String cmd = Helper.eventToCommand(rr_event);
+							
 							// only to test the Message Processor at server side
-							String cmd = player1.getName() + ",FIRE," + point.x + "," + point.y;
+							//String cmd = player1.getName() + ",FIRE," + point.x + "," + point.y;
 							client.sendCommand(cmd);
 						}
 					}
@@ -138,13 +149,16 @@ public class BattleshipGame extends JFrame {
 		this.setVisible(true);
 	}
 	
+	
 	public void whenConnectionIsSetButtonsEnable() {
 		for(int i = 0; i < 5; i++) {
 			player1.getShips()[i].button.setEnabled(true);
 		}
 	}
 	
-	
+	public void disableAllButtons() {
+		// TODO implement this method to disable all Buttons after a connection closed!
+	}
 	
 
 
