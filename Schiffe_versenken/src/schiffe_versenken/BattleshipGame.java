@@ -1,5 +1,6 @@
 package schiffe_versenken;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
@@ -61,7 +62,9 @@ public class BattleshipGame extends JFrame {
 					{
 						Point point = player2.getBattlefield().getTileCoords((Tile)e.getSource());
 						if(player2.getBattlefield().getBoard()[point.x][point.y].isBoardShootable) {
-							new Shot(point.x, point.y);
+							// only to test the Message Processor at server side
+							String cmd = player1.getName() + ",FIRE," + point.x + "," + point.y;
+							client.sendCommand(cmd);
 						}
 					}
 				});
@@ -86,6 +89,7 @@ public class BattleshipGame extends JFrame {
 			System.err.println("local network error!");
 			return;
 		}
+		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
 	}
 
@@ -93,10 +97,15 @@ public class BattleshipGame extends JFrame {
 	 * connect to partner and save reference for Client object
 	 */
 	private void connectToPartner(String iv_ip, int iv_port) {	
+		// try to connect to server side
 		Runnable client = new Client( iv_ip, iv_port );
+		// start new thread
 		clientThread = new Thread(client);
 		clientThread.start();
+		// save reference to client object for later processing
 		this.client = (Client) client;
+		// unlock all GUI elements
+		whenConnectionIsSetButtonsEnable();
 	}
 	
 	
