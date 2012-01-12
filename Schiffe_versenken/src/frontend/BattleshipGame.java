@@ -109,6 +109,47 @@ public class BattleshipGame extends JFrame {
 	}
 	
 	
+	
+	/*
+	 * react on event from Server
+	 * 
+	 */
+	public void handleEvent(AWTEvent ir_event) {
+		System.err.println("GUI instance received Action from Server!");
+		
+		Action action = Helper.awtEventToAction(ir_event);
+		
+		switch(action.getKey()) {
+		case Helper.start:
+			// if IP address in message is local IP, start game
+			if(action.getMisc().equals( this.localPlayer.getName() ) == true ) {
+				this.remotePlayer.getBattlefield().setButtonsEnable();
+			}
+			break;
+		case Helper.result:
+			break;
+		}
+	}
+	
+	/*
+	 * add new observer to current object
+	 */
+	public void addObserver(Client ir_object) {
+		//observer.add(ir_object);
+	}
+	
+	/*
+	 * forward event to all observers
+	 */
+	public void fireEvent(AWTEvent ir_event) {
+//		for(Server object:observer) {
+//			object.handleEvent(ir_event);
+//		}
+	}
+	
+	
+	
+	
 	/**********************************************
 	 * ACTION LISTENER SECTION FOR GUI EVENTS
 	 * 
@@ -234,6 +275,8 @@ public class BattleshipGame extends JFrame {
 		clientThread.start();
 		// save reference to client object for later processing
 		this.client = (Client) client;
+		// add GUI to client to receive broadcast events from server
+		this.client.addGUI(this);
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
 	}

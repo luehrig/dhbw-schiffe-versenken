@@ -14,15 +14,11 @@ public abstract class NetworkObject {
 	protected BufferedReader readerIn;
 	protected String sendBuffer;
 
-	
-	
-	
-	
 	/*
 	 * send command
 	 * */
 	public void sendCommand(String iv_command) {
-		writerOut.println(iv_command);
+		this.writerOut.println(iv_command);
 		this.sendBuffer = iv_command;
 	}
 

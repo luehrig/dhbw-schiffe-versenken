@@ -20,8 +20,8 @@ public class Server implements Runnable {
 		private Server parent;
 		private Socket socket = null;
 		private int threadID;
-		private PrintWriter writerOut;
-		private BufferedReader readerIn;
+		//private PrintWriter writerOut;
+		//private BufferedReader readerIn;
 		
 		private String receivedCommand;
 		private int errorCount;
@@ -220,10 +220,11 @@ public class Server implements Runnable {
 	}
 	
 	/*
-	 * react on event
+	 * react on event from Message Processor
+	 * only send broadcast message to all connected clients
 	 */
-	private void handleEvent(AWTEvent ir_event) {
-		// do something useful
+	public void handleEvent(AWTEvent ir_event) {
+		this.sendBroadcastMessage( Helper.eventToCommand(ir_event) );
 	}
 	
 	/*

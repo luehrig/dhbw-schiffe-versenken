@@ -16,6 +16,11 @@ public class Helper {
 	public static final String ok = "OK";
 	public static final String resend = "RESEND";
 	public static final String transmit = "TRANSMITFIELD";
+	public static final String start = "START";
+	public static final String server = "MASTERMIND";
+	public static final String bye = "BYE";
+	public static final String ping = "PING";
+	public static final String result = "RESULT";
 
 	/*
 	 * convert a byte array in integer value
@@ -28,6 +33,13 @@ public class Helper {
 		return result;
 	}
 
+	/*
+	 * generate random integer between x and y
+	 */
+	public static int getRandomInteger(int x, int y) {
+		return (int) (x + Math.floor(Math.random() * (y-x+1)));
+	}
+	
 	/*
 	 * check if command has no modification
 	 */

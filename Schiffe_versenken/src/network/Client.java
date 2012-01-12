@@ -1,10 +1,12 @@
 package network;
 
+import java.awt.AWTEvent;
 import java.io.*;
 import java.net.*;
 
-import backend.Helper;
+import frontend.BattleshipGame;
 
+import backend.Helper;
 
 public class Client extends NetworkObject implements Runnable {
 
@@ -19,16 +21,16 @@ public class Client extends NetworkObject implements Runnable {
 		/*
 		 * constructor
 		 */
-		public KeepAliveThread(long iv_max_timeout, PrintWriter ir_outbound) {
+		public KeepAliveThread(PrintWriter ir_outbound) {
 			super("KeepAliveThread");
-			this.max_timeout = iv_max_timeout;
 			this.outboundPlug = ir_outbound;
 		}
-		
+
 		/*
 		 * send "PING" to partner every 10 seconds
 		 * 
 		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Thread#run()
 		 */
 		public void run() {
@@ -36,7 +38,7 @@ public class Client extends NetworkObject implements Runnable {
 				this.outboundPlug.println("PING");
 				System.out.println("Client: " + ip + " Ping");
 				try {
-					Thread.sleep(this.max_timeout-100);
+					Thread.sleep(10000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -52,11 +54,10 @@ public class Client extends NetworkObject implements Runnable {
 	private KeepAliveThread keepAliveThread = null;
 	private String receivedCommand;
 	private int errorCount;
-
+	private BattleshipGame gameGUI;
 
 	private final int maxErrorCount = 2;
-	
-	
+
 	/*
 	 * creates client object including a connection to server
 	 */
@@ -66,12 +67,19 @@ public class Client extends NetworkObject implements Runnable {
 	}
 
 	/*
+	 * add gui reference for event handling to client object
+	 */
+	public void addGUI(BattleshipGame ir_game) {
+		this.gameGUI = ir_game;
+	}
+
+	/*
 	 * this method shutdown the client
 	 */
 	public void switchOff() {
 		this.powerSwitch = false;
-	} 
-	
+	}
+
 	/*
 	 * initiate connection to specified server
 	 */
@@ -92,10 +100,10 @@ public class Client extends NetworkObject implements Runnable {
 			System.exit(1);
 		}
 
-		// start keep alive thread that pings server every 60 seconds
-		keepAliveThread = new KeepAliveThread(60, this.writerOut);
+		// start keep alive thread that pings server every 10 seconds
+		keepAliveThread = new KeepAliveThread(this.writerOut);
 		keepAliveThread.start();
-		
+
 		System.out.println("Connection to " + this.ip + " on port "
 				+ this.communicationPort + " established!");
 
@@ -111,30 +119,30 @@ public class Client extends NetworkObject implements Runnable {
 					this.receivedCommand = this.readerIn.readLine();
 					this.errorCount = 0;
 				} catch (SocketException | SocketTimeoutException e) {
-					if(this.errorCount < this.maxErrorCount) {
+					if (this.errorCount < this.maxErrorCount) {
 						this.errorCount++;
-					}
-					else {
+					} else {
 						System.err.println("connection to server lost...");
 						break;
 					}
 				}
-				System.out.println("Client received command: " + this.receivedCommand);
-				if (receivedCommand.equals("BYE")) {
+				System.out.println("Client received command: "
+						+ this.receivedCommand);
+				
+				
+				switch(this.receivedCommand) {
+				case Helper.resend:
+					this.sendCommand(sendBuffer);
+					break;
+				case Helper.ping:
+					break;
+				case Helper.bye:
 					this.writerOut.println("BYE");
 					break;
+				default:
+					// fire event to to GUI
+					this.gameGUI.handleEvent(Helper.commandToEvent(receivedCommand));
 				}
-
-				if(receivedCommand.equals("PING")) {
-
-				}
-				
-				if(receivedCommand.equals(Helper.resend)) {
-					this.sendCommand( sendBuffer );
-				}
-				
-				// command handling is still missing
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -156,11 +164,11 @@ public class Client extends NetworkObject implements Runnable {
 
 		System.out.println("Connection to host lost...");
 	}
-	
+
 	@Override
 	public void run() {
 		this.communicationSocket = this.initiateCommunicationSocket();
-		
+
 		this.listen();
 	}
 
