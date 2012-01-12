@@ -1,4 +1,10 @@
-package schiffe_versenken;
+package frontend;
+
+import frontend.views.BattlefieldViewer;
+import frontend.views.Chat;
+import frontend.views.Header;
+import frontend.views.SetupView;
+import frontend.views.StatusBar;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -12,6 +18,11 @@ import java.net.UnknownHostException;
 
 
 import javax.swing.*;
+
+import backend.Action;
+import backend.Helper;
+import backend.Player;
+import backend.Tile;
 
 import network.Client;
 import network.Server;
@@ -27,13 +38,13 @@ public class BattleshipGame extends JFrame {
 	JFrame popupFrame;
 	Popup popup;
 	
-	Player player1;
-	Player player2;
+	Player localPlayer;
+	Player remotePlayer;
 	Server server;
 	Client client;
 	Thread clientThread;
 	Thread serverThread;
-	East east;
+	SetupView east;
 	
 	String ipAddress;
 	JTextField ipTextField;
@@ -41,30 +52,42 @@ public class BattleshipGame extends JFrame {
 	// BattleshipGame Constructor
 	public BattleshipGame() {
 		super("Battleship Game");
-		this.newPlayer();
+		try {
+			this.newPlayer();
+		} catch (UnknownHostException e) {
+			System.err.println("error while initializing players!");
+		}
 		this.initGUI();
 		this.initMenu();
 		this.addTileActionListener();
 	}// BattleshipGame Constructor
 
-	// creates new player
-	private void newPlayer() {
-		player1 = new Player("Erol");
-		player2 = new Player("Max");
+	/*
+	 * creates new player objects
+	 * 
+	 * player1 represents local player and is initialized with local IP address as name
+	 * player2 represents remote player
+	 */
+	private void newPlayer() throws UnknownHostException {
+		localPlayer = new Player( InetAddress.getLocalHost().getHostAddress().toString() );
+		remotePlayer = new Player("remote");
 	}
 	
 	
-	// adds every Tile in the Battlefied of Player 2 an ActionListener
+	/*
+	 * adds every Tile in the Battlefied of the remote player an ActionListener that is used to
+	 * fire by player 1.
+	 */
 	private void addTileActionListener() {
 
 		for(int x = 0; x < 10; x++ ) {
 			for(int y = 0; y < 10; y++ ) {
-				player2.getBattlefield().getBoard()[x][y].addActionListener(new ActionListener() 
+				remotePlayer.getBattlefield().getBoard()[x][y].addActionListener(new ActionListener() 
 				{
 					public void actionPerformed(ActionEvent e) 
 					{
-						Point point = player2.getBattlefield().getTileCoords((Tile)e.getSource());
-						if(player2.getBattlefield().getBoard()[point.x][point.y].isBoardShootable) {
+						Point point = remotePlayer.getBattlefield().getTileCoords((Tile)e.getSource());
+						if(remotePlayer.getBattlefield().getBoard()[point.x][point.y].isBoardShootable) {
 							
 							Action fireAction = null;
 							try {
@@ -77,33 +100,106 @@ public class BattleshipGame extends JFrame {
 							String cmd = Helper.eventToCommand(rr_event);
 							// send action string to server
 							client.sendCommand(cmd);
-							
-							
-							// only for testing!
-							transmitBattlefield();
 						}
 					}
 				});
 				
 			}
  		}
-	}// addTileActionListener
-
-	/*
-	 * transmit battlefield to server
+	}
+	
+	
+	/**********************************************
+	 * ACTION LISTENER SECTION FOR GUI EVENTS
+	 * 
 	 */
-	public void transmitBattlefield() {
-		String battlefieldAsString = this.player1.getBattlefield().toString();
+	
+	/*
+	 * ActionListener for create game button in options menu
+	 */
+	private ActionListener actionListenerCreateGameButton = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			createServer();
+		}
+
+	};
+	
+	/*
+	 * ActionListener for connect button in options menu
+	 * 
+	 * When button is pushed, connect to entered IP address
+	 */
+	private ActionListener actionListenerConnectButton = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			ipAddress = ipTextField.getText();
+			if(ipAddress != null) {
+				popupFrame.setVisible(false);
+				connectToPartner(ipAddress, 6200);
+			}
+			else {
+				System.err.println("No IP address was entered!"); 
+			}
+			
+		}
 		
-		Action transmitAction = null;
+	};
+	
+	/*
+	 * ActionListener for "connect to partner" button in connect popup
+	 */
+	private ActionListener actionListenerInitializeConnectionButton = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			popupFrame.setVisible(true);
+		}
+	};
+	
+	
+	/*
+	 * ActionListener for cancel button in options menu
+	 */
+	private ActionListener actionListenerCancelButton = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			cancelGame();
+		}
+	};
+	
+	/*
+	 * ActionListener for exit game button in options menu
+	 */
+	private ActionListener actionListenerExitButton = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			System.exit(0);
+		}
+	};
+
+	/**********************************************
+	 * METHOD SECTION
+	 * 
+	 */
+	
+	/*
+	 * transmit local initialized battlefield to server
+	 */
+	private void transmitBattlefield() {
+		Action transmitAction;
+		AWTEvent rr_event;
+		String battlefieldAsString;
+		String cmd;
+		
+		// convert local battlefield to string
+		battlefieldAsString = this.localPlayer.getBattlefield().toString();
+		
+		// build action, pack into event that should be transfered to server 
+		transmitAction = null;
 		try {
-			transmitAction = new Action( InetAddress.getLocalHost().getHostAddress().toString(), Helper.transmit, this.player1.getBattlefield().getColNumber(), this.player1.getBattlefield().getRowNumber(), battlefieldAsString);
+			transmitAction = new Action( InetAddress.getLocalHost().getHostAddress().toString(), Helper.transmit, this.localPlayer.getBattlefield().getColNumber(), this.localPlayer.getBattlefield().getRowNumber(), battlefieldAsString);
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
-		AWTEvent rr_event = new ActionEvent(transmitAction, 0, Helper.transmit);
+		rr_event = new ActionEvent(transmitAction, 0, Helper.transmit);
 		
-		String cmd = Helper.eventToCommand(rr_event);
+		// convert event to command and transfer to server
+		cmd = Helper.eventToCommand(rr_event);
 		client.sendCommand(cmd);
 	}
 	
@@ -153,6 +249,7 @@ public class BattleshipGame extends JFrame {
 		if( server != null ) {
 			server.switchOff();
 		}
+		// call finalize methods to make sure that all objects are thrown away
 		client.finalize();
 		server.finalize();
 	}
@@ -164,19 +261,19 @@ public class BattleshipGame extends JFrame {
 		this.setBounds(100, 100, 680, 450);
 
 		this.setLayout(new BorderLayout());
-		this.add(new North(), BorderLayout.NORTH);
-		this.add(east = new East(player1, player2), BorderLayout.EAST);
+		this.add(new Header(), BorderLayout.NORTH);
+		this.add(east = new SetupView(localPlayer, remotePlayer), BorderLayout.EAST);
 		this.addReadyButtonActionListener();
-		this.add(new South(), BorderLayout.SOUTH);
-		this.add(new West(), BorderLayout.WEST);
-		this.add(new BattlefieldViewer(player1, player2), BorderLayout.CENTER);
+		this.add(new StatusBar(), BorderLayout.SOUTH);
+		this.add(new Chat(), BorderLayout.WEST);
+		this.add(new BattlefieldViewer(localPlayer, remotePlayer), BorderLayout.CENTER);
 		this.setVisible(true);
 	}
 	
 	
 	public void whenConnectionIsSetButtonsEnable() {
 		for(int i = 0; i < 5; i++) {
-			player1.getShips()[i].button.setEnabled(true);
+			localPlayer.getShips()[i].button.setEnabled(true);
 		}
 	}
 	
@@ -197,12 +294,7 @@ public class BattleshipGame extends JFrame {
 
 		// Menu New Game
 		JMenuItem newGame = new JMenuItem("Neues Spiel");
-		newGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				createServer();
-			}
-
-		});
+		newGame.addActionListener( actionListenerCreateGameButton );
 		fileMenu.add(newGame);
 
 		// Menu new Connection
@@ -216,66 +308,27 @@ public class BattleshipGame extends JFrame {
 		ipTextField = new JTextField("127.0.0.1");
 
 		JButton connectButton = new JButton("verbinden");
-		connectButton.addActionListener(new ActionListener() {
-			
-			/*
-			 * 
-			 * When button is pushed, connect to entered IP address
-			 * 
-			 * (non-Javadoc)
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				ipAddress = ipTextField.getText();
-				if(ipAddress != null) {
-					popupFrame.setVisible(false);
-					connectToPartner(ipAddress, 6200);
-					
-				}
-				else {
-					System.err.println("No IP address was entered!"); 
-				}
-				
-			}
-			
-		});
+		connectButton.addActionListener( actionListenerConnectButton );
 		popupPanel.add(ipTextField);
 		popupPanel.add(connectButton);
 		popupFrame.add(popupPanel);
 		
 		JMenuItem newConnection = new JMenuItem("Neue Verbindung herstellen");
-		newConnection.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				popupFrame.setVisible(true);
-			}
-		});
+		newConnection.addActionListener( actionListenerInitializeConnectionButton );
 		fileMenu.add(newConnection);
 		
 		
 		// Menu cancel Connection
 		JMenuItem cancelConnection = new JMenuItem("Verbindung abbrechen");
 		// Action Listener definition for cancel connection
-		cancelConnection.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cancelGame();
-			}
-		});
+		cancelConnection.addActionListener( actionListenerCancelButton );
 		fileMenu.add(cancelConnection);
-
-		
 		
 
 		// Menu Exit Game
 		fileMenu.addSeparator();
 		JMenuItem exitGame = new JMenuItem("Beenden");
-		exitGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
+		exitGame.addActionListener(actionListenerExitButton);
 		fileMenu.add(exitGame);
 	}// initMenu
 	
@@ -284,33 +337,33 @@ public class BattleshipGame extends JFrame {
 	public void addReadyButtonActionListener() {
 		east.ready.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(	player1.areAllShipsSet()) {
+				if(	localPlayer.areAllShipsSet()) {
 					
-					player1.getBattlefield().setButtonsDisable();
-					player2.getBattlefield().setButtonsEnable();
+					localPlayer.getBattlefield().setButtonsDisable();
+					remotePlayer.getBattlefield().setButtonsDisable();
 					east.ready.setEnabled(false);
 					
 					for(int i = 0; i < 10; i ++) {
 						for(int j = 0; j < 10; j++) {
-							player2.getBattlefield().getBoard()[i][j].isBoardShootable = true;
+							remotePlayer.getBattlefield().getBoard()[i][j].isBoardShootable = true;
 						}
-					}	
+					}
+					
+					// transfer local battlefield to server instance
+					transmitBattlefield();
 				}
 			}
 		});
 	}
 
 	/**
+	 * method to start to game BattleShip
+	 *  
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 		// startet das Spiel
 		BattleshipGame game = new BattleshipGame();
-
 	}
-	
-
 
 }

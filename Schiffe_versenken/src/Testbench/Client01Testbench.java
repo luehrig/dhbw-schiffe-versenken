@@ -2,7 +2,8 @@ package Testbench;
 
 import java.awt.AWTEvent;
 
-import schiffe_versenken.Helper;
+import backend.Helper;
+
 import network.Client;
 
 public class Client01Testbench {

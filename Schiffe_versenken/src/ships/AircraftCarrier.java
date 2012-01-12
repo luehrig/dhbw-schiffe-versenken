@@ -1,6 +1,6 @@
 package ships;
 
-import schiffe_versenken.Ship;
+import backend.Ship;
 
 public final class AircraftCarrier extends Ship {
 

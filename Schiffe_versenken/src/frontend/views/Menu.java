@@ -1,4 +1,4 @@
-package schiffe_versenken;
+package frontend.views;
 
 import javax.swing.JMenu;
 

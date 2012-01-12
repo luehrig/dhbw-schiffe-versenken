@@ -1,4 +1,4 @@
-package schiffe_versenken;
+package frontend.views;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,9 +7,9 @@ import java.net.UnknownHostException;
 
 import javax.swing.JLabel;
 
-public class South extends JLabel {
+public class StatusBar extends JLabel {
 	
-	public South() {
+	public StatusBar() {
 		this.setForeground(Color.WHITE);
 		this.setBackground(Color.DARK_GRAY);
 		this.setFont(new Font("Arial", Font.BOLD, 20));

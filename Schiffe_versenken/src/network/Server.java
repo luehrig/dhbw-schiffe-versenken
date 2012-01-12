@@ -1,10 +1,13 @@
 package network;
 
 import java.net.*;
+import java.util.LinkedList;
 import java.awt.AWTEvent;
 import java.io.*;
 
-import schiffe_versenken.Helper;
+import backend.Helper;
+import backend.MessageProcessor;
+
 
 public class Server implements Runnable {
 
@@ -14,11 +17,12 @@ public class Server implements Runnable {
 	 * this thread is talking with a single client
 	 */
 	private class ServerThread extends NetworkObject implements Runnable {
+		private Server parent;
 		private Socket socket = null;
 		private int threadID;
 		private PrintWriter writerOut;
 		private BufferedReader readerIn;
-		private MessageProcessor msgProcessor;
+		
 		private String receivedCommand;
 		private int errorCount;
 
@@ -27,10 +31,9 @@ public class Server implements Runnable {
 		/*
 		 * constructor buffer socket reference in object
 		 */
-		public ServerThread(int iv_threadID, Socket ir_socket) {
+		public ServerThread(Server ir_parent, int iv_threadID, Socket ir_socket) {
 			this.threadID = iv_threadID;
 			this.socket = ir_socket;
-			this.msgProcessor = new MessageProcessor(this);
 		}
 
 		/*
@@ -98,10 +101,13 @@ public class Server implements Runnable {
 					this.writerOut.println("PING");
 					System.out
 							.println("Server received Ping command and sent it back!");
-				} else {
+				} 
+				else if (this.receivedCommand.equals( Helper.resend )) {
+					this.sendCommand(sendBuffer);				
+				}
+				else {
 					AWTEvent event = Helper.commandToEvent(receivedCommand);
-
-					this.msgProcessor.handleEvent(event);
+					msgProcessor.handleEvent(event);
 				}
 
 				// command handling is still missing
@@ -132,6 +138,10 @@ public class Server implements Runnable {
 	private boolean powerSwitch = true;
 	private ServerThread[] serverThreads = new ServerThread[this.maxClients];
 
+	protected MessageProcessor msgProcessor;
+	private LinkedList<Server> observer = new LinkedList<Server>();
+	
+	
 	private final int maxClients = 2;
 
 	/*
@@ -139,6 +149,7 @@ public class Server implements Runnable {
 	 */
 	public Server(int iv_port) {
 		this.communicationport = iv_port;
+		this.msgProcessor = this.getMessageProcessorInstance();
 	}
 
 	/*
@@ -185,6 +196,7 @@ public class Server implements Runnable {
 				try {
 					// create new ServerThread for every incoming client
 					this.serverThreads[this.clientCounter] = new ServerThread(
+							this,
 							this.clientCounter,
 							this.communicationSocket.accept());
 					new Thread(this.serverThreads[this.clientCounter]).start();
@@ -199,6 +211,38 @@ public class Server implements Runnable {
 		}
 	}
 
+	/*
+	 * create Message Processor instance
+	 */
+	public MessageProcessor getMessageProcessorInstance() {
+		MessageProcessor msgProcessor = new MessageProcessor(this);
+		return msgProcessor;
+	}
+	
+	/*
+	 * react on event
+	 */
+	private void handleEvent(AWTEvent ir_event) {
+		// do something useful
+	}
+	
+	/*
+	 * add new observer to current object
+	 */
+	public void addObserver(Server ir_object) {
+		observer.add(ir_object);
+	}
+	
+	/*
+	 * forward event to all observers
+	 */
+	public void fireEvent(AWTEvent ir_event) {
+		for(Server object:observer) {
+			object.handleEvent(ir_event);
+		}
+	}
+	
+	
 	/*
 	 * make sure that after a game whole connection is closed
 	 */

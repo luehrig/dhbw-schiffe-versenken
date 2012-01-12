@@ -1,4 +1,4 @@
-package schiffe_versenken;
+package frontend.views;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -9,7 +9,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class East extends JPanel {
+import backend.Player;
+
+
+public class SetupView extends JPanel {
 	
 	private Player player1;
 	private Player player2;
@@ -18,7 +21,7 @@ public class East extends JPanel {
 	
 	
 	// East Constructor
-	public East(final Player player1, final Player player2) {
+	public SetupView(final Player player1, final Player player2) {
 		this.player1 = player1;
 		this.player2 = player2;
 		this.initLayout();

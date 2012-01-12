@@ -1,43 +1,21 @@
 package network;
 
-
-import java.awt.AWTEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.LinkedList;
+
+import backend.Helper;
 
 
-import schiffe_versenken.Helper;
 
 public abstract class NetworkObject {
 
 	protected PrintWriter writerOut;
 	protected BufferedReader readerIn;
-	private LinkedList<NetworkObject> observer = new LinkedList();
+	protected String sendBuffer;
+
 	
-	/*
-	 * react on event
-	 */
-	private void handleEvent(AWTEvent ir_event) {
-		// do something useful
-	}
 	
-	/*
-	 * add new observer to current object
-	 */
-	public void addObserver(NetworkObject ir_object) {
-		observer.add(ir_object);
-	}
-	
-	/*
-	 * forward event to all observers
-	 */
-	public void fireEvent(AWTEvent ir_event) {
-		for(NetworkObject object:observer) {
-			object.handleEvent(ir_event);
-		}
-	}
 	
 	
 	/*
@@ -45,6 +23,7 @@ public abstract class NetworkObject {
 	 * */
 	public void sendCommand(String iv_command) {
 		writerOut.println(iv_command);
+		this.sendBuffer = iv_command;
 	}
 
 	

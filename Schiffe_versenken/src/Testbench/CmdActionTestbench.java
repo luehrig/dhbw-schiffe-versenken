@@ -2,7 +2,8 @@ package Testbench;
 
 import java.awt.AWTEvent;
 
-import schiffe_versenken.Helper;
+import backend.Helper;
+
 
 public class CmdActionTestbench {
 

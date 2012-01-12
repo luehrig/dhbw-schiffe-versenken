@@ -1,4 +1,4 @@
-package schiffe_versenken;
+package frontend.views;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -8,6 +8,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
+
+import backend.Player;
+import backend.Tile;
+
 
 public class BattlefieldViewer extends JPanel implements MouseListener {
 	

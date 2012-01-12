@@ -1,4 +1,4 @@
-package schiffe_versenken;
+package backend;
 
 import java.awt.AWTEvent;
 import java.awt.event.ActionEvent;
@@ -6,14 +6,15 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
 public class Helper {
 
 	/*
 	 * global constants
 	 */
-	public static final String fire 	= "FIRE";
-	public static final String ok 		= "OK";
-	public static final String resend	= "RESEND";
+	public static final String fire = "FIRE";
+	public static final String ok = "OK";
+	public static final String resend = "RESEND";
 	public static final String transmit = "TRANSMITFIELD";
 
 	/*
@@ -82,7 +83,7 @@ public class Helper {
 		String key = null;
 		int x_pos = 0;
 		int y_pos = 0;
-		String misc = null;
+		String misc = "";
 
 		// split command to single values (separated by ',')
 		commandParts = iv_command.split("\\,");
@@ -107,7 +108,12 @@ public class Helper {
 				break;
 			default:
 				// other values are optional parameters
-				misc = misc.concat(commandParts[i]);
+				if (misc != "") {
+					misc = misc.concat("," + commandParts[i]);
+				}
+				else {
+					misc = misc.concat(commandParts[i]);
+				}
 				break;
 			}
 		}

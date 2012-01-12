@@ -1,10 +1,10 @@
-package schiffe_versenken;
+package backend;
+
 
 public class Player {
 
 	private String name;
 	private Battlefield battlefield;
-	private String ipAddress;
 	private Ship[] ships = {new ships.AircraftCarrier(),
 							new ships.Destroyer(),
 							new ships.PatrolBoat(),

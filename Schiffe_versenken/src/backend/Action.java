@@ -1,4 +1,4 @@
-package schiffe_versenken;
+package backend;
 
 import java.awt.event.ActionEvent;
 
@@ -6,6 +6,10 @@ import javax.swing.AbstractAction;
 
 public class Action extends AbstractAction {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String origin;
 	private String key;
 	private int x_pos;

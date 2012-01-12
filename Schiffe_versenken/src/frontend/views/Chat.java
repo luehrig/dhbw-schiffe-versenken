@@ -1,13 +1,13 @@
-package schiffe_versenken;
+package frontend.views;
 
 import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
 
-public class West extends JLabel {
+public class Chat extends JLabel {
 	
-	public West() {
+	public Chat() {
 		this.setForeground(Color.WHITE);
 		this.setBackground(Color.DARK_GRAY);
 		this.setFont(new Font("Arial", Font.BOLD, 20));

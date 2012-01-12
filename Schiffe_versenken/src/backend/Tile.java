@@ -1,4 +1,4 @@
-package schiffe_versenken;
+package backend;
 
 import java.awt.Color;
 import java.awt.Insets;

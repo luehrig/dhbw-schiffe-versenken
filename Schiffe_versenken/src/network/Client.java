@@ -3,6 +3,9 @@ package network;
 import java.io.*;
 import java.net.*;
 
+import backend.Helper;
+
+
 public class Client extends NetworkObject implements Runnable {
 
 	/*
@@ -33,7 +36,7 @@ public class Client extends NetworkObject implements Runnable {
 				this.outboundPlug.println("PING");
 				System.out.println("Client: " + ip + " Ping");
 				try {
-					Thread.sleep(10000);
+					Thread.sleep(this.max_timeout-100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -45,11 +48,11 @@ public class Client extends NetworkObject implements Runnable {
 	private String ip;
 	private int communicationPort;
 	private Socket communicationSocket;
-	private MessageProcessor msgProcessor;
 	private boolean powerSwitch = true;
 	private KeepAliveThread keepAliveThread = null;
 	private String receivedCommand;
 	private int errorCount;
+
 
 	private final int maxErrorCount = 2;
 	
@@ -60,7 +63,6 @@ public class Client extends NetworkObject implements Runnable {
 	public Client(String iv_ip, int iv_port) {
 		this.ip = iv_ip;
 		this.communicationPort = iv_port;
-		this.msgProcessor = new MessageProcessor(this);
 	}
 
 	/*
@@ -125,6 +127,10 @@ public class Client extends NetworkObject implements Runnable {
 
 				if(receivedCommand.equals("PING")) {
 
+				}
+				
+				if(receivedCommand.equals(Helper.resend)) {
+					this.sendCommand( sendBuffer );
 				}
 				
 				// command handling is still missing
