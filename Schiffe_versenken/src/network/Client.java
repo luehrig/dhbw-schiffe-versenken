@@ -36,7 +36,7 @@ public class Client extends NetworkObject implements Runnable {
 		public void run() {
 			while (powerSwitch == true) {
 				this.outboundPlug.println("PING");
-				System.out.println("Client: " + ip + " Ping");
+				//System.out.println("Client: " + ip + " Ping");
 				try {
 					Thread.sleep(10000);
 				} catch (InterruptedException e) {
@@ -126,8 +126,8 @@ public class Client extends NetworkObject implements Runnable {
 						break;
 					}
 				}
-				System.out.println("Client received command: "
-						+ this.receivedCommand);
+//				System.out.println("Client received command: "
+//						+ this.receivedCommand);
 				
 				
 				switch(this.receivedCommand) {

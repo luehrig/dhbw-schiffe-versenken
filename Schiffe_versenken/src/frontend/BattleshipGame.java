@@ -126,7 +126,11 @@ public class BattleshipGame extends JFrame {
 				this.remotePlayer.getBattlefield().setButtonsEnable();
 			}
 			break;
-		case Helper.result:
+		case Helper.hit:
+			System.out.println("Shot hit ship!");
+			break;
+		case Helper.nohit:
+			System.out.println("Shot hit NO ship!");
 			break;
 		}
 	}

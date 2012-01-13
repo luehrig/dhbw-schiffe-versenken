@@ -99,8 +99,8 @@ public class Server implements Runnable {
 				// send "PING" back if "PING" was send
 				else if (this.receivedCommand.equals("PING")) {
 					this.writerOut.println("PING");
-					System.out
-							.println("Server received Ping command and sent it back!");
+//					System.out
+//							.println("Server received Ping command and sent it back!");
 				} 
 				else if (this.receivedCommand.equals( Helper.resend )) {
 					this.sendCommand(sendBuffer);				

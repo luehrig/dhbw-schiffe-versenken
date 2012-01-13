@@ -46,8 +46,52 @@ public class MessageProcessor implements Runnable {
 
 		// decide with key the process route
 		switch (action.getKey()) {
+		/*
+		 * fire command received
+		 * 1. check which player sent command and is this player allowed to send fire command at the the moment
+		 * 2. "fire" command to battlefield of other player
+		 * 3. receive result of "fire" and build message that includes result
+		 * 4. fire event broadcast to all clients
+		 * 
+		 */
 		case Helper.fire:
 			System.out.println("Fire-Event received by Message Processcor!");
+			
+			if(action.getOrigin().equals(this.game.getCurrentPlayer().getName())) {
+				
+				// get battlefield of enemy
+				Battlefield workingBattlefield = this.game.getEnemiesBattlefield(this.game.getCurrentPlayer());
+				Shot shot = new Shot(action.getXPos(), action.getYPos());
+				
+				boolean result = workingBattlefield.setShot(shot);
+				
+				String cmd = "";
+				if(result == true) {
+					// hit
+					cmd = Helper.server + "," + Helper.hit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + this.game.getCurrentPlayer().getName() + "," + this.game.getSuspendedPlayer().getName();
+					this.fireEvent(Helper.commandToEvent(cmd));
+				}
+				else {
+					//no hit : misc include player name of source and destination
+					cmd = Helper.server + "," + Helper.nohit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + this.game.getCurrentPlayer().getName() + "," + this.game.getSuspendedPlayer().getName();
+					this.fireEvent(Helper.commandToEvent(cmd));
+					
+					this.game.setCurrentPlayer( this.game.getSuspendedPlayer() );
+					
+					cmd = Helper.server + "," + Helper.start + ",0,0,"
+							+ this.game.getCurrentPlayer().getName();
+					this.fireEvent(Helper.commandToEvent(cmd));
+					// switch game status to "started"
+					this.game.setGameStarted();
+				}
+				
+			}
+			else {
+				System.err.println(action.getOrigin() + " is NOT allowed to send fire event at the moment!");
+			}
+			
+			
+			
 			break;
 		case Helper.transmit:
 			System.out.println("Battlefield received by Message Processor!");
@@ -66,11 +110,15 @@ public class MessageProcessor implements Runnable {
 
 			// check if game is ready for first round
 			if (game.isReady() == true) {
+				// select by random which player starts the first round
+				this.game.setCurrentPlayer(this.calculatePlayerToStart());
 				// send broadcast message to all clients and publish the
 				// decision
 				String cmd = Helper.server + "," + Helper.start + ",0,0,"
-						+ this.calculatePlayerToStart().getName();
+						+ this.game.getCurrentPlayer().getName();
 				this.fireEvent(Helper.commandToEvent(cmd));
+				// switch game status to "started"
+				this.game.setGameStarted();
 			}
 			// critical section end
 			initialize.release();

@@ -21,6 +21,8 @@ public class Helper {
 	public static final String bye = "BYE";
 	public static final String ping = "PING";
 	public static final String result = "RESULT";
+	public static final String hit = "HIT";
+	public static final String nohit = "WATER";
 
 	/*
 	 * convert a byte array in integer value
