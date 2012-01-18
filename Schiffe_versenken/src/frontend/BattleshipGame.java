@@ -22,6 +22,7 @@ import javax.swing.*;
 import backend.Action;
 import backend.Helper;
 import backend.Player;
+import backend.Shot;
 import backend.Tile;
 
 import network.Client;
@@ -48,7 +49,10 @@ public class BattleshipGame extends JFrame {
 	
 	String ipAddress;
 	JTextField ipTextField;
-
+	
+	// in later versions direct access to text label to switch text
+	String currentPlayer;
+	
 	// BattleshipGame Constructor
 	public BattleshipGame() {
 		super("Battleship Game");
@@ -60,6 +64,9 @@ public class BattleshipGame extends JFrame {
 		this.initGUI();
 		this.initMenu();
 		this.addTileActionListener();
+		
+		Shot s = new Shot(1, 1);
+		remotePlayer.getBattlefield().setShot(s);
 	}// BattleshipGame Constructor
 
 	/*
@@ -125,12 +132,34 @@ public class BattleshipGame extends JFrame {
 			if(action.getMisc().equals( this.localPlayer.getName() ) == true ) {
 				this.remotePlayer.getBattlefield().setButtonsEnable();
 			}
+			// set current Player
+			currentPlayer = action.getMisc();
+			
 			break;
 		case Helper.hit:
 			System.out.println("Shot hit ship!");
+			
+			Shot shot0 = new Shot(action.getXPos(), action.getYPos());
+			if(action.getMisc().equals(this.localPlayer.getName())) {
+				this.localPlayer.getBattlefield().setShot(shot0);
+			}
+			else {
+				this.remotePlayer.getBattlefield().setShotInGUI(shot0);
+			}
+			
+			
 			break;
 		case Helper.nohit:
 			System.out.println("Shot hit NO ship!");
+			
+			Shot shot1 = new Shot(action.getXPos(), action.getYPos());
+			if(action.getMisc().equals(this.localPlayer.getName())) {
+				this.localPlayer.getBattlefield().setShot(shot1);
+			}
+			else {
+				this.remotePlayer.getBattlefield().setFailInGUI(shot1);
+			}
+			
 			break;
 		}
 	}

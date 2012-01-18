@@ -88,6 +88,21 @@ public class Battlefield {
 		}
 	}
 
+	/*
+	 * set shot (hit) in GUI mode
+	 */
+	public void setShotInGUI(Shot ir_shot) {
+		this.board[ir_shot.x][ir_shot.y].setHit();
+	}
+	
+	
+	/*
+	 * set shot (fail) in GUI mode
+	 */
+	public void setFailInGUI(Shot ir_shot) {
+		this.board[ir_shot.x][ir_shot.y].setFail();
+	}
+	
 	public Point getTileCoords(Tile tile) {
 		for (int x = 0; x < row; x++) {
 			for (int y = 0; y < col; y++) {
@@ -98,7 +113,8 @@ public class Battlefield {
 		}
 		return new Point(-1, -1);
 	}
-
+	
+	
 	/*
 	 * transform battlefield to one String
 	 * 
