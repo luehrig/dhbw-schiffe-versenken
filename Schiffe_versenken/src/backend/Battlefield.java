@@ -56,6 +56,7 @@ public class Battlefield {
 		
 	}
 
+	// Set all buttons on battlefield disabled
 	public void setButtonsDisable() {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -65,6 +66,7 @@ public class Battlefield {
 		}
 	}
 
+	// Set all buttons on battlefield enabled
 	public void setButtonsEnable() {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -74,10 +76,14 @@ public class Battlefield {
 		}
 	}
 
+	// returns board
 	public Tile[][] getBoard() {
 		return this.board;
 	}
 
+	// set a shot on board and set the tile hit or fail
+	// returns true, if is hit
+	// returns false, if is not hit
 	public boolean setShot(Shot schuss) {
 		if (board[schuss.x][schuss.y].isShip()) {
 			this.board[schuss.x][schuss.y].setHit();
@@ -103,6 +109,7 @@ public class Battlefield {
 		this.board[ir_shot.x][ir_shot.y].setFail();
 	}
 	
+	// returns Coordinates of the tile which is asked
 	public Point getTileCoords(Tile tile) {
 		for (int x = 0; x < row; x++) {
 			for (int y = 0; y < col; y++) {

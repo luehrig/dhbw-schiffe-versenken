@@ -329,7 +329,7 @@ public class BattleshipGame extends JFrame {
 	}
 	
 	
-	// initialisiert den ganzen Frame
+	// initiate GUI
 	private void initGUI() {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setBounds(100, 100, 680, 450);
@@ -344,7 +344,7 @@ public class BattleshipGame extends JFrame {
 		this.setVisible(true);
 	}
 	
-	
+	// set all Buttons Enabled
 	public void whenConnectionIsSetButtonsEnable() {
 		for(int i = 0; i < 5; i++) {
 			localPlayer.getShips()[i].button.setEnabled(true);
