@@ -332,7 +332,7 @@ public class BattleshipGame extends JFrame {
 	// initiate GUI
 	private void initGUI() {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setBounds(100, 100, 680, 450);
+		this.setBounds(100, 100, 500, 450);
 
 		this.setLayout(new BorderLayout());
 		this.add(new Header(), BorderLayout.NORTH);

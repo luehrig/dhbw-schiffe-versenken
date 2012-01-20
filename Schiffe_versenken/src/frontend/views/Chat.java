@@ -4,15 +4,13 @@ import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-public class Chat extends JLabel {
+public class Chat extends JPanel {
 	
 	public Chat() {
 		this.setForeground(Color.WHITE);
 		this.setBackground(Color.DARK_GRAY);
-		this.setFont(new Font("Arial", Font.BOLD, 20));
-		this.setOpaque(true);
-		this.setText("Chat");
 	}
 
 }
