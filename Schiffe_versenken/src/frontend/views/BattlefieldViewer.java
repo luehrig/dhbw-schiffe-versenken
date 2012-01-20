@@ -59,7 +59,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 				
 				Point point =player1.getBattlefield().getTileCoords((Tile)e.getSource());
 				
-				if(player1.selectedShip instanceof ships.AircraftCarrier) {
+				if(player1.selectedShip instanceof ships.AircraftCarrier && !player1.isShipSet(player1.aircraftcarrier)) {
 					
 					if(horizontal) {
 						if(point.y <= 5 && ( 	!player1.getBattlefield().getBoard()[point.x][point.y].isShip() 	&&
@@ -77,6 +77,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.aircraftcarrier);
 						player1.getShips()[player1.aircraftcarrier].button.setEnabled(false);
+						
 						}
 					} else if(!horizontal){
 						if(point.x <= 5 && ( 	!player1.getBattlefield().getBoard()[point.x][point.y].isShip() 	&&
@@ -99,7 +100,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 
 				}
 				
-				if(player1.selectedShip instanceof ships.PatrolBoat) {
+				if(player1.selectedShip instanceof ships.PatrolBoat && !player1.isShipSet(player1.patrolboat)) {
 					if(horizontal) {
 						if(point.y <= 8 && ( 	!player1.getBattlefield().getBoard()[point.x][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+1].isShip() 	
@@ -126,7 +127,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 
 				}
 				
-				if(player1.selectedShip instanceof ships.Submarine) {
+				if(player1.selectedShip instanceof ships.Submarine && !player1.isShipSet(player1.submarine)) {
 					if(horizontal) {
 						if(point.y <= 7 && ( 	!player1.getBattlefield().getBoard()[point.x][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+1].isShip() 	&&
@@ -157,7 +158,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 
 				}
 				
-				if(player1.selectedShip instanceof ships.Destroyer) {
+				if(player1.selectedShip instanceof ships.Destroyer && !player1.isShipSet(player1.destroyer)) {
 					if(horizontal) {
 						if(point.y <= 7 && ( 	!player1.getBattlefield().getBoard()[point.x][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+1].isShip() 	&&
@@ -188,7 +189,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 
 				}
 				
-				if(player1.selectedShip instanceof ships.BattleShip) {
+				if(player1.selectedShip instanceof ships.BattleShip && !player1.isShipSet(player1.battleship)) {
 					if(horizontal) {
 						if(point.y <= 6 && ( 	!player1.getBattlefield().getBoard()[point.x][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+1].isShip() 	&&
