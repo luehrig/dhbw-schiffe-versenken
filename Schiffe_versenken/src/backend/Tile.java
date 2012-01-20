@@ -13,6 +13,7 @@ public class Tile extends JButton {
 	public int y;
 	public Status status;
 	public boolean isBoardShootable = false;
+	public ShipStatus shipStatus;
 	
 	public Tile(int x, int y, Status status) {
 		this.x = x;
@@ -26,7 +27,6 @@ public class Tile extends JButton {
 		case FAIL: this.setFail(); break;
 		case WATER: this.setWater(); break;
 		case HIT: this.setHit(); break;
-		case SHIP: this.setShip(); break;
 		}
 	}
 	
@@ -43,9 +43,10 @@ public class Tile extends JButton {
 		}
 	}
 	
-	public void setShip() {
+	public void setShip(ShipStatus shipstatus) {
 		this.setBackground(Color.BLACK);
 		this.status = Status.SHIP;
+		this.shipStatus = shipstatus;
 	}
 	
 	public void setHit() {
@@ -71,6 +72,10 @@ public class Tile extends JButton {
 		}
 	}
 	
+	public ShipStatus getShipStatus() {
+		return this.shipStatus;
+	}
+	
 	public String getStatus() {
 		return this.status.name().toString();
 	}
@@ -81,5 +86,14 @@ public class Tile extends JButton {
 		HIT,
 		FAIL,
 		SELECTED;
+	}
+	
+	public enum ShipStatus {
+		DESTROYER,
+		BATTLESHIP,
+		PATROLBOAT,
+		AIRCRAFTCARRIER,
+		SUBMARINE;
+		
 	}
 }
