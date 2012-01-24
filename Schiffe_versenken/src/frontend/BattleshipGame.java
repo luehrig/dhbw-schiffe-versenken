@@ -374,7 +374,6 @@ public class BattleshipGame extends JFrame {
 		// Menu new Connection
 		
 		popupFrame = new JFrame("Verbindung herstellen");
-		popupFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		popupFrame.setBounds(this.getX(), this.getY(), 180, 100);
 		
 		JPanel popupPanel = new JPanel();
