@@ -22,29 +22,34 @@ public class Player {
 	
 	public boolean isMouseListenerActive = true;
 							
-	
+	// Constructor
 	public Player(String iv_name) {
 		this.name = iv_name;
 		this.battlefield = new Battlefield();
 	}
 	
 	
+	// returns Name of Player
 	public String getName() {
 		return this.name;
 	}
 	
+	// returns Battlefield of Player
 	public Battlefield getBattlefield() {
 		return this.battlefield;
 	}
 	
+	// sets a Shot on Player`s battlefield
 	public boolean setShot(Shot shot) {
 			return this.battlefield.setShot(shot);
 	}
 	
+	// returns an array of ships
 	public Ship[] getShips() {
 		return this.ships;
 	}
 	
+	// checks if Ship is set on battlefield
 	public boolean isShipSet(int ship) {
 		if(isShipSet[ship] == true) {
 			return true;
@@ -53,10 +58,12 @@ public class Player {
 		}
 	}
 	
+	// sets ship as set on battlefield
 	public void setShip(int ship) {
 		this.isShipSet[ship] =  true;
 	}
 	
+	// checks, if all Ships of the player are set
 	public boolean areAllShipsSet() {
 		boolean bool = true;
 		for(int i = 0; i < 5; i++) {

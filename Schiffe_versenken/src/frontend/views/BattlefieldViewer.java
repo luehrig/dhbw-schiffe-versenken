@@ -68,11 +68,11 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 												!player1.getBattlefield().getBoard()[point.x][point.y+3].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+4].isShip() 
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+2].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+3].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+4].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
+						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
+						player1.getBattlefield().getBoard()[point.x][point.y+2].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
+						player1.getBattlefield().getBoard()[point.x][point.y+3].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
+						player1.getBattlefield().getBoard()[point.x][point.y+4].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.aircraftcarrier);
@@ -86,11 +86,11 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 												!player1.getBattlefield().getBoard()[point.x+3][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x+4][point.y].isShip() 
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+2][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+3][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+4][point.y].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
+						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
+						player1.getBattlefield().getBoard()[point.x+2][point.y].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
+						player1.getBattlefield().getBoard()[point.x+3][point.y].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
+						player1.getBattlefield().getBoard()[point.x+4][point.y].setShip(Tile.ShipStatus.AIRCRAFTCARRIER);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.aircraftcarrier);
@@ -105,8 +105,8 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 						if(point.y <= 8 && ( 	!player1.getBattlefield().getBoard()[point.x][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+1].isShip() 	
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.PATROLBOAT);
+						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip(Tile.ShipStatus.PATROLBOAT);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.patrolboat);
@@ -116,8 +116,8 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 						if(point.x <= 8 && ( 	!player1.getBattlefield().getBoard()[point.x][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x+1][point.y].isShip() 	
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.PATROLBOAT);
+						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip(Tile.ShipStatus.PATROLBOAT);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.patrolboat);
@@ -133,9 +133,9 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 												!player1.getBattlefield().getBoard()[point.x][point.y+1].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+2].isShip()
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+2].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.SUBMARINE);
+						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip(Tile.ShipStatus.SUBMARINE);
+						player1.getBattlefield().getBoard()[point.x][point.y+2].setShip(Tile.ShipStatus.SUBMARINE);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.submarine);
@@ -146,9 +146,9 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 												!player1.getBattlefield().getBoard()[point.x+1][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x+2][point.y].isShip()
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+2][point.y].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.SUBMARINE);
+						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip(Tile.ShipStatus.SUBMARINE);
+						player1.getBattlefield().getBoard()[point.x+2][point.y].setShip(Tile.ShipStatus.SUBMARINE);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.submarine);
@@ -164,9 +164,9 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 												!player1.getBattlefield().getBoard()[point.x][point.y+1].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+2].isShip()
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+2].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.DESTROYER);
+						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip(Tile.ShipStatus.DESTROYER);
+						player1.getBattlefield().getBoard()[point.x][point.y+2].setShip(Tile.ShipStatus.DESTROYER);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.destroyer);
@@ -177,9 +177,9 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 												!player1.getBattlefield().getBoard()[point.x+1][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x+2][point.y].isShip()
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+2][point.y].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.DESTROYER);
+						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip(Tile.ShipStatus.DESTROYER);
+						player1.getBattlefield().getBoard()[point.x+2][point.y].setShip(Tile.ShipStatus.DESTROYER);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.destroyer);
@@ -196,10 +196,10 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 												!player1.getBattlefield().getBoard()[point.x][point.y+2].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x][point.y+3].isShip()
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+2].setShip();
-						player1.getBattlefield().getBoard()[point.x][point.y+3].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.BATTLESHIP);
+						player1.getBattlefield().getBoard()[point.x][point.y+1].setShip(Tile.ShipStatus.BATTLESHIP);
+						player1.getBattlefield().getBoard()[point.x][point.y+2].setShip(Tile.ShipStatus.BATTLESHIP);
+						player1.getBattlefield().getBoard()[point.x][point.y+3].setShip(Tile.ShipStatus.BATTLESHIP);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.battleship);
@@ -211,10 +211,10 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 												!player1.getBattlefield().getBoard()[point.x+2][point.y].isShip() 	&&
 												!player1.getBattlefield().getBoard()[point.x+3][point.y].isShip()
 											)) {
-						player1.getBattlefield().getBoard()[point.x][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+2][point.y].setShip();
-						player1.getBattlefield().getBoard()[point.x+3][point.y].setShip();
+						player1.getBattlefield().getBoard()[point.x][point.y].setShip(Tile.ShipStatus.BATTLESHIP);
+						player1.getBattlefield().getBoard()[point.x+1][point.y].setShip(Tile.ShipStatus.BATTLESHIP);
+						player1.getBattlefield().getBoard()[point.x+2][point.y].setShip(Tile.ShipStatus.BATTLESHIP);
+						player1.getBattlefield().getBoard()[point.x+3][point.y].setShip(Tile.ShipStatus.BATTLESHIP);
 						
 						player1.isMouseListenerActive = false;
 						player1.setShip(player1.battleship);

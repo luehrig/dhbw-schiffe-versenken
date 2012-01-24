@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 
 import backend.Tile.Status;
 
-
 public class Battlefield {
 
 	private Tile[][] board;
@@ -37,7 +36,7 @@ public class Battlefield {
 	 */
 	public Battlefield(int iv_cols, int iv_rows,
 			String iv_battlefieldDescription) {
-		
+
 		this.board = new Tile[iv_cols][iv_rows];
 
 		// variables
@@ -46,16 +45,21 @@ public class Battlefield {
 
 		// split command to single values (separated by ',')
 		singleArguments = iv_battlefieldDescription.split("\\,");
-		
-		for(int x_pos = 0; x_pos < iv_rows; x_pos++) {
-			for(int y_pos = 0; y_pos < iv_cols; y_pos++) {
-				this.board[ Integer.parseInt(singleArguments[argCounter]) ][ Integer.parseInt(singleArguments[argCounter+1]) ] = new Tile( Integer.parseInt(singleArguments[argCounter]), Integer.parseInt(singleArguments[argCounter+1]), Tile.Status.valueOf(singleArguments[argCounter+2]) ); 
-				argCounter = argCounter+3;
+
+		for (int x_pos = 0; x_pos < iv_rows; x_pos++) {
+			for (int y_pos = 0; y_pos < iv_cols; y_pos++) {
+				this.board[Integer.parseInt(singleArguments[argCounter])][Integer
+						.parseInt(singleArguments[argCounter + 1])] = new Tile(
+						Integer.parseInt(singleArguments[argCounter]),
+						Integer.parseInt(singleArguments[argCounter + 1]),
+						Tile.Status.valueOf(singleArguments[argCounter + 2]));
+				argCounter = argCounter + 3;
 			}
 		}
-		
+
 	}
 
+	// Set all buttons on battlefield disabled
 	public void setButtonsDisable() {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -65,6 +69,7 @@ public class Battlefield {
 		}
 	}
 
+	// Set all buttons on battlefield enabled
 	public void setButtonsEnable() {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -74,10 +79,14 @@ public class Battlefield {
 		}
 	}
 
+	// returns board
 	public Tile[][] getBoard() {
 		return this.board;
 	}
 
+	// set a shot on board and set the tile hit or fail
+	// returns true, if is hit
+	// returns false, if is not hit
 	public boolean setShot(Shot schuss) {
 		if (board[schuss.x][schuss.y].isShip()) {
 			this.board[schuss.x][schuss.y].setHit();
@@ -94,15 +103,15 @@ public class Battlefield {
 	public void setShotInGUI(Shot ir_shot) {
 		this.board[ir_shot.x][ir_shot.y].setHit();
 	}
-	
-	
+
 	/*
 	 * set shot (fail) in GUI mode
 	 */
 	public void setFailInGUI(Shot ir_shot) {
 		this.board[ir_shot.x][ir_shot.y].setFail();
 	}
-	
+
+	// returns Coordinates of the tile which is asked
 	public Point getTileCoords(Tile tile) {
 		for (int x = 0; x < row; x++) {
 			for (int y = 0; y < col; y++) {
@@ -113,8 +122,7 @@ public class Battlefield {
 		}
 		return new Point(-1, -1);
 	}
-	
-	
+
 	/*
 	 * transform battlefield to one String
 	 * 
@@ -129,16 +137,19 @@ public class Battlefield {
 
 		for (int x_pos = 0; x_pos < this.row; x_pos++) {
 			for (int y_pos = 0; y_pos < this.col; y_pos++) {
-				if (rv_result == "") {
-					singleTile = Integer.toString(x_pos) + ","
-							+ Integer.toString(y_pos) + ","
-							+ this.board[x_pos][y_pos].getStatus();
-				} else {
-					singleTile = "," + Integer.toString(x_pos) + ","
-							+ Integer.toString(y_pos) + ","
-							+ this.board[x_pos][y_pos].getStatus();
-				}
-				rv_result = rv_result.concat(singleTile);
+				// improvement to transmit only tiles that carries ship
+				//if (this.board[x_pos][y_pos].getStatus() != Tile.Status.WATER.toString()) {
+					if (rv_result == "") {
+						singleTile = Integer.toString(x_pos) + ","
+								+ Integer.toString(y_pos) + ","
+								+ this.board[x_pos][y_pos].getStatus();
+					} else {
+						singleTile = "," + Integer.toString(x_pos) + ","
+								+ Integer.toString(y_pos) + ","
+								+ this.board[x_pos][y_pos].getStatus();
+					}
+					rv_result = rv_result.concat(singleTile);
+				//}
 			}
 		}
 
