@@ -65,8 +65,6 @@ public class BattleshipGame extends JFrame {
 		this.initMenu();
 		this.addTileActionListener();
 		
-		Shot s = new Shot(1, 1);
-		remotePlayer.getBattlefield().setShot(s);
 	}// BattleshipGame Constructor
 
 	/*
