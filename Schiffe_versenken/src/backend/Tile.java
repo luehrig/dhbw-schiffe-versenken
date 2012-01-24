@@ -34,9 +34,9 @@ public class Tile extends JButton {
 		case HIT:
 			this.setHit();
 			break;
-		/*case SHIP:
-			this.setShip();
-			break;*/
+		case SHIP:
+			this.setShip(Tile.ShipStatus.SUBMARINE);
+			break;
 		// appended to solve first line!
 		default:
 			this.setWater();
