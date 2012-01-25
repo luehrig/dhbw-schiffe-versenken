@@ -21,6 +21,10 @@ public class Tile extends JButton {
 		this.y = iv_y;
 		this.initTile(iv_status);
 	}
+	
+	public Tile(Status iv_status) {
+		this.initTile(iv_status);
+	}
 
 	private void initTile(Status iv_status) {
 		//this.setWater();

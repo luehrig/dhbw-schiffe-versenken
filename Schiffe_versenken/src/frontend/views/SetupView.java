@@ -1,12 +1,14 @@
 package frontend.views;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import backend.Player;
@@ -40,6 +42,14 @@ public class SetupView extends JPanel {
 	
 	// initializes East
 	private void initEast() {
+		c.gridy = 0;
+		JLabel myShips = new JLabel();
+		myShips.setForeground(Color.WHITE);
+		myShips.setBackground(Color.DARK_GRAY);
+		myShips.setFont(new Font("Arial", Font.BOLD, 12));
+		myShips.setOpaque(true);
+		myShips.setText("My Ships:");
+		this.add(myShips, c);
 		
 		// adds aircraftcarrier button to east panel
 		player1.getShips()[player1.aircraftcarrier].button.addActionListener(new ActionListener() {
@@ -48,7 +58,7 @@ public class SetupView extends JPanel {
 				player1.isMouseListenerActive = true;	
 			}
 		});
-		c.gridy = 0;	
+		c.gridy = 1;	
 		this.add(player1.getShips()[player1.aircraftcarrier].button, c);
 		
 		// adds destroyer button to east panel
@@ -58,7 +68,7 @@ public class SetupView extends JPanel {
 				player1.isMouseListenerActive = true;
 			}
 		});
-		c.gridy = 1;
+		c.gridy = 2;
 		this.add(player1.getShips()[player1.destroyer].button, c);
 		
 		// adds patrolboat button to east panel
@@ -68,7 +78,7 @@ public class SetupView extends JPanel {
 				player1.isMouseListenerActive = true;
 			}
 		});
-		c.gridy = 2;	
+		c.gridy = 3;	
 		this.add(player1.getShips()[player1.patrolboat].button, c);
 		
 		// adds submarine button to east panel
@@ -78,7 +88,7 @@ public class SetupView extends JPanel {
 				player1.isMouseListenerActive = true;
 			}
 		});
-		c.gridy = 3;
+		c.gridy = 4;
 		this.add(player1.getShips()[player1.submarine].button, c);
 		
 		// adds battleship button to east panel
@@ -88,7 +98,7 @@ public class SetupView extends JPanel {
 				player1.isMouseListenerActive = true;
 			}
 		});
-		c.gridy = 4;	
+		c.gridy = 5;	
 		this.add(player1.getShips()[player1.battleship].button, c);
 		
 		// adds ready button to east panel
