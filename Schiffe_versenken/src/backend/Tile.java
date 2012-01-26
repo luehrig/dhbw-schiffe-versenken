@@ -9,11 +9,11 @@ import javax.swing.JButton;
 
 public class Tile extends JButton {
 
-	public int x;
-	public int y;
-	public Status status;
-	public boolean isBoardShootable = false;
-	public ShipStatus shipStatus;
+	private int x;
+	private int y;
+	private Status status;
+	private boolean isBoardShotable = false;
+	private ShipStatus shipStatus;
 
 	// Constructor
 	public Tile(int iv_x, int iv_y, Status iv_status) {
@@ -113,6 +113,14 @@ public class Tile extends JButton {
 	// returns Status
 	public String getStatus() {
 		return this.status.name().toString();
+	}
+	
+	public boolean isBoardShotable() {
+		return this.isBoardShotable;
+	}
+	
+	public void setBoardShotable() {
+		this.isBoardShotable = true;
 	}
 	
 	// Enum to mark Tile as Water, Ship, Hit, Fail, Selected

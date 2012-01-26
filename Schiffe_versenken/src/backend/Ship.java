@@ -9,7 +9,7 @@ public abstract class Ship {
 	// variables for all child classes
 	private String name;
 	private int size;
-	public JButton button;
+	private JButton button;
 	
 	public Ship( String iv_name, int iv_size ) {
 		this.size = iv_size;
@@ -26,6 +26,10 @@ public abstract class Ship {
 	
 	public int getSize() {
 		return this.size;
+	}
+	
+	public JButton getButton() {
+		return this.button;
 	}
 	
 }
