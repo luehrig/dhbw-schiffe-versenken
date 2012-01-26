@@ -53,7 +53,10 @@ public class Battlefield {
 						Integer.parseInt(singleArguments[argCounter]),
 						Integer.parseInt(singleArguments[argCounter + 1]),
 						Tile.Status.valueOf(singleArguments[argCounter + 2]));
-				argCounter = argCounter + 3;
+				this.board[Integer.parseInt(singleArguments[argCounter])][Integer
+						.parseInt(singleArguments[argCounter + 1])]
+						.setShip(Tile.ShipStatus.valueOf(singleArguments[argCounter + 3]));
+				argCounter = argCounter + 4;
 			}
 		}
 
@@ -138,18 +141,21 @@ public class Battlefield {
 		for (int x_pos = 0; x_pos < this.row; x_pos++) {
 			for (int y_pos = 0; y_pos < this.col; y_pos++) {
 				// improvement to transmit only tiles that carries ship
-				//if (this.board[x_pos][y_pos].getStatus() != Tile.Status.WATER.toString()) {
-					if (rv_result == "") {
-						singleTile = Integer.toString(x_pos) + ","
-								+ Integer.toString(y_pos) + ","
-								+ this.board[x_pos][y_pos].getStatus();
-					} else {
-						singleTile = "," + Integer.toString(x_pos) + ","
-								+ Integer.toString(y_pos) + ","
-								+ this.board[x_pos][y_pos].getStatus();
-					}
-					rv_result = rv_result.concat(singleTile);
-				//}
+				// if (this.board[x_pos][y_pos].getStatus() !=
+				// Tile.Status.WATER.toString()) {
+				if (rv_result == "") {
+					singleTile = Integer.toString(x_pos) + ","
+							+ Integer.toString(y_pos) + ","
+							+ this.board[x_pos][y_pos].getStatus() + ","
+							+ this.board[x_pos][y_pos].getShipStatus();
+				} else {
+					singleTile = "," + Integer.toString(x_pos) + ","
+							+ Integer.toString(y_pos) + ","
+							+ this.board[x_pos][y_pos].getStatus() + ","
+							+ this.board[x_pos][y_pos].getShipStatus();
+				}
+				rv_result = rv_result.concat(singleTile);
+				// }
 			}
 		}
 
@@ -168,5 +174,9 @@ public class Battlefield {
 	 */
 	public int getColNumber() {
 		return this.col;
+	}
+	
+	public Tile getTile(int iv_x, int iv_y) {
+		return this.board[iv_x][iv_y];
 	}
 }

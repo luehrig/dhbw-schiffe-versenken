@@ -57,6 +57,7 @@ public class MessageProcessor implements Runnable {
 		case Helper.fire:
 			System.out.println("Fire-Event received by Message Processcor!");
 			
+			// accept shot only if current player is same as origin
 			if(action.getOrigin().equals(this.game.getCurrentPlayer().getName())) {
 				
 				// get battlefield of enemy
@@ -68,7 +69,11 @@ public class MessageProcessor implements Runnable {
 				String cmd = "";
 				if(result == true) {
 					// hit
-					cmd = Helper.server + "," + Helper.hit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + this.game.getSuspendedPlayer().getName();
+					// get ship kind
+					Tile workingTile[][] = workingBattlefield.getBoard();
+					Tile.ShipStatus shipKind = workingTile[action.getXPos()][action.getYPos()].getShipStatus(); 
+					
+					cmd = Helper.server + "," + Helper.hit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + shipKind.toString() + "," + this.game.getSuspendedPlayer().getName();
 					this.fireEvent(Helper.commandToEvent(cmd));
 				}
 				else {

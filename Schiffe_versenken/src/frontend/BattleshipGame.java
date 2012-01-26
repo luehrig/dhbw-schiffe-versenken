@@ -138,11 +138,15 @@ public class BattleshipGame extends JFrame {
 			System.out.println("Shot hit ship!");
 			
 			Shot shot0 = new Shot(action.getXPos(), action.getYPos());
-			if(action.getMisc().equals(this.localPlayer.getName())) {
+			
+			String[] miscParts = action.getMisc().split("\\,");
+						
+			if(miscParts[1].equals(this.localPlayer.getName())) {
 				this.localPlayer.getBattlefield().setShot(shot0);
 			}
 			else {
 				this.remotePlayer.getBattlefield().setShotInGUI(shot0);
+				this.remotePlayer.getBattlefield().getTile(action.getXPos(), action.getYPos()).setShip(Tile.ShipStatus.valueOf(miscParts[0]));
 			}
 			
 			

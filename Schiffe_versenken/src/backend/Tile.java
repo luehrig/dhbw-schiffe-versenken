@@ -20,10 +20,12 @@ public class Tile extends JButton {
 		this.x = iv_x;
 		this.y = iv_y;
 		this.initTile(iv_status);
+		this.shipStatus = ShipStatus.NOSHIP;
 	}
 	
 	public Tile(Status iv_status) {
 		this.initTile(iv_status);
+		this.shipStatus = ShipStatus.NOSHIP;
 	}
 
 	private void initTile(Status iv_status) {
@@ -128,7 +130,7 @@ public class Tile extends JButton {
 		BATTLESHIP,
 		PATROLBOAT,
 		AIRCRAFTCARRIER,
-		SUBMARINE;
-		
+		SUBMARINE,
+		NOSHIP;
 	}
 }
