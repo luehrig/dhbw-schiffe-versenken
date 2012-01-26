@@ -13,7 +13,7 @@ import backend.Tile.Status;
 public class Battlefield {
 
 	private Tile[][] board;
-	public JPanel panel = new JPanel();
+	private JPanel panel = new JPanel();
 	private final int row = 10;
 	private final int col = 10;
 
@@ -60,6 +60,10 @@ public class Battlefield {
 			}
 		}
 
+	}
+	
+	public JPanel getPanel() {
+		return this.panel;
 	}
 
 	// Set all buttons on battlefield disabled

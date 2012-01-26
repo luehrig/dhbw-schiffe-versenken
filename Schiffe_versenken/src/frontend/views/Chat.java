@@ -13,8 +13,8 @@ import backend.Tile;
 
 public class Chat extends JPanel {
 	
-	JButton button;
-	GridBagConstraints c;
+	private JButton button;
+	private GridBagConstraints c;
 	
 	public Chat() {
 		this.setBackground(Color.DARK_GRAY);

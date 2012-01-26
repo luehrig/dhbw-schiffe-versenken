@@ -92,7 +92,7 @@ public class BattleshipGame extends JFrame {
 					public void actionPerformed(ActionEvent e) 
 					{
 						Point point = remotePlayer.getBattlefield().getTileCoords((Tile)e.getSource());
-						if(remotePlayer.getBattlefield().getBoard()[point.x][point.y].isBoardShootable) {
+						if(remotePlayer.getBattlefield().getBoard()[point.x][point.y].isBoardShotable()) {
 							
 							Action fireAction = null;
 							try {
@@ -351,7 +351,7 @@ public class BattleshipGame extends JFrame {
 	// set all Buttons Enabled
 	public void whenConnectionIsSetButtonsEnable() {
 		for(int i = 0; i < 5; i++) {
-			localPlayer.getShips()[i].button.setEnabled(true);
+			localPlayer.getShips()[i].getButton().setEnabled(true);
 		}
 	}
 	
@@ -412,17 +412,17 @@ public class BattleshipGame extends JFrame {
 	
 	// adds ready button on east panel an action listener
 	public void addReadyButtonActionListener() {
-		east.ready.addActionListener(new ActionListener() {
+		east.getReadyButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(	localPlayer.areAllShipsSet()) {
 					
 					localPlayer.getBattlefield().setButtonsDisable();
 					remotePlayer.getBattlefield().setButtonsDisable();
-					east.ready.setEnabled(false);
+					east.getReadyButton().setEnabled(false);
 					
 					for(int i = 0; i < 10; i ++) {
 						for(int j = 0; j < 10; j++) {
-							remotePlayer.getBattlefield().getBoard()[i][j].isBoardShootable = true;
+							remotePlayer.getBattlefield().getBoard()[i][j].setBoardShotable();
 						}
 					}
 					

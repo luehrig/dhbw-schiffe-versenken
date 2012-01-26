@@ -19,7 +19,7 @@ public class SetupView extends JPanel {
 	private Player player1;
 	private Player player2;
 	private GridBagConstraints c;
-	public JButton ready;
+	private JButton ready;
 	
 	
 	// East Constructor
@@ -52,54 +52,54 @@ public class SetupView extends JPanel {
 		this.add(myShips, c);
 		
 		// adds aircraftcarrier button to east panel
-		player1.getShips()[player1.aircraftcarrier].button.addActionListener(new ActionListener() {
+		player1.getShips()[player1.aircraftcarrier].getButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				player1.selectedShip = player1.getShips()[player1.aircraftcarrier];
 				player1.isMouseListenerActive = true;	
 			}
 		});
 		c.gridy = 1;	
-		this.add(player1.getShips()[player1.aircraftcarrier].button, c);
+		this.add(player1.getShips()[player1.aircraftcarrier].getButton(), c);
 		
 		// adds destroyer button to east panel
-		player1.getShips()[player1.destroyer].button.addActionListener(new ActionListener() {
+		player1.getShips()[player1.destroyer].getButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				player1.selectedShip = player1.getShips()[player1.destroyer];
 				player1.isMouseListenerActive = true;
 			}
 		});
 		c.gridy = 2;
-		this.add(player1.getShips()[player1.destroyer].button, c);
+		this.add(player1.getShips()[player1.destroyer].getButton(), c);
 		
 		// adds patrolboat button to east panel
-		player1.getShips()[player1.patrolboat].button.addActionListener(new ActionListener() {
+		player1.getShips()[player1.patrolboat].getButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				player1.selectedShip = player1.getShips()[player1.patrolboat];
 				player1.isMouseListenerActive = true;
 			}
 		});
 		c.gridy = 3;	
-		this.add(player1.getShips()[player1.patrolboat].button, c);
+		this.add(player1.getShips()[player1.patrolboat].getButton(), c);
 		
 		// adds submarine button to east panel
-		player1.getShips()[player1.submarine].button.addActionListener(new ActionListener() {
+		player1.getShips()[player1.submarine].getButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				player1.selectedShip = player1.getShips()[player1.submarine];
 				player1.isMouseListenerActive = true;
 			}
 		});
 		c.gridy = 4;
-		this.add(player1.getShips()[player1.submarine].button, c);
+		this.add(player1.getShips()[player1.submarine].getButton(), c);
 		
 		// adds battleship button to east panel
-		player1.getShips()[player1.battleship].button.addActionListener(new ActionListener() {
+		player1.getShips()[player1.battleship].getButton().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				player1.selectedShip = player1.getShips()[player1.battleship];
 				player1.isMouseListenerActive = true;
 			}
 		});
 		c.gridy = 5;	
-		this.add(player1.getShips()[player1.battleship].button, c);
+		this.add(player1.getShips()[player1.battleship].getButton(), c);
 		
 		// adds ready button to east panel
 		ready = new JButton("Ready");
@@ -108,6 +108,10 @@ public class SetupView extends JPanel {
 		c.gridy = 6;
 		this.add(ready, c);
 	} // initEast
+	
+	public JButton getReadyButton() {
+		return this.ready;
+	}
 	
 	
 } // East
