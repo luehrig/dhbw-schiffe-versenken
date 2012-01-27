@@ -53,7 +53,7 @@ public class Battlefield {
 						Integer.parseInt(singleArguments[argCounter]),
 						Integer.parseInt(singleArguments[argCounter + 1]),
 						Tile.Status.valueOf(singleArguments[argCounter + 2]));
-				if ( Tile.ShipStatus.valueOf(singleArguments[argCounter + 2]) != Tile.ShipStatus.NOSHIP) {
+				if ( Tile.ShipStatus.valueOf(singleArguments[argCounter + 3]) != Tile.ShipStatus.NOSHIP) {
 					this.board[Integer.parseInt(singleArguments[argCounter])][Integer
 							.parseInt(singleArguments[argCounter + 1])]
 							.setShip(Tile.ShipStatus
