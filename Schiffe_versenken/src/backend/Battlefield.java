@@ -53,15 +53,18 @@ public class Battlefield {
 						Integer.parseInt(singleArguments[argCounter]),
 						Integer.parseInt(singleArguments[argCounter + 1]),
 						Tile.Status.valueOf(singleArguments[argCounter + 2]));
-				this.board[Integer.parseInt(singleArguments[argCounter])][Integer
-						.parseInt(singleArguments[argCounter + 1])]
-						.setShip(Tile.ShipStatus.valueOf(singleArguments[argCounter + 3]));
+				if ( Tile.ShipStatus.valueOf(singleArguments[argCounter + 2]) != Tile.ShipStatus.NOSHIP) {
+					this.board[Integer.parseInt(singleArguments[argCounter])][Integer
+							.parseInt(singleArguments[argCounter + 1])]
+							.setShip(Tile.ShipStatus
+									.valueOf(singleArguments[argCounter + 3]));
+				}
 				argCounter = argCounter + 4;
 			}
 		}
 
 	}
-	
+
 	public JPanel getPanel() {
 		return this.panel;
 	}
@@ -179,7 +182,7 @@ public class Battlefield {
 	public int getColNumber() {
 		return this.col;
 	}
-	
+
 	public Tile getTile(int iv_x, int iv_y) {
 		return this.board[iv_x][iv_y];
 	}
