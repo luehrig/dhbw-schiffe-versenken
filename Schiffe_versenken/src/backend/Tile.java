@@ -13,19 +13,19 @@ public class Tile extends JButton {
 	private int y;
 	private Status status;
 	private boolean isBoardShotable = false;
-	private ShipStatus shipStatus;
+	private Ship.Type shipStatus;
 
 	// Constructor
 	public Tile(int iv_x, int iv_y, Status iv_status) {
 		this.x = iv_x;
 		this.y = iv_y;
 		this.initTile(iv_status);
-		this.shipStatus = ShipStatus.NOSHIP;
+		this.shipStatus = Ship.Type.NOSHIP;
 	}
 	
 	public Tile(Status iv_status) {
 		this.initTile(iv_status);
-		this.shipStatus = ShipStatus.NOSHIP;
+		this.shipStatus = Ship.Type.NOSHIP;
 	}
 
 	private void initTile(Status iv_status) {
@@ -41,7 +41,7 @@ public class Tile extends JButton {
 			this.setHit();
 			break;
 		case SHIP:
-			this.setShip(Tile.ShipStatus.SUBMARINE);
+			this.setShip(Ship.Type.SUBMARINE);
 			break;
 		// appended to solve first line!
 		default:
@@ -72,7 +72,7 @@ public class Tile extends JButton {
 	}
 
 	// sets Tile Ship
-	public void setShip(ShipStatus shipstatus) {
+	public void setShip(Ship.Type shipstatus) {
 		this.setBackground(Color.BLACK);
 		this.status = Status.SHIP;
 		this.shipStatus = shipstatus;
@@ -106,7 +106,7 @@ public class Tile extends JButton {
 	}
 	
 	// returns ShipStatus
-	public ShipStatus getShipStatus() {
+	public Ship.Type getShipStatus() {
 		return this.shipStatus;
 	}
 	
@@ -132,13 +132,13 @@ public class Tile extends JButton {
 		SELECTED;
 	}
 	
-	// Enum to mark a ShipTile as Dest, Batt, Patr, Airc, Subm
-	public enum ShipStatus {
-		DESTROYER,
-		BATTLESHIP,
-		PATROLBOAT,
-		AIRCRAFTCARRIER,
-		SUBMARINE,
-		NOSHIP;
-	}
+//	// Enum to mark a ShipTile as Dest, Batt, Patr, Airc, Subm
+//	public enum ShipStatus {
+//		DESTROYER,
+//		BATTLESHIP,
+//		PATROLBOAT,
+//		AIRCRAFTCARRIER,
+//		SUBMARINE,
+//		NOSHIP;
+//	}
 }

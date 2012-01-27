@@ -71,7 +71,7 @@ public class MessageProcessor implements Runnable {
 					// hit
 					// get ship kind
 					Tile workingTile[][] = workingBattlefield.getBoard();
-					Tile.ShipStatus shipKind = workingTile[action.getXPos()][action.getYPos()].getShipStatus(); 
+					Ship.Type shipKind = workingTile[action.getXPos()][action.getYPos()].getShipStatus(); 
 					
 					cmd = Helper.server + "," + Helper.hit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + shipKind.toString() + "," + this.game.getSuspendedPlayer().getName();
 					this.fireEvent(Helper.commandToEvent(cmd));

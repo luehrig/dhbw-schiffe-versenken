@@ -4,8 +4,8 @@ import java.awt.AWTEvent;
 import java.io.*;
 import java.net.*;
 
-import frontend.BattleshipGame;
 
+import backend.ActionController;
 import backend.Helper;
 
 public class Client extends NetworkObject implements Runnable {
@@ -54,7 +54,7 @@ public class Client extends NetworkObject implements Runnable {
 	private KeepAliveThread keepAliveThread = null;
 	private String receivedCommand;
 	private int errorCount;
-	private BattleshipGame gameGUI;
+	private ActionController actController;
 
 	private final int maxErrorCount = 2;
 
@@ -67,10 +67,10 @@ public class Client extends NetworkObject implements Runnable {
 	}
 
 	/*
-	 * add gui reference for event handling to client object
+	 * add ActionController reference for event handling to client object
 	 */
-	public void addGUI(BattleshipGame ir_game) {
-		this.gameGUI = ir_game;
+	public void addController(ActionController actController) {
+		this.actController = actController;
 	}
 
 	/*
@@ -141,7 +141,7 @@ public class Client extends NetworkObject implements Runnable {
 					break;
 				default:
 					// fire event to to GUI
-					this.gameGUI.handleEvent(Helper.commandToEvent(receivedCommand));
+					this.actController.handleEvent(Helper.commandToEvent(receivedCommand));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

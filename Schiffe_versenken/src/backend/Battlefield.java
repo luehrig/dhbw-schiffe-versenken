@@ -53,10 +53,10 @@ public class Battlefield {
 						Integer.parseInt(singleArguments[argCounter]),
 						Integer.parseInt(singleArguments[argCounter + 1]),
 						Tile.Status.valueOf(singleArguments[argCounter + 2]));
-				if ( Tile.ShipStatus.valueOf(singleArguments[argCounter + 3]) != Tile.ShipStatus.NOSHIP) {
+				if ( Ship.Type.valueOf(singleArguments[argCounter + 3]) != Ship.Type.NOSHIP) {
 					this.board[Integer.parseInt(singleArguments[argCounter])][Integer
 							.parseInt(singleArguments[argCounter + 1])]
-							.setShip(Tile.ShipStatus
+							.setShip(Ship.Type
 									.valueOf(singleArguments[argCounter + 3]));
 				}
 				argCounter = argCounter + 4;

@@ -21,6 +21,14 @@ public class Game {
 	}
 	
 	/*
+	 * set new Player
+	 */
+	public void setPlayer(String name) {
+		playerOne = new Player(name);
+		playerTwo = new Player("remote");
+	}
+	
+	/*
 	 * return reference to player 1
 	 */
 	public Player getPlayerOne() {
@@ -162,4 +170,6 @@ public class Game {
 	public void setCurrentPlayer(Player ir_player) {
 		this.currentPlayer = ir_player;
 	}
+	
+
 }

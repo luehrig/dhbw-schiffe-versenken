@@ -74,6 +74,16 @@ public class Player {
 		return bool;
 	}
 	
+	public Ship getShip(Ship.Type shiptype) {
+		
+		for(int i = 0; i < this.ships.length; i++) {
+			if(this.ships[i].getShipType() == shiptype) {
+				return this.ships[i];
+			}
+		}
+		return null;
+	}
+	
 	
 	
 	
