@@ -31,7 +31,7 @@ public class BattleShipGame extends JFrame {
 		this.setLayout(new BorderLayout());
 		this.add(new Header(this.actController)				, BorderLayout.NORTH);
 		this.add(new RightSetupView(this.actController)		, BorderLayout.EAST);
-		this.add(new StatusBar()								, BorderLayout.SOUTH);
+		this.add(new StatusBar(this.actController)								, BorderLayout.SOUTH);
 		this.add(new LeftSetupView(this.actController)			, BorderLayout.WEST);
 		this.add(new BattlefieldViewer(this.actController)		, BorderLayout.CENTER);
 		this.setJMenuBar(new Menu(this.actController));
