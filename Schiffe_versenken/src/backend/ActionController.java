@@ -122,7 +122,7 @@ public class ActionController {
 		serverThread.start();
 		this.server = (Server) server;
 		try {
-			connectToPartner( InetAddress.getLocalHost().getHostName() , 6200);
+			connectToPartner( InetAddress.getLocalHost().getHostAddress(), 6200);
 		} catch (UnknownHostException e) {
 			System.err.println("local network error!");
 			return;
@@ -144,6 +144,9 @@ public class ActionController {
 		this.client = (Client) client;
 		// add GUI to client to receive broadcast events from server
 		this.client.addController(this);
+		// save ip in player object
+		// TODO: Modify player name !!!
+		this.game.getPlayerByName("Erol").setIP(this.client.getIP());									
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
 	}
@@ -192,7 +195,7 @@ public class ActionController {
 		switch(action.getKey()) {
 		case Helper.start:
 			// if IP address in message is local IP, start game
-			if(action.getMisc().equals( this.game.getPlayerOne().getName() ) == true ) {
+			if(action.getMisc().equals( this.game.getPlayerOne().getIP() ) == true ) {
 				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
 			}
 			// set current Player

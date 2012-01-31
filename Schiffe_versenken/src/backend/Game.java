@@ -100,6 +100,22 @@ public class Game {
 	}
 	
 	/*
+	 * return Player by IP
+	 * return NULL if no player with IP exist in game
+	 */
+	public Player getPlayerByIP(String iv_ip) {
+		if(this.playerOne.getIP().equals(iv_ip)) {
+			return this.playerOne;
+		}
+		else if(this.playerTwo.getIP().equals(iv_ip)) {
+			return this.playerTwo;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/*
 	 * return enemies battlefield
 	 */
 	public Battlefield getEnemiesBattlefield(Player ir_player) {

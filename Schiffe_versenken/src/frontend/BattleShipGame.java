@@ -42,7 +42,7 @@ public class BattleShipGame extends JFrame {
 	
 	// TODO: sollen die Player überhaupt ihren Namen eingeben? 
 	private void newPlayer() {
-		this.actController.setPlayer("Erol ");
+		this.actController.setPlayer("Erol");
 	}
 	
 	/*

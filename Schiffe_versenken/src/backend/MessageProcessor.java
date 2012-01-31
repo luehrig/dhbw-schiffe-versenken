@@ -58,7 +58,7 @@ public class MessageProcessor implements Runnable {
 			System.out.println("Fire-Event received by Message Processcor!");
 			
 			// accept shot only if current player is same as origin
-			if(action.getOrigin().equals(this.game.getCurrentPlayer().getName())) {
+			if(action.getOrigin().equals(this.game.getCurrentPlayer().getIP())) {
 				
 				// get battlefield of enemy
 				Battlefield workingBattlefield = this.game.getEnemiesBattlefield(this.game.getCurrentPlayer());
@@ -102,7 +102,11 @@ public class MessageProcessor implements Runnable {
 			System.out.println("Battlefield received by Message Processor!");
 
 			// create player instance
-			Player player = new Player(action.getOrigin());
+			// TODO: name
+			//Player player = new Player(action.getOrigin());
+			
+			Player player = new Player("Player");
+			player.setIP(action.getOrigin());
 
 			// build battlefield with received data
 			Battlefield rcvBattlefield = new Battlefield(action.getXPos(),
@@ -120,7 +124,7 @@ public class MessageProcessor implements Runnable {
 				// send broadcast message to all clients and publish the
 				// decision
 				String cmd = Helper.server + "," + Helper.start + ",0,0,"
-						+ this.game.getCurrentPlayer().getName();
+						+ this.game.getCurrentPlayer().getIP();	// getName()
 				this.fireEvent(Helper.commandToEvent(cmd));
 				// switch game status to "started"
 				this.game.setGameStarted();
