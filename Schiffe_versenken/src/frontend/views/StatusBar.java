@@ -12,11 +12,11 @@ import backend.ActionController;
 
 public class StatusBar extends JPanel {
 	
-	private static Font STATUS_FONT = new Font("Arial", Font.BOLD, 16);
+	private static Font STATUS_FONT = new Font("Arial", Font.BOLD, 14);
 	
 	private JLabel infoLabel;
 	private JLabel playerLabel;
-	private JLabel timeLabel;
+//	private JLabel timeLabel;
 	private JLabel ipLabel;	
 	private ActionController actController;
 	
@@ -33,8 +33,8 @@ public class StatusBar extends JPanel {
 		this.setPreferredSize(new Dimension(600, 30));
 		this.setSize(getMaximumSize());
 		setInfo();
-		setPlayer();
-		setTime();
+//		setPlayer();
+//		setTime();
 		setIpAdr();		
 		
 	
@@ -49,7 +49,7 @@ public class StatusBar extends JPanel {
 		infoLabel.setBackground(Color.DARK_GRAY);
 		infoLabel.setFont(STATUS_FONT);
 		infoLabel.setOpaque(true);
-		infoLabel.setBounds(0, 0, 150, 30);
+		infoLabel.setBounds(10, 0, 150, 30);
 		infoLabel.setAlignmentY(LEFT_ALIGNMENT);
 
 		
@@ -59,7 +59,7 @@ public class StatusBar extends JPanel {
 
 	}
 	
-	public void setPlayer(){
+	public void setPlayer(String currentName){
 		String currentPlayer;
 		
 		playerLabel = new JLabel("");
@@ -67,9 +67,9 @@ public class StatusBar extends JPanel {
 		playerLabel.setBackground(Color.DARK_GRAY);
 		playerLabel.setFont(STATUS_FONT);
 		playerLabel.setOpaque(true);
-		playerLabel.setBounds(150, 0, 150, 30);
+		playerLabel.setBounds(250, 0, 150, 30);
 		
-		currentPlayer = actController.getCurrentPlayerName();
+		
 		
 		playerLabel.setText("Player");
 		
@@ -79,28 +79,30 @@ public class StatusBar extends JPanel {
 		this.add(playerLabel);
 	}
 	
-	public void setTime(){
-		timeLabel = new JLabel("", JLabel.CENTER);
-		
-		timeLabel.setForeground(Color.WHITE);
-		timeLabel.setBackground(Color.DARK_GRAY);
-		timeLabel.setFont(STATUS_FONT);
-		timeLabel.setOpaque(true);
-		timeLabel.setBounds(300, 0, 100, 30);
-		
-		timeLabel.setText("Time");
-		
-		this.add(timeLabel);
-		
-	}
+	
+	
+//	public void setTime(){
+//		timeLabel = new JLabel("", JLabel.CENTER);
+//		
+//		timeLabel.setForeground(Color.WHITE);
+//		timeLabel.setBackground(Color.DARK_GRAY);
+//		timeLabel.setFont(STATUS_FONT);
+//		timeLabel.setOpaque(true);
+//		timeLabel.setBounds(300, 0, 100, 30);
+//		
+//		timeLabel.setText("Time");
+//		
+//		this.add(timeLabel);
+//		
+//	}
 	
 	public void setIpAdr(){
-		ipLabel = new JLabel("", JLabel.CENTER);
+		ipLabel = new JLabel("", JLabel.RIGHT);
 		ipLabel.setForeground(Color.WHITE);
 		ipLabel.setBackground(Color.DARK_GRAY);
 		ipLabel.setFont(STATUS_FONT);
 		ipLabel.setOpaque(true);
-		ipLabel.setBounds(400, 0, 200, 30);
+		ipLabel.setBounds(400, 0, 180, 30);
 		
 		InetAddress ipAdr = null;
 		try {
