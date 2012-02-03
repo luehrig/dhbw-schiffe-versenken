@@ -74,6 +74,21 @@ public class MessageProcessor implements Runnable {
 					Ship.Type shipKind = workingTile[action.getXPos()][action.getYPos()].getShipStatus(); 
 					
 					cmd = Helper.server + "," + Helper.hit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + shipKind.toString() + "," + this.game.getSuspendedPlayer().getIP();
+					
+					// check if current ship type is "ready" for starts sinking
+					if(this.game.getSuspendedPlayer().hitShip(shipKind) == true) {
+						cmd.concat(",SINK");
+						
+						// check if inactive player has more ships?
+						if(this.game.getSuspendedPlayer().shipsAvailable() == false) {
+							// send sink message to all clients
+							this.fireEvent(Helper.commandToEvent(cmd));
+							
+							// build message that includes the winner of this game!
+							cmd = Helper.server + "," + Helper.winner + ",0,0," + this.game.getCurrentPlayer().getIP();
+						}
+					}
+					
 					this.fireEvent(Helper.commandToEvent(cmd));
 				}
 				else {
