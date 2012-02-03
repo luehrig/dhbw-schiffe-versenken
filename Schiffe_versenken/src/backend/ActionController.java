@@ -289,7 +289,7 @@ public class ActionController {
 			else {
 				this.game.getPlayerTwo().getBattlefield().setShotInGUI(shot0);
 
-				this.game.getPlayerTwo().getBattlefield().getTile(action.getXPos(), action.getYPos()).setShip(Ship.Type.valueOf(miscParts[0]));
+				//this.game.getPlayerTwo().getBattlefield().getTile(action.getXPos(), action.getYPos()).setShip(Ship.Type.valueOf(miscParts[0]));
 				// TODO this.setShipHit(action.getMisc());
 
 				// this should be redirected to gui, because it includes ship kind that was hit
