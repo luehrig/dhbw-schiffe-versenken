@@ -12,6 +12,7 @@ public abstract class Ship {
 	private JButton button;
 	private Type shiptype;
 	
+	
 	public Ship( String iv_name, int iv_size, Ship.Type shiptype ) {
 		this.size = iv_size;
 		this.name = iv_name;

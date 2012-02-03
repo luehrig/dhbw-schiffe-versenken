@@ -95,7 +95,13 @@ public class Player {
 		return null;
 	}
 	
-	
+	public void hitShip(Ship.Type shiptype) {
+		switch (shiptype) {
+		case AIRCRAFTCARRIER:
+		case 
+			
+		}
+	}
 	
 	
 }

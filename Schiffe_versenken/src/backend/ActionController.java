@@ -215,13 +215,16 @@ public class ActionController {
 			Shot shot0 = new Shot(action.getXPos(), action.getYPos());
 			
 			String[] miscParts = action.getMisc().split("\\,");
-						
+			
+			// branch for local player
 			if(miscParts[1].equals(this.game.getPlayerOne().getIP())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot0);
 			}
+			// branch for remote player
 			else {
 				this.game.getPlayerTwo().getBattlefield().setShotInGUI(shot0);
-				this.game.getPlayerTwo().getBattlefield().getTile(action.getXPos(), action.getYPos()).setShip(Ship.Type.valueOf(miscParts[0]));
+				// this should be redirected to gui, because it includes ship kind that was hit
+				// Ship.Type.valueOf(miscParts[0])
 			}
 			
 			
