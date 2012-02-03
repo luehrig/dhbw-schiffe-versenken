@@ -67,6 +67,13 @@ public class Client extends NetworkObject implements Runnable {
 	}
 
 	/*
+	 * return IP of client
+	 */
+	public String getIP() {
+		return this.ip;
+	}
+	
+	/*
 	 * add ActionController reference for event handling to client object
 	 */
 	public void addController(ActionController actController) {

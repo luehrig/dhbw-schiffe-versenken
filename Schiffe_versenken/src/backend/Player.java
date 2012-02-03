@@ -4,6 +4,7 @@ package backend;
 public class Player {
 
 	private String name;
+	private String ip;
 	private Battlefield battlefield;
 	private Ship[] ships = {new ships.AircraftCarrier(),
 							new ships.Destroyer(),
@@ -34,6 +35,11 @@ public class Player {
 		return this.name;
 	}
 	
+	// returns IP of Player
+	public String getIP() {
+		return this.ip;
+	}
+	
 	// returns Battlefield of Player
 	public Battlefield getBattlefield() {
 		return this.battlefield;
@@ -42,6 +48,11 @@ public class Player {
 	// sets a Shot on Player`s battlefield
 	public boolean setShot(Shot shot) {
 			return this.battlefield.setShot(shot);
+	}
+	
+	// set IP for player
+	public void setIP(String iv_ip) {
+		this.ip = iv_ip;
 	}
 	
 	// returns an array of ships
