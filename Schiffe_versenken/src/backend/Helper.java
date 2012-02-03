@@ -23,6 +23,7 @@ public class Helper {
 	public static final String result = "RESULT";
 	public static final String hit = "HIT";
 	public static final String nohit = "WATER";
+	public static final String winner = "WINNER";
 
 	/*
 	 * convert a byte array in integer value

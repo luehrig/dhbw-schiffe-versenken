@@ -73,12 +73,27 @@ public class MessageProcessor implements Runnable {
 					Tile workingTile[][] = workingBattlefield.getBoard();
 					Ship.Type shipKind = workingTile[action.getXPos()][action.getYPos()].getShipStatus(); 
 					
-					cmd = Helper.server + "," + Helper.hit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + shipKind.toString() + "," + this.game.getSuspendedPlayer().getName();
+					cmd = Helper.server + "," + Helper.hit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + shipKind.toString() + "," + this.game.getSuspendedPlayer().getIP();
+					
+					// check if current ship type is "ready" for starts sinking
+					if(this.game.getSuspendedPlayer().hitShip(shipKind) == true) {
+						cmd.concat(",SINK");
+						
+						// check if inactive player has more ships?
+						if(this.game.getSuspendedPlayer().shipsAvailable() == false) {
+							// send sink message to all clients
+							this.fireEvent(Helper.commandToEvent(cmd));
+							
+							// build message that includes the winner of this game!
+							cmd = Helper.server + "," + Helper.winner + ",0,0," + this.game.getCurrentPlayer().getIP();
+						}
+					}
+					
 					this.fireEvent(Helper.commandToEvent(cmd));
 				}
 				else {
 					//no hit : misc include player name of source and destination
-					cmd = Helper.server + "," + Helper.nohit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + this.game.getSuspendedPlayer().getName();
+					cmd = Helper.server + "," + Helper.nohit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + this.game.getSuspendedPlayer().getIP();
 					this.fireEvent(Helper.commandToEvent(cmd));
 					
 					this.game.setCurrentPlayer( this.game.getSuspendedPlayer() );

@@ -30,6 +30,9 @@ public class ActionController {
 	
 	private String currentPlayerName;
 	
+	private Player local;
+	private Player remote;
+	
 	private String ipAddress;
 	
 	private BattleShipGame bsg;
@@ -115,7 +118,14 @@ public class ActionController {
 
 	// set player
 	public void setPlayer(String name) {
+	// TODO
 		game.setPlayer(name);	
+
+		local = new Player(name);
+		remote = new Player("remote");
+		game.addPlayer(local, local.getBattlefield());
+		game.addPlayer(remote, remote.getBattlefield());
+
 	}
 	
 	// returns ship button which is asked of local player 
@@ -192,7 +202,7 @@ public class ActionController {
 	/*
 	 * connect to partner and save reference for Client object
 	 */
-	private void connectToPartner(String iv_ip, int iv_port) {	
+	private void connectToPartner(String iv_ip, int iv_port) throws UnknownHostException {	
 		// try to connect to server side
 		Runnable client = new Client( iv_ip, iv_port );
 		// start new thread
@@ -203,8 +213,8 @@ public class ActionController {
 		// add GUI to client to receive broadcast events from server
 		this.client.addController(this);
 		// save ip in player object
-		// TODO: Modify player name !!!
-		this.game.getPlayerByName("Erol").setIP(this.client.getIP());									
+		// TODO: Modify player name !!
+		this.game.getPlayerByName("Erol").setIP(InetAddress.getLocalHost().getHostAddress());									
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
 		
@@ -229,13 +239,14 @@ public class ActionController {
 	
 	/**************************************************************************************************
 	 * ActionHandller 
+	 * @throws UnknownHostException 
 	 */
 	
 	
 	/*
 	 * set IP Address of enemy
 	 */
-	public void setRemoteIPadress(KeyEvent e) {
+	public void setRemoteIPadress(KeyEvent e) throws UnknownHostException {
 		JTextField tField;
 		
 		tField = (JTextField) e.getSource();
@@ -268,15 +279,22 @@ public class ActionController {
 			Shot shot0 = new Shot(action.getXPos(), action.getYPos());
 			
 			String[] miscParts = action.getMisc().split("\\,");
-						
-			if(miscParts[1].equals(this.game.getPlayerOne().getName())) {
+			
+			// branch for local player
+			if(miscParts[1].equals(this.game.getPlayerOne().getIP())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot0);
 				// TODO this.setShipHit(action.getMisc());
 			}
+			// branch for remote player
 			else {
 				this.game.getPlayerTwo().getBattlefield().setShotInGUI(shot0);
+
 				this.game.getPlayerTwo().getBattlefield().getTile(action.getXPos(), action.getYPos()).setShip(Ship.Type.valueOf(miscParts[0]));
 				// TODO this.setShipHit(action.getMisc());
+
+				// this should be redirected to gui, because it includes ship kind that was hit
+				// Ship.Type.valueOf(miscParts[0])
+
 			}
 			
 			
@@ -285,11 +303,15 @@ public class ActionController {
 			System.out.println("Shot hit NO ship!");
 			
 			Shot shot1 = new Shot(action.getXPos(), action.getYPos());
-			if(action.getMisc().equals(this.game.getPlayerOne().getName())) {
+			// branch for local player handling
+			if(action.getMisc().equals(this.game.getPlayerOne().getIP())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot1);
+				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
 			}
+			// branch for remote player handling
 			else {
 				this.game.getPlayerTwo().getBattlefield().setFailInGUI(shot1);
+				this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
 			}
 			
 			this.setNoHit(action.getMisc());
@@ -338,7 +360,7 @@ public class ActionController {
 	 */
 	public void handleShot(ActionEvent e) {
 		Point point = this.game.getPlayerTwo().getBattlefield().getTileCoords((Tile)e.getSource());
-		if(this.game.getPlayerOne().getBattlefield().getBoard()[point.x][point.y].isBoardShotable()) {
+		if(this.game.getPlayerTwo().getBattlefield().getBoard()[point.x][point.y].isBoardShotable()) {
 			
 			Action fireAction = null;
 			try {
@@ -368,6 +390,7 @@ public class ActionController {
 				this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
 				((JButton) e.getSource()).setEnabled(false);
 				
+				// activate tiles in enemies battlefield
 				for(int i = 0; i < 10; i ++) {
 					for(int j = 0; j < 10; j++) {
 						this.game.getPlayerTwo().getBattlefield().getBoard()[i][j].setBoardShotable();
