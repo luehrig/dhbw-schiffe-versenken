@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
+import frontend.BattleShipGame;
+
 import network.Client;
 import network.Server;
 
@@ -29,6 +31,8 @@ public class ActionController {
 	private String currentPlayerName;
 	
 	private String ipAddress;
+	
+	private BattleShipGame bsg;
 	
 	/*
 	 * ActionContoller constructor
@@ -55,10 +59,63 @@ public class ActionController {
 	public String getCurrentPlayerName() {
 		return this.currentPlayerName;
 	}
+	
+	// set BattleShipGame
+	public void setBattleShipGame(BattleShipGame bsg){
+		this.bsg = bsg;
+	}
+	
+	// returns local IP
+	public String getLocalID(){
+		InetAddress ipAdr = null;
+		try {
+			ipAdr = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ipAdr.getHostAddress();
+	}
+	
+	// set current player
+	public void setCurrentPlayer(String currentPlayerIP){
+
+		if(this.getLocalID() == currentPlayerIP)
+			this.bsg.getStatusBar().setPlayer("It´s your turn!");
+		else
+			this.bsg.getStatusBar().setPlayer("It´s the other´s turn!");
+	}
+	
+	public void setNoHit(String shotTargetIP){
+		
+		if(this.getLocalID() != shotTargetIP){
+			this.bsg.getStatusBar().setInfo("You didn´t hit :(");
+		}
+		
+	}
+	
+	// set info at statusbar
+	public void setShipHit(String[] ship ){
+		
+		if(this.getLocalID() == ship[1]){
+			if(ship[2] == "0")
+				this.bsg.getStatusBar().setInfo("You hit the " + ship[0] + "!!!");
+			else
+				this.bsg.getStatusBar().setInfo( ship[0] + " sink!!!");
+		}
+		else{
+			if(ship[2] == "0")
+				this.bsg.getStatusBar().setInfo("Your " + ship[0] + "was hit");
+			else
+				this.bsg.getStatusBar().setInfo("Your" + ship[0] + " sink");
+		}
+		
+	}
+	
 
 	// set player
 	public void setPlayer(String name) {
-		game.setPlayer(name);
+		game.setPlayer(name);	
 	}
 	
 	// returns ship button which is asked of local player 
@@ -129,6 +186,7 @@ public class ActionController {
 		}
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
+		this.bsg.getStatusBar().setInfo("Server was created successfully");
 	}
 	
 	/*
@@ -149,6 +207,8 @@ public class ActionController {
 		this.game.getPlayerByName("Erol").setIP(this.client.getIP());									
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
+		
+		this.bsg.getStatusBar().setInfo("You have connected successfully");
 	}
 	
 	/*
@@ -199,7 +259,7 @@ public class ActionController {
 				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
 			}
 			// set current Player
-			currentPlayerName = action.getMisc();
+			this.setCurrentPlayer(action.getMisc());
 			
 			break;
 		case Helper.hit:
@@ -211,10 +271,12 @@ public class ActionController {
 						
 			if(miscParts[1].equals(this.game.getPlayerOne().getName())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot0);
+				// TODO this.setShipHit(action.getMisc());
 			}
 			else {
 				this.game.getPlayerTwo().getBattlefield().setShotInGUI(shot0);
 				this.game.getPlayerTwo().getBattlefield().getTile(action.getXPos(), action.getYPos()).setShip(Ship.Type.valueOf(miscParts[0]));
+				// TODO this.setShipHit(action.getMisc());
 			}
 			
 			
@@ -229,6 +291,10 @@ public class ActionController {
 			else {
 				this.game.getPlayerTwo().getBattlefield().setFailInGUI(shot1);
 			}
+			
+			this.setNoHit(action.getMisc());
+			this.setCurrentPlayer(action.getMisc());
+			
 			
 			break;
 		}

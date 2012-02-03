@@ -12,11 +12,10 @@ import backend.ActionController;
 
 public class StatusBar extends JPanel {
 	
-	private static Font STATUS_FONT = new Font("Arial", Font.BOLD, 14);
+	private static Font STATUS_FONT = new Font("Arial", Font.BOLD, 12);
 	
 	private JLabel infoLabel;
 	private JLabel playerLabel;
-//	private JLabel timeLabel;
 	private JLabel ipLabel;	
 	private ActionController actController;
 	
@@ -29,54 +28,45 @@ public class StatusBar extends JPanel {
 		this.actController = actController;
 		this.setLayout(null);
 		this.setBackground(Color.DARK_GRAY);
-		
 		this.setPreferredSize(new Dimension(600, 30));
 		this.setSize(getMaximumSize());
-		setInfo();
-//		setPlayer();
-//		setTime();
-		setIpAdr();		
 		
-	
-		
-	}
-	
-	public void setInfo(){
-		infoLabel = new JLabel("", JLabel.LEFT);
-		
-		
+		// set Info Label
+		infoLabel = new JLabel("Info", JLabel.LEFT);
 		infoLabel.setForeground(Color.WHITE);
 		infoLabel.setBackground(Color.DARK_GRAY);
 		infoLabel.setFont(STATUS_FONT);
 		infoLabel.setOpaque(true);
-		infoLabel.setBounds(10, 0, 150, 30);
+		infoLabel.setBounds(10, 0, 250, 30);
 		infoLabel.setAlignmentY(LEFT_ALIGNMENT);
-
-		
-		infoLabel.setText("Info");
-		
 		this.add(infoLabel);
-
-	}
-	
-	public void setPlayer(String currentName){
-		String currentPlayer;
 		
+		// set Label for current player
 		playerLabel = new JLabel("");
 		playerLabel.setForeground(Color.WHITE);
 		playerLabel.setBackground(Color.DARK_GRAY);
 		playerLabel.setFont(STATUS_FONT);
 		playerLabel.setOpaque(true);
 		playerLabel.setBounds(250, 0, 150, 30);
-		
-		
-		
-		playerLabel.setText("Player");
-		
-//		if(currentPlayer != null)
-//			playerLabel.setText("It's " + currentPlayer + "'s turn");
-		
 		this.add(playerLabel);
+		
+		// set Label for IP adress
+		this.setIpAdr();
+		
+	
+		
+	}
+	
+	public void setInfo(String info){
+		
+		infoLabel.setText(info);
+		
+	}
+	
+	public void setPlayer(String currentPlayerInfo){
+				
+		playerLabel.setText(currentPlayerInfo);
+		
 	}
 	
 	
