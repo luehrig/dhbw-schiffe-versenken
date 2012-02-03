@@ -216,7 +216,7 @@ public class ActionController {
 			
 			String[] miscParts = action.getMisc().split("\\,");
 						
-			if(miscParts[1].equals(this.game.getPlayerOne().getName())) {
+			if(miscParts[1].equals(this.game.getPlayerOne().getIP())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot0);
 			}
 			else {
@@ -230,11 +230,15 @@ public class ActionController {
 			System.out.println("Shot hit NO ship!");
 			
 			Shot shot1 = new Shot(action.getXPos(), action.getYPos());
-			if(action.getMisc().equals(this.game.getPlayerOne().getName())) {
+			// branch for local player handling
+			if(action.getMisc().equals(this.game.getPlayerOne().getIP())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot1);
+				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
 			}
+			// branch for remote player handling
 			else {
 				this.game.getPlayerTwo().getBattlefield().setFailInGUI(shot1);
+				this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
 			}
 			
 			break;
@@ -279,7 +283,7 @@ public class ActionController {
 	 */
 	public void handleShot(ActionEvent e) {
 		Point point = this.game.getPlayerTwo().getBattlefield().getTileCoords((Tile)e.getSource());
-		if(this.game.getPlayerOne().getBattlefield().getBoard()[point.x][point.y].isBoardShotable()) {
+		if(this.game.getPlayerTwo().getBattlefield().getBoard()[point.x][point.y].isBoardShotable()) {
 			
 			Action fireAction = null;
 			try {
@@ -309,6 +313,7 @@ public class ActionController {
 				this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
 				((JButton) e.getSource()).setEnabled(false);
 				
+				// activate tiles in enemies battlefield
 				for(int i = 0; i < 10; i ++) {
 					for(int j = 0; j < 10; j++) {
 						this.game.getPlayerTwo().getBattlefield().getBoard()[i][j].setBoardShotable();
