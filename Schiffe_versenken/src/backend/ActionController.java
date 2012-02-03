@@ -28,6 +28,9 @@ public class ActionController {
 	
 	private String currentPlayerName;
 	
+	private Player local;
+	private Player remote;
+	
 	private String ipAddress;
 	
 	/*
@@ -58,7 +61,10 @@ public class ActionController {
 
 	// set player
 	public void setPlayer(String name) {
-		game.setPlayer(name);
+		local = new Player(name);
+		remote = new Player("remote");
+		game.addPlayer(local, local.getBattlefield());
+		game.addPlayer(remote, remote.getBattlefield());
 	}
 	
 	// returns ship button which is asked of local player 
@@ -134,7 +140,7 @@ public class ActionController {
 	/*
 	 * connect to partner and save reference for Client object
 	 */
-	private void connectToPartner(String iv_ip, int iv_port) {	
+	private void connectToPartner(String iv_ip, int iv_port) throws UnknownHostException {	
 		// try to connect to server side
 		Runnable client = new Client( iv_ip, iv_port );
 		// start new thread
@@ -145,8 +151,8 @@ public class ActionController {
 		// add GUI to client to receive broadcast events from server
 		this.client.addController(this);
 		// save ip in player object
-		// TODO: Modify player name !!!
-		this.game.getPlayerByName("Erol").setIP(this.client.getIP());									
+		// TODO: Modify player name !!
+		this.game.getPlayerByName("Erol").setIP(InetAddress.getLocalHost().getHostAddress());									
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
 	}
@@ -169,13 +175,14 @@ public class ActionController {
 	
 	/**************************************************************************************************
 	 * ActionHandller 
+	 * @throws UnknownHostException 
 	 */
 	
 	
 	/*
 	 * set IP Address of enemy
 	 */
-	public void setRemoteIPadress(KeyEvent e) {
+	public void setRemoteIPadress(KeyEvent e) throws UnknownHostException {
 		JTextField tField;
 		
 		tField = (JTextField) e.getSource();

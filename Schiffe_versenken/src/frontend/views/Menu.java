@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.UnknownHostException;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -85,7 +86,12 @@ public class Menu extends JMenuBar {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if(key == KeyEvent.VK_ENTER) {
-					actController.setRemoteIPadress(e);
+					try {
+						actController.setRemoteIPadress(e);
+					} catch (UnknownHostException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 			public void keyReleased(KeyEvent e) {}
