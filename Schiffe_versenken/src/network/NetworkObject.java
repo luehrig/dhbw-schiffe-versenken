@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import backend.Helper;
+import backend.exceptions.ConnectionIssueException;
 
 
 
@@ -27,12 +28,12 @@ public abstract class NetworkObject {
 	 * receive command
 	 * @return null if no command was received
 	 * */
-	public String receiveCommand() {
+	public String receiveCommand() throws ConnectionIssueException {
 		String rv_command = null;
 		try {
 			rv_command = readerIn.readLine();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new ConnectionIssueException();
 		}
 
 		// check if message was correct, if not:

@@ -9,7 +9,6 @@ import backend.ActionController;
 import backend.Helper;
 import backend.exceptions.ConnectionIssueException;
 import backend.exceptions.ConnectionLostException;
-import backend.exceptions.GenericException;
 
 public class Client extends NetworkObject implements Runnable {
 

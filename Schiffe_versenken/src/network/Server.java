@@ -5,9 +5,11 @@ import java.util.LinkedList;
 import java.awt.AWTEvent;
 import java.io.*;
 
+import backend.ActionController;
 import backend.Helper;
 import backend.MessageProcessor;
-
+import backend.exceptions.ConnectionIssueException;
+import backend.exceptions.ServerException;
 
 public class Server implements Runnable {
 
@@ -20,9 +22,9 @@ public class Server implements Runnable {
 		private Server parent;
 		private Socket socket = null;
 		private int threadID;
-		//private PrintWriter writerOut;
-		//private BufferedReader readerIn;
-		
+		// private PrintWriter writerOut;
+		// private BufferedReader readerIn;
+
 		private String receivedCommand;
 		private int errorCount;
 
@@ -67,7 +69,9 @@ public class Server implements Runnable {
 				System.out.println("Client: " + this.socket.getInetAddress()
 						+ " successfully connected!");
 			} catch (IOException e) {
-				System.err.println("An error occurred during connecting...!");
+				actController.handleException(new ConnectionIssueException(
+						"An error occurred during connecting...!"));
+				// System.err.println("An error occurred during connecting...!");
 				return;
 			}
 
@@ -90,24 +94,25 @@ public class Server implements Runnable {
 
 				System.out.println("Client received command: "
 						+ this.receivedCommand);
-				// close connection if partner sends "BYE"
-				if (this.receivedCommand.equals("BYE")) {
-
-					this.writerOut.println("BYE");
-					break;
-				}
-				// send "PING" back if "PING" was send
-				else if (this.receivedCommand.equals("PING")) {
-					this.writerOut.println("PING");
-//					System.out
-//							.println("Server received Ping command and sent it back!");
-				} 
-				else if (this.receivedCommand.equals( Helper.resend )) {
-					this.sendCommand(sendBuffer);				
-				}
-				else {
-					AWTEvent event = Helper.commandToEvent(receivedCommand);
-					msgProcessor.handleEvent(event);
+				try {
+					// close connection if partner sends "BYE"
+					if (this.receivedCommand.equals("BYE")) {
+						this.writerOut.println("BYE");
+						break;
+					}
+					// send "PING" back if "PING" was send
+					else if (this.receivedCommand.equals("PING")) {
+						this.writerOut.println("PING");
+						// System.out
+						// .println("Server received Ping command and sent it back!");
+					} else if (this.receivedCommand.equals(Helper.resend)) {
+						this.sendCommand(sendBuffer);
+					} else {
+						AWTEvent event = Helper.commandToEvent(receivedCommand);
+						msgProcessor.handleEvent(event);
+					}
+				} catch (NullPointerException e) {
+					// do nothing because client is away!
 				}
 
 				// command handling is still missing
@@ -117,11 +122,14 @@ public class Server implements Runnable {
 			try {
 				this.socket.close();
 			} catch (IOException e) {
-				System.err.println("Could not shutdown server thread "
-						+ this.threadID);
+				actController.handleException(new ServerException(
+						"Could not shutdown server thread " + this.threadID));
+				// System.err.println("Could not shutdown server thread "
+				// + this.threadID);
 			}
 
 		}
+
 	} // end inner class ServerThread
 
 	/*
@@ -139,9 +147,9 @@ public class Server implements Runnable {
 	private ServerThread[] serverThreads = new ServerThread[this.maxClients];
 
 	protected MessageProcessor msgProcessor;
+	protected ActionController actController;
 	private LinkedList<Server> observer = new LinkedList<Server>();
-	
-	
+
 	private final int maxClients = 2;
 
 	/*
@@ -160,14 +168,23 @@ public class Server implements Runnable {
 		try {
 			rr_serverSocket = new ServerSocket(this.communicationport);
 		} catch (IOException e) {
-			System.err.println("Could not listen on port: "
-					+ this.communicationport);
+			this.actController.handleException(new ServerException(
+					"Could not listen on port: " + this.communicationport));
+			// System.err.println("Could not listen on port: "
+			// + this.communicationport);
 			this.switchOff();
 		}
 
 		System.out.println("Communication Server successfully initiated");
 
 		return rr_serverSocket;
+	}
+
+	/*
+	 * add ActionController reference for event handling to client object
+	 */
+	public void addController(ActionController actController) {
+		this.actController = actController;
 	}
 
 	/*
@@ -196,14 +213,15 @@ public class Server implements Runnable {
 				try {
 					// create new ServerThread for every incoming client
 					this.serverThreads[this.clientCounter] = new ServerThread(
-							this,
-							this.clientCounter,
+							this, this.clientCounter,
 							this.communicationSocket.accept());
 					new Thread(this.serverThreads[this.clientCounter]).start();
 					this.clientCounter++;
 				} catch (IOException e) {
 					// if an error occurred escape whole server thread
-					System.err.println("Accept failed.");
+					// System.err.println("Accept failed.");
+					this.actController.handleException(new ServerException(
+							"Client accept failed!"));
 					return;
 				}
 			}
@@ -218,32 +236,31 @@ public class Server implements Runnable {
 		MessageProcessor msgProcessor = new MessageProcessor(this);
 		return msgProcessor;
 	}
-	
+
 	/*
-	 * react on event from Message Processor
-	 * only send broadcast message to all connected clients
+	 * react on event from Message Processor only send broadcast message to all
+	 * connected clients
 	 */
 	public void handleEvent(AWTEvent ir_event) {
-		this.sendBroadcastMessage( Helper.eventToCommand(ir_event) );
+		this.sendBroadcastMessage(Helper.eventToCommand(ir_event));
 	}
-	
+
 	/*
 	 * add new observer to current object
 	 */
 	public void addObserver(Server ir_object) {
 		observer.add(ir_object);
 	}
-	
+
 	/*
 	 * forward event to all observers
 	 */
 	public void fireEvent(AWTEvent ir_event) {
-		for(Server object:observer) {
+		for (Server object : observer) {
 			object.handleEvent(ir_event);
 		}
 	}
-	
-	
+
 	/*
 	 * make sure that after a game whole connection is closed
 	 */
@@ -251,7 +268,9 @@ public class Server implements Runnable {
 		try {
 			this.communicationSocket.close();
 		} catch (IOException e) {
-			System.out.println("Could not close server socket");
+			// System.out.println("Could not close server socket");
+			this.actController.handleException(new ServerException(
+					"Could not close server socket"));
 			return;
 		}
 	}
