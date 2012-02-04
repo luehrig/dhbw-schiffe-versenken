@@ -100,25 +100,12 @@ public class Player {
 	public boolean hitShip(Ship.Type shiptype) {
 		Ship workingShip = null;
 		
-		switch (shiptype) {
-		case AIRCRAFTCARRIER:
-			workingShip = this.ships[0];
-			break;
-		case BATTLESHIP:
-			workingShip = this.ships[1];
-			break;
-
-		case DESTROYER:
-			workingShip = this.ships[2];
-			break;
-
-		case PATROLBOAT:
-			workingShip = this.ships[3];
-			break;
-
-		case SUBMARINE:
-			workingShip = this.ships[4];
-			break;
+		// find correct ship and set as working object
+		for(int i = 0; i < this.ships.length; i++) {
+			if( this.ships[i].getShipType().equals(shiptype) ) {
+				workingShip = this.ships[i];
+				break;
+			}
 		}
 		
 		// decrement section count

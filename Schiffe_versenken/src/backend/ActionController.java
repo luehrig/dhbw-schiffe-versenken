@@ -253,6 +253,7 @@ public class ActionController {
 		this.ipAddress = tField.getText();
 		connectToPartner(this.ipAddress, 6200);
 	}
+
 	
 	/*
 	 * react on event from Server
@@ -320,6 +321,16 @@ public class ActionController {
 			
 			break;
 		}
+	}
+	
+	/*
+	 * handle all exceptions that occurres while client is running
+	 */
+	public void handleException(Exception ir_exception) {
+		// display exception in console
+		System.err.println( ir_exception.getClass().getSimpleName() + ir_exception.getMessage() );
+		
+		// TODO: react with gui methods..
 	}
 	
 	/*

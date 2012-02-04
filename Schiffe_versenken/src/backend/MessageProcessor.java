@@ -47,79 +47,89 @@ public class MessageProcessor implements Runnable {
 		// decide with key the process route
 		switch (action.getKey()) {
 		/*
-		 * fire command received
-		 * 1. check which player sent command and is this player allowed to send fire command at the the moment
-		 * 2. "fire" command to battlefield of other player
-		 * 3. receive result of "fire" and build message that includes result
-		 * 4. fire event broadcast to all clients
-		 * 
+		 * fire command received 1. check which player sent command and is this
+		 * player allowed to send fire command at the the moment 2. "fire"
+		 * command to battlefield of other player 3. receive result of "fire"
+		 * and build message that includes result 4. fire event broadcast to all
+		 * clients
 		 */
 		case Helper.fire:
 			System.out.println("Fire-Event received by Message Processcor!");
-			
+
 			// accept shot only if current player is same as origin
-			if(action.getOrigin().equals(this.game.getCurrentPlayer().getIP())) {
-				
+			if (action.getOrigin().equals(this.game.getCurrentPlayer().getIP())) {
+
 				// get battlefield of enemy
-				Battlefield workingBattlefield = this.game.getEnemiesBattlefield(this.game.getCurrentPlayer());
+				Battlefield workingBattlefield = this.game
+						.getEnemiesBattlefield(this.game.getCurrentPlayer());
 				Shot shot = new Shot(action.getXPos(), action.getYPos());
-				
+
 				boolean result = workingBattlefield.setShot(shot);
-				
+
 				String cmd = "";
-				if(result == true) {
+				if (result == true) {
 					// hit
 					// get ship kind
 					Tile workingTile[][] = workingBattlefield.getBoard();
-					Ship.Type shipKind = workingTile[action.getXPos()][action.getYPos()].getShipStatus(); 
-					
-					cmd = Helper.server + "," + Helper.hit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + shipKind.toString() + "," + this.game.getSuspendedPlayer().getIP();
-					
+					Ship.Type shipKind = workingTile[action.getXPos()][action
+							.getYPos()].getShipStatus();
+
+					cmd = Helper.server + "," + Helper.hit + ","
+							+ Integer.toString(action.getXPos()) + ","
+							+ Integer.toString(action.getYPos()) + ","
+							+ shipKind.toString() + ","
+							+ this.game.getSuspendedPlayer().getIP();
+
 					// check if current ship type is "ready" for starts sinking
-					if(this.game.getSuspendedPlayer().hitShip(shipKind) == true) {
-						cmd.concat(",SINK");
-						
+					if (this.game.getSuspendedPlayer().hitShip(shipKind) == true) {
+						cmd = cmd + ",SINK";
+
+						// send sink message to all clients
+						this.fireEvent(Helper.commandToEvent(cmd));
+
 						// check if inactive player has more ships?
-						if(this.game.getSuspendedPlayer().shipsAvailable() == false) {
-							// send sink message to all clients
+						if (this.game.getSuspendedPlayer().shipsAvailable() == false) {
+
+							// build message that includes the winner of this
+							// game!
+							cmd = Helper.server + "," + Helper.winner + ",0,0,"
+									+ this.game.getCurrentPlayer().getIP();
 							this.fireEvent(Helper.commandToEvent(cmd));
-							
-							// build message that includes the winner of this game!
-							cmd = Helper.server + "," + Helper.winner + ",0,0," + this.game.getCurrentPlayer().getIP();
 						}
+					} else {
+						this.fireEvent(Helper.commandToEvent(cmd));
 					}
-					
+				} else {
+					// no hit : misc include player name of source and
+					// destination
+					cmd = Helper.server + "," + Helper.nohit + ","
+							+ Integer.toString(action.getXPos()) + ","
+							+ Integer.toString(action.getYPos()) + ","
+							+ this.game.getSuspendedPlayer().getIP();
 					this.fireEvent(Helper.commandToEvent(cmd));
-				}
-				else {
-					//no hit : misc include player name of source and destination
-					cmd = Helper.server + "," + Helper.nohit + "," + Integer.toString(action.getXPos()) + "," + Integer.toString(action.getYPos()) + "," + this.game.getSuspendedPlayer().getIP();
-					this.fireEvent(Helper.commandToEvent(cmd));
-					
-					this.game.setCurrentPlayer( this.game.getSuspendedPlayer() );
-					
+
+					this.game.setCurrentPlayer(this.game.getSuspendedPlayer());
+
 					cmd = Helper.server + "," + Helper.start + ",0,0,"
 							+ this.game.getCurrentPlayer().getName();
 					this.fireEvent(Helper.commandToEvent(cmd));
 					// switch game status to "started"
 					this.game.setGameStarted();
 				}
-				
+
+			} else {
+				System.err.println(action.getOrigin()
+						+ " is NOT allowed to send fire event at the moment!");
 			}
-			else {
-				System.err.println(action.getOrigin() + " is NOT allowed to send fire event at the moment!");
-			}
-			
-			
-			
+
 			break;
 		case Helper.transmit:
 			System.out.println("Battlefield received by Message Processor!");
 
 			// create player instance
 			// TODO: name
-			//Player player = new Player(action.getOrigin());
-			
+			// Player player = new Player(action.getOrigin());
+
 			Player player = new Player("Player");
 			player.setIP(action.getOrigin());
 
@@ -139,7 +149,7 @@ public class MessageProcessor implements Runnable {
 				// send broadcast message to all clients and publish the
 				// decision
 				String cmd = Helper.server + "," + Helper.start + ",0,0,"
-						+ this.game.getCurrentPlayer().getIP();	// getName()
+						+ this.game.getCurrentPlayer().getIP(); // getName()
 				this.fireEvent(Helper.commandToEvent(cmd));
 				// switch game status to "started"
 				this.game.setGameStarted();

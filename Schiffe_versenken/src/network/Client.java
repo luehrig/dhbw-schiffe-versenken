@@ -7,6 +7,9 @@ import java.net.*;
 
 import backend.ActionController;
 import backend.Helper;
+import backend.exceptions.ConnectionIssueException;
+import backend.exceptions.ConnectionLostException;
+import backend.exceptions.GenericException;
 
 public class Client extends NetworkObject implements Runnable {
 
@@ -90,7 +93,7 @@ public class Client extends NetworkObject implements Runnable {
 	/*
 	 * initiate connection to specified server
 	 */
-	private Socket initiateCommunicationSocket() {
+	private Socket initiateCommunicationSocket() throws ConnectionIssueException {
 		Socket rr_clientSocket = null;
 		try {
 			rr_clientSocket = new Socket(this.ip, this.communicationPort);
@@ -99,12 +102,14 @@ public class Client extends NetworkObject implements Runnable {
 			this.readerIn = new BufferedReader(new InputStreamReader(
 					rr_clientSocket.getInputStream()));
 		} catch (UnknownHostException e) {
-			System.err.println("Don't know about host: " + this.ip);
-			System.exit(1);
+			throw new ConnectionIssueException("Don't know about host: " + this.ip);
+			//System.err.println("Don't know about host: " + this.ip);
+			//System.exit(1);
 		} catch (IOException e) {
-			System.err.println("Couldn't get I/O for the connection to: "
-					+ this.ip + this.communicationPort);
-			System.exit(1);
+			throw new ConnectionIssueException("Couldn't get I/O for the connection to: " + this.ip + this.communicationPort);
+			//System.err.println("Couldn't get I/O for the connection to: "
+			//		+ this.ip + this.communicationPort);
+			//System.exit(1);
 		}
 
 		// start keep alive thread that pings server every 10 seconds
@@ -118,7 +123,7 @@ public class Client extends NetworkObject implements Runnable {
 	}
 
 	// listen for commands from partner
-	private void listen() {
+	private void listen() throws ConnectionLostException, ConnectionIssueException {
 		// poll commands
 		while (this.powerSwitch == true) {
 			try {
@@ -129,8 +134,9 @@ public class Client extends NetworkObject implements Runnable {
 					if (this.errorCount < this.maxErrorCount) {
 						this.errorCount++;
 					} else {
-						System.err.println("connection to server lost...");
-						break;
+						//System.err.println("connection to server lost...");
+						throw new ConnectionLostException();
+						//break;
 					}
 				}
 //				System.out.println("Client received command: "
@@ -151,7 +157,7 @@ public class Client extends NetworkObject implements Runnable {
 					this.actController.handleEvent(Helper.commandToEvent(receivedCommand));
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new ConnectionIssueException();
 			}
 		}
 	}
@@ -174,9 +180,13 @@ public class Client extends NetworkObject implements Runnable {
 
 	@Override
 	public void run() {
-		this.communicationSocket = this.initiateCommunicationSocket();
-
-		this.listen();
+		try {
+			this.communicationSocket = this.initiateCommunicationSocket();
+		
+			this.listen();
+		} catch (ConnectionLostException | ConnectionIssueException e) {
+			this.actController.handleException(e);
+		}
 	}
 
 }
