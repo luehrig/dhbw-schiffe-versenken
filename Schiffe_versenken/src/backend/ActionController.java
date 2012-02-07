@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
+import backend.exceptions.ServerException;
+
 import frontend.BattleShipGame;
 
 import network.Client;
@@ -184,7 +186,12 @@ public class ActionController {
 	 */
 	private void createServer() {
 		// create new server instance on port 6200 in separate thread
-		Runnable server = new Server(6200);
+		Runnable server = null;
+		try {
+			server = new Server(6200);
+		} catch (UnknownHostException e1) {
+			this.handleException( new ServerException(e1.getMessage()));
+		}
 		serverThread = new Thread(server);
 		serverThread.start();
 		this.server = (Server) server;

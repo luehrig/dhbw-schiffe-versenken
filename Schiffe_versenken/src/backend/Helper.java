@@ -24,6 +24,9 @@ public class Helper {
 	public static final String hit = "HIT";
 	public static final String nohit = "WATER";
 	public static final String winner = "WINNER";
+	public static final String newgame = "NEWGAME";
+	public static final String success = "SUCCESS";
+	public static final String nosuccess = "NOSUCCESS";
 
 	/*
 	 * convert a byte array in integer value

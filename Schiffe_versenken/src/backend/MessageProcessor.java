@@ -15,13 +15,15 @@ public class MessageProcessor implements Runnable {
 	private Game game;
 	private Server observer;
 	private static Semaphore initialize = new Semaphore(1);
+	private String gameMasterIP = null;
 
 	/*
 	 * constructor that add new object as observer in call object
 	 */
-	public MessageProcessor(Server ir_origin) {
+	public MessageProcessor(Server ir_origin, String iv_serverip) {
 		ir_origin.addObserver(ir_origin);
 		observer = ir_origin;
+		this.gameMasterIP = iv_serverip;
 		// create game instance to manage whole game
 		this.game = new Game();
 	}
@@ -90,6 +92,9 @@ public class MessageProcessor implements Runnable {
 						// check if inactive player has more ships?
 						if (this.game.getSuspendedPlayer().shipsAvailable() == false) {
 
+							// mark game as finished
+							this.game.setGameFinished();
+
 							// build message that includes the winner of this
 							// game!
 							cmd = Helper.server + "," + Helper.winner + ",0,0,"
@@ -156,6 +161,28 @@ public class MessageProcessor implements Runnable {
 			}
 			// critical section end
 			initialize.release();
+
+			break;
+		case Helper.newgame:
+			String cmd = null;
+			
+			// check that only the game master can reset the game
+			if (this.gameMasterIP == action.getMisc()) {
+				// try to reset game instance
+				if (this.game.destroyGame() == true) {
+					cmd = Helper.server + "," + Helper.newgame + ",0,0,"
+							+ Helper.success;
+					
+				} else {
+					cmd = Helper.server + "," + Helper.newgame + ",0,0,"
+							+ Helper.nosuccess;
+				}
+				this.fireEvent(Helper.commandToEvent(cmd));
+			}
+			else {
+				System.err.println(action.getOrigin()
+						+ " is NOT allowed to reset the game because NO game master!");
+			}
 
 			break;
 		default:

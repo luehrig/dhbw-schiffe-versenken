@@ -155,7 +155,7 @@ public class Server implements Runnable {
 	/*
 	 * Creates server and starts server socket in additional thread
 	 */
-	public Server(int iv_port) {
+	public Server(int iv_port) throws UnknownHostException {
 		this.communicationport = iv_port;
 		this.msgProcessor = this.getMessageProcessorInstance();
 	}
@@ -232,8 +232,8 @@ public class Server implements Runnable {
 	/*
 	 * create Message Processor instance
 	 */
-	public MessageProcessor getMessageProcessorInstance() {
-		MessageProcessor msgProcessor = new MessageProcessor(this);
+	public MessageProcessor getMessageProcessorInstance() throws UnknownHostException {
+		MessageProcessor msgProcessor = new MessageProcessor(this, InetAddress.getLocalHost().getHostAddress());
 		return msgProcessor;
 	}
 
