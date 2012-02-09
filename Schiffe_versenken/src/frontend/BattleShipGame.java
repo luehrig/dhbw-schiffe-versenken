@@ -60,6 +60,22 @@ public class BattleShipGame extends JFrame {
 		return this.statusBar;
 	}
 	
+	public RightSetupView getRightSetupView() {
+		return rightSV;
+	}
+	
+	public LeftSetupView getLeftSetupView() {
+		return leftSV;
+	}
+	
+	public Menu getMenu() {
+		return this.menu;
+	}
+	
+	public void winner() {
+		
+	}
+	
 
 	
 	// TODO: sollen die Player überhaupt ihren Namen eingeben? 

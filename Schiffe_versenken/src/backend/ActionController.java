@@ -259,6 +259,8 @@ public class ActionController {
 		tField = (JTextField) e.getSource();
 		this.ipAddress = tField.getText();
 		connectToPartner(this.ipAddress, 6200);
+		
+		this.bsg.getMenu().disableItems();
 	}
 
 	
@@ -292,6 +294,10 @@ public class ActionController {
 			if(miscParts[1].equals(this.game.getPlayerOne().getIP())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot0);
 				// TODO this.setShipHit(action.getMisc());
+				if(miscParts.length == 3) {
+					this.bsg.getRightSetupView().setShipSink(miscParts[0]);
+				}
+				
 			}
 			// branch for remote player
 			else {
@@ -299,7 +305,9 @@ public class ActionController {
 
 				//this.game.getPlayerTwo().getBattlefield().getTile(action.getXPos(), action.getYPos()).setShip(Ship.Type.valueOf(miscParts[0]));
 				// TODO this.setShipHit(action.getMisc());
-
+				if(miscParts.length == 3) {
+					this.bsg.getLeftSetupView().setShipSink(miscParts[0]);
+				}
 				// this should be redirected to gui, because it includes ship kind that was hit
 				// Ship.Type.valueOf(miscParts[0])
 
@@ -327,6 +335,10 @@ public class ActionController {
 			
 			
 			break;
+		case Helper.winner:
+			System.out.println("one player wins the game");
+			this.game.getPlayerOne().getBattlefield().setButtonsDisable();
+			this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
 		}
 	}
 	
@@ -354,16 +366,13 @@ public class ActionController {
 		// if new server
 		if(item.getText().equals("New Server")) {
 			this.createServer();
-		}
-		
-		// if new connection
-		if(item.getText().equals("Connect To")) {
-			
+			this.bsg.getMenu().disableItems();
 		}
 		
 		// if disconnect
 		if(item.getText().equals("Disconnect")) {
 			this.cancelGame();
+			this.bsg.getMenu().enableItems();
 		}
 		
 		// if exit game

@@ -63,6 +63,7 @@ public class Menu extends JMenuBar {
 	private void initNewGame() {
 		this.newGame = new JMenuItem("New Game");
 		this.newGame.addActionListener(actListener);
+		this.newGame.setEnabled(false);
 		this.option.add(newGame);
 	}
 	
@@ -108,6 +109,7 @@ public class Menu extends JMenuBar {
 	private void initExitConnect() {
 		this.exitConnect = new JMenuItem("Disconnect");
 		this.exitConnect.addActionListener(actListener);
+		this.exitConnect.setEnabled(false);
 		this.option.add(exitConnect);
 	}
 	
@@ -127,6 +129,20 @@ public class Menu extends JMenuBar {
 				actController.handleMenuAction(e);
 			}
 		};
+	}
+	
+	public void disableItems() {
+		this.newServer.setEnabled(false);
+		this.newConnect.setEnabled(false);
+		this.exitConnect.setEnabled(true);
+		this.newGame.setEnabled(true);
+	}
+	
+	public void enableItems() {
+		this.newServer.setEnabled(true);
+		this.newConnect.setEnabled(true);
+		this.exitConnect.setEnabled(false);
+		this.newGame.setEnabled(false);
 	}
 
 }

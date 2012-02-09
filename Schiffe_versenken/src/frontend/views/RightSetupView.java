@@ -96,6 +96,36 @@ public class RightSetupView extends JPanel {
 		this.add(this.actController.getLocalShipButton(Ship.Type.SUBMARINE), c);
 	}
 	
+	
+	public void setShipSink(String shiptype) {
+		
+		switch(shiptype) {
+			
+		case "AIRCRAFTCARRIER":
+			// aircraftcarrier button
+			this.actController.getLocalShipButton(Ship.Type.AIRCRAFTCARRIER).setBackground(Color.RED);
+			break;
+		case "BATTLESHIP":
+			// battleship button
+			this.actController.getLocalShipButton(Ship.Type.BATTLESHIP).setBackground(Color.RED);
+			break;
+		case "DESTROYER":
+			// destroyer button
+			this.actController.getLocalShipButton(Ship.Type.DESTROYER).setBackground(Color.RED);
+			break;
+		case "PATROLBOAT":
+			//patrolboat button
+			this.actController.getLocalShipButton(Ship.Type.PATROLBOAT).setBackground(Color.RED);
+			break;
+		case "SUBMARINE":
+			// submarine button
+			this.actController.getLocalShipButton(Ship.Type.SUBMARINE).setBackground(Color.RED);
+			break;
+		}
+
+	}
+	
+	
 	/*
 	 * actionlistener for all button of this class
 	 */

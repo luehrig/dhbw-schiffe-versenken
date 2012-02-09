@@ -57,7 +57,7 @@ public class LeftSetupView extends JPanel {
 		
 		//give up button
 		this.c.gridy = 6;
-		this.giveUpButton = new JButton("Give Up!");
+		this.giveUpButton = new JButton("Play Again!");
 		this.giveUpButton.setForeground(Color.DARK_GRAY);
 		this.giveUpButton.setBackground(Color.ORANGE);
 		this.giveUpButton.addActionListener(new ActionListener() {
@@ -96,6 +96,34 @@ public class LeftSetupView extends JPanel {
 		// submarine button
 		this.c.gridy = 5;
 		this.add(this.actController.getRemoteShipButton(Ship.Type.SUBMARINE), c);
+	}
+	
+	public void setShipSink(String shiptype) {
+		
+		switch(shiptype) {
+			
+		case "AIRCRAFTCARRIER":
+			// aircraftcarrier button
+			this.actController.getRemoteShipButton(Ship.Type.AIRCRAFTCARRIER).setBackground(Color.RED);
+			break;
+		case "BATTLESHIP":
+			// battleship button
+			this.actController.getRemoteShipButton(Ship.Type.BATTLESHIP).setBackground(Color.RED);
+			break;
+		case "DESTROYER":
+			// destroyer button
+			this.actController.getRemoteShipButton(Ship.Type.DESTROYER).setBackground(Color.RED);
+			break;
+		case "PATROLBOAT":
+			//patrolboat button
+			this.actController.getRemoteShipButton(Ship.Type.PATROLBOAT).setBackground(Color.RED);
+			break;
+		case "SUBMARINE":
+			// submarine button
+			this.actController.getRemoteShipButton(Ship.Type.SUBMARINE).setBackground(Color.RED);
+			break;
+		}
+
 	}
 
 }
