@@ -224,6 +224,9 @@ public class Server implements Runnable {
 							"Client accept failed!"));
 					return;
 				}
+				catch( NullPointerException e) {
+					this.actController.handleException(new ConnectionIssueException());
+				}
 			}
 
 		}
