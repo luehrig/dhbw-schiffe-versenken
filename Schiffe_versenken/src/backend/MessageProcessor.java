@@ -149,15 +149,16 @@ public class MessageProcessor implements Runnable {
 
 			// check if game is ready for first round
 			if (game.isReady() == true) {
-				// select by random which player starts the first round
-				this.game.setCurrentPlayer(this.calculatePlayerToStart());
-				// send broadcast message to all clients and publish the
-				// decision
-				String cmd = Helper.server + "," + Helper.start + ",0,0,"
-						+ this.game.getCurrentPlayer().getIP(); // getName()
-				this.fireEvent(Helper.commandToEvent(cmd));
-				// switch game status to "started"
-				this.game.setGameStarted();
+				/*
+				 * // select by random which player starts the first round
+				 * this.game.setCurrentPlayer(this.calculatePlayerToStart()); //
+				 * send broadcast message to all clients and publish the //
+				 * decision String cmd = Helper.server + "," + Helper.start +
+				 * ",0,0," + this.game.getCurrentPlayer().getIP(); // getName()
+				 * this.fireEvent(Helper.commandToEvent(cmd)); // switch game
+				 * status to "started" this.game.setGameStarted();
+				 */
+				this.sendStartGame();
 			}
 			// critical section end
 			initialize.release();
@@ -165,23 +166,27 @@ public class MessageProcessor implements Runnable {
 			break;
 		case Helper.newgame:
 			String cmd = null;
-			
+
 			// check that only the game master can reset the game
-			if (this.gameMasterIP == action.getMisc()) {
+			if (this.gameMasterIP.equals(action.getOrigin())) {
 				// try to reset game instance
 				if (this.game.destroyGame() == true) {
 					cmd = Helper.server + "," + Helper.newgame + ",0,0,"
 							+ Helper.success;
-					
+					this.fireEvent(Helper.commandToEvent(cmd));
+
+					//this.sendStartGame();
+
 				} else {
 					cmd = Helper.server + "," + Helper.newgame + ",0,0,"
 							+ Helper.nosuccess;
+					this.fireEvent(Helper.commandToEvent(cmd));
 				}
-				this.fireEvent(Helper.commandToEvent(cmd));
-			}
-			else {
-				System.err.println(action.getOrigin()
-						+ " is NOT allowed to reset the game because NO game master!");
+
+			} else {
+				System.err
+						.println(action.getOrigin()
+								+ " is NOT allowed to reset the game because NO game master!");
 			}
 
 			break;
@@ -204,6 +209,26 @@ public class MessageProcessor implements Runnable {
 		}
 	}
 
+	/*
+	 * transmit random player for start
+	 */
+	private void sendStartGame() {
+		// select by random which player starts the first round
+		this.game.setCurrentPlayer(this.calculatePlayerToStart());
+		// send broadcast message to all clients and publish the
+		// decision
+		String cmd = Helper.server + "," + Helper.start + ",0,0,"
+				+ this.game.getCurrentPlayer().getIP(); // getName()
+		this.fireEvent(Helper.commandToEvent(cmd));
+		// switch game status to "started"
+		this.game.setGameStarted();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 

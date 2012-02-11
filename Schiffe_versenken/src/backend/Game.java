@@ -192,11 +192,25 @@ public class Game {
 			this.playerOne = null;
 			this.playerTwo = null;
 
-			// clear stat data
+			// clear stat data and set correct game status
 			this.currentPlayer = null;
+			this.status = gameStatus.initialized;
 			return true;
 		}
 		return false;
+	}
+	
+	public void forceDestroyGame() {
+		this.battlefieldPlayerOne = null;
+		this.battlefieldPlayerTwo = null;
+
+		// clear player objects
+		this.playerOne = null;
+		this.playerTwo = null;
+
+		// clear stat data and set correct game status
+		this.currentPlayer = null;
+		this.status = gameStatus.initialized;
 	}
 
 }

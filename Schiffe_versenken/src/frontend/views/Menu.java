@@ -145,4 +145,5 @@ public class Menu extends JMenuBar {
 		this.newGame.setEnabled(false);
 	}
 
+
 }
