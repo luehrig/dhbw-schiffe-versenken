@@ -17,8 +17,9 @@ import backend.Ship;
 public class LeftSetupView extends JPanel {
 	
 	private ActionController actController;
+	private ActionListener actionListener;
 	private JLabel enemyShipslabel;
-	private JButton giveUpButton;
+	private JButton playAgainButton;
 	private GridBagConstraints c;
 	
 	/*
@@ -45,6 +46,9 @@ public class LeftSetupView extends JPanel {
 	 */
 	private void initRightSetupView() {
 		
+		// initialize ActionListener
+		this.setActionListener();
+		
 		//label with text: Enemy Ships
 		this.c.gridy = 0;
 		this.enemyShipslabel = new JLabel("Enemy Ships");
@@ -57,19 +61,12 @@ public class LeftSetupView extends JPanel {
 		
 		//give up button
 		this.c.gridy = 6;
-		this.giveUpButton = new JButton("Play Again!");
-		this.giveUpButton.setForeground(Color.DARK_GRAY);
-		this.giveUpButton.setBackground(Color.ORANGE);
-		this.giveUpButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Wollen wir diesen Button nutzen?
-				
-			}
-			
-		});
-		this.add(giveUpButton, c);
+		this.playAgainButton = new JButton("Play Again!");
+		this.playAgainButton.setForeground(Color.DARK_GRAY);
+		this.playAgainButton.setBackground(Color.ORANGE);
+		this.playAgainButton.setName("playAgain");
+		this.playAgainButton.addActionListener(this.actionListener);
+		this.add(playAgainButton, c);
 	}
 	
 	/*
@@ -124,6 +121,17 @@ public class LeftSetupView extends JPanel {
 			break;
 		}
 
+	}
+	
+	/*
+	 * actionlistener for all button of this view
+	 */
+	private void setActionListener() {
+		this.actionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actController.handleLeftSetupViewAction(e);
+			}
+		};
 	}
 
 }

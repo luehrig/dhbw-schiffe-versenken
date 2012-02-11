@@ -9,6 +9,7 @@ import backend.ActionController;
 import backend.Helper;
 import backend.MessageProcessor;
 import backend.exceptions.ConnectionIssueException;
+import backend.exceptions.ConnectionLostException;
 import backend.exceptions.ServerException;
 
 public class Server implements Runnable {
@@ -22,8 +23,6 @@ public class Server implements Runnable {
 		private Server parent;
 		private Socket socket = null;
 		private int threadID;
-		// private PrintWriter writerOut;
-		// private BufferedReader readerIn;
 
 		private String receivedCommand;
 		private int errorCount;
@@ -66,13 +65,13 @@ public class Server implements Runnable {
 						this.socket.getInputStream()));
 
 				// report success
-				System.out.println("Client: " + this.socket.getInetAddress()
-						+ " successfully connected!");
+				//System.out.println("Client: " + this.socket.getInetAddress()
+				//		+ " successfully connected!");
+				
 			} catch (IOException e) {
 				actController.handleException(new ConnectionIssueException(
 						"An error occurred during connecting...!"));
 				// System.err.println("An error occurred during connecting...!");
-				return;
 			}
 
 			// poll commands
@@ -92,8 +91,14 @@ public class Server implements Runnable {
 
 				this.errorCount = 0;
 
-				System.out.println("Client received command: "
-						+ this.receivedCommand);
+				//System.out.println("Client received command: "
+				//		+ this.receivedCommand);
+				if(this.receivedCommand == null) {
+					actController.handleException(new ConnectionLostException("Connection to Client lost!"));
+					//this.finalize();
+					return;
+				}
+				
 				try {
 					// close connection if partner sends "BYE"
 					if (this.receivedCommand.equals("BYE")) {
@@ -155,36 +160,29 @@ public class Server implements Runnable {
 	/*
 	 * Creates server and starts server socket in additional thread
 	 */
-	public Server(int iv_port) throws UnknownHostException {
+	public Server(int iv_port, ActionController ir_actioncontroller) throws UnknownHostException {
 		this.communicationport = iv_port;
 		this.msgProcessor = this.getMessageProcessorInstance();
+		this.actController = ir_actioncontroller;
 	}
 
 	/*
 	 * Set up server socket for incoming clients
 	 */
-	private ServerSocket initiateCommunicationSocket() {
+	private ServerSocket initiateCommunicationSocket() throws ServerException {
 		ServerSocket rr_serverSocket = null;
 		try {
 			rr_serverSocket = new ServerSocket(this.communicationport);
 		} catch (IOException e) {
-			this.actController.handleException(new ServerException(
-					"Could not listen on port: " + this.communicationport));
+			this.switchOff();
+			throw new ServerException("Could not listen on port: " + this.communicationport);
 			// System.err.println("Could not listen on port: "
 			// + this.communicationport);
-			this.switchOff();
 		}
 
 		System.out.println("Communication Server successfully initiated");
 
 		return rr_serverSocket;
-	}
-
-	/*
-	 * add ActionController reference for event handling to client object
-	 */
-	public void addController(ActionController actController) {
-		this.actController = actController;
 	}
 
 	/*
@@ -206,7 +204,7 @@ public class Server implements Runnable {
 	/*
 	 * listen to specified socket for clients
 	 */
-	private void listen() {
+	private void listen() throws ConnectionIssueException, ServerException {
 		// wait for clients
 		while (this.powerSwitch == true) {
 			if (this.clientCounter < this.maxClients) {
@@ -220,12 +218,10 @@ public class Server implements Runnable {
 				} catch (IOException e) {
 					// if an error occurred escape whole server thread
 					// System.err.println("Accept failed.");
-					this.actController.handleException(new ServerException(
-							"Client accept failed!"));
-					return;
+					throw new ServerException("Client accept failed!");
 				}
 				catch( NullPointerException e) {
-					this.actController.handleException(new ConnectionIssueException());
+					throw new ConnectionIssueException();
 				}
 			}
 
@@ -280,8 +276,16 @@ public class Server implements Runnable {
 
 	@Override
 	public void run() {
-		this.communicationSocket = this.initiateCommunicationSocket();
-		this.listen();
+		try {
+			this.communicationSocket = this.initiateCommunicationSocket();
+		} catch (ServerException e) {
+			this.actController.handleException(e);
+		}
+		try {
+			this.listen();
+		} catch (ConnectionIssueException | ServerException e) {
+			this.actController.handleException(e);
+		}
 		this.finalize();
 	}
 

@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
+import backend.exceptions.NetworkException;
 import backend.exceptions.ServerException;
 
 import frontend.BattleShipGame;
@@ -187,11 +188,11 @@ public class ActionController {
 	 * creates server on local machine (incl. save reference for Server object)
 	 * and connect local user to server
 	 */
-	private void createServer() {
+	private void createServer() throws NetworkException {
 		// create new server instance on port 6200 in separate thread
 		Runnable server = null;
 		try {
-			server = new Server(6200);
+			server = new Server(6200,this);
 		} catch (UnknownHostException e1) {
 			this.handleException(new ServerException(e1.getMessage()));
 		}
@@ -201,8 +202,7 @@ public class ActionController {
 		try {
 			connectToPartner(InetAddress.getLocalHost().getHostAddress(), 6200);
 		} catch (UnknownHostException e) {
-			System.err.println("local network error!");
-			return;
+			throw new NetworkException("local network error!");
 		}
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
@@ -417,7 +417,11 @@ public class ActionController {
 
 		// if new server
 		if (item.getText().equals("New Server")) {
-			this.createServer();
+			try {
+				this.createServer();
+			} catch (NetworkException e1) {
+				this.handleException(e1);
+			}
 			this.bsg.getMenu().disableItems();
 		}
 
@@ -519,6 +523,18 @@ public class ActionController {
 			this.game.getPlayerOne().selectedShip = this.game.getPlayerOne()
 					.getShips()[this.game.getPlayerOne().patrolboat];
 			this.game.getPlayerOne().isMouseListenerActive = true;
+		}
+	}
+	
+	/*
+	 * handles all events of LeftSetupView
+	 */
+	public void handleLeftSetupViewAction(ActionEvent e) {
+		JButton button = (JButton) e.getSource();
+
+		// if ready button
+		if (button.getName().equals("playAgain")) {
+			this.transmitNewGame();
 		}
 	}
 
