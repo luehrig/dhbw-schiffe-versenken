@@ -12,11 +12,17 @@ import backend.ActionController;
 
 public class StatusBar extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1210178083917538284L;
+
 	private static Font STATUS_FONT = new Font("Arial", Font.BOLD, 12);
 	
 	private JLabel infoLabel;
 	private JLabel playerLabel;
 	private JLabel ipLabel;	
+	@SuppressWarnings("unused")
 	private ActionController actController;
 	
 	
@@ -98,7 +104,6 @@ public class StatusBar extends JPanel {
 		try {
 			ipAdr = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ipLabel.setText("My IP: " + ipAdr.getHostAddress() + " ");

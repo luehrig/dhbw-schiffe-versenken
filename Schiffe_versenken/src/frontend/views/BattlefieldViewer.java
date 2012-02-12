@@ -14,6 +14,10 @@ import backend.Tile;
 
 public class BattlefieldViewer extends JPanel implements MouseListener {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8865229600593407050L;
 	private ActionController actController;
 	
 	/*

@@ -17,12 +17,17 @@ import backend.ActionController;
 
 public class Menu extends JMenuBar {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1447485767871605534L;
 	private JMenu option;
 	private JMenuItem newGame;
 	private JMenuItem newServer;
 	private JMenu newConnect;
 	private JMenuItem exitConnect;
 	private JMenuItem exitGame;
+	@SuppressWarnings("unused")
 	private JMenuItem ipItem;
 	
 	private ActionController actController;
@@ -90,7 +95,6 @@ public class Menu extends JMenuBar {
 					try {
 						actController.setRemoteIPadress(e);
 					} catch (UnknownHostException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}

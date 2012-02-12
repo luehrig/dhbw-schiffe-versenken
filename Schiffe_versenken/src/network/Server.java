@@ -20,6 +20,7 @@ public class Server implements Runnable {
 	 * this thread is talking with a single client
 	 */
 	private class ServerThread extends NetworkObject implements Runnable {
+		@SuppressWarnings("unused")
 		private Server parent;
 		private Socket socket = null;
 		private int threadID;

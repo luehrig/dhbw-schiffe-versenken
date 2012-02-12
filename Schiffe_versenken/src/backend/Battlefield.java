@@ -1,14 +1,9 @@
 package backend;
 
-import java.awt.AWTEvent;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import backend.Tile.Status;
 
 public class Battlefield {
 

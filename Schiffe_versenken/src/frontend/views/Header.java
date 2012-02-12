@@ -1,7 +1,6 @@
 package frontend.views;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -10,6 +9,11 @@ import backend.ActionController;
 
 public class Header extends JLabel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8368299996738149176L;
+	@SuppressWarnings("unused")
 	private ActionController actController;
 	
 	/*

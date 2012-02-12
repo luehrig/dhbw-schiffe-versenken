@@ -1,7 +1,6 @@
 package frontend.views;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +15,10 @@ import backend.Ship;
 
 public class LeftSetupView extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3513873600681449546L;
 	private ActionController actController;
 	private ActionListener actionListener;
 	private JLabel enemyShipslabel;
@@ -38,7 +41,7 @@ public class LeftSetupView extends JPanel {
 		this.setLayout(new GridBagLayout());
 		this.setBackground(Color.DARK_GRAY);
 		this.c = new GridBagConstraints();
-		this.c.fill = c.HORIZONTAL;
+		this.c.fill = GridBagConstraints.HORIZONTAL;
 	}
 	
 	/*

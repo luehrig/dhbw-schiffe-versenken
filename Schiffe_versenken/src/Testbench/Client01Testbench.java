@@ -1,9 +1,5 @@
 package Testbench;
 
-import java.awt.AWTEvent;
-
-import backend.Helper;
-
 import network.Client;
 
 public class Client01Testbench {

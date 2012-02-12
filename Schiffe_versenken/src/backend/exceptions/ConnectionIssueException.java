@@ -6,6 +6,11 @@ package backend.exceptions;
 
 public class ConnectionIssueException extends NetworkException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8541733958747499287L;
+
 	public ConnectionIssueException() {
 		super();
 	}

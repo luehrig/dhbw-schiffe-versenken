@@ -1,15 +1,17 @@
 package backend;
 
 import java.awt.Color;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 
 public class Tile extends JButton {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2076309709112562577L;
+	@SuppressWarnings("unused")
 	private int x;
+	@SuppressWarnings("unused")
 	private int y;
 	private Status status;
 	private boolean isBoardShotable = false;
@@ -49,7 +51,9 @@ public class Tile extends JButton {
 			break;
 		}
 	}
-		
+	
+	// TODO
+	// this method is marked as obsolete
 	// initiates Tile
 	private void initTile() {
 		this.setWater();

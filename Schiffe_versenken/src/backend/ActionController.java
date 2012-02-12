@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
@@ -77,7 +76,6 @@ public class ActionController {
 		try {
 			ipAdr = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return ipAdr.getHostAddress();
@@ -120,7 +118,6 @@ public class ActionController {
 
 	// set player
 	public void setPlayer(String name) throws UnknownHostException {
-		// TODO
 		game.setPlayer(name);
 
 		local = new Player(name);

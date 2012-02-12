@@ -1,10 +1,8 @@
 package Testbench;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import backend.ActionController;
-
 import network.Server;
 
 public class ServerTestbench {

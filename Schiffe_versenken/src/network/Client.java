@@ -1,9 +1,7 @@
 package network;
 
-import java.awt.AWTEvent;
 import java.io.*;
 import java.net.*;
-
 
 import backend.ActionController;
 import backend.Helper;
@@ -17,6 +15,7 @@ public class Client extends NetworkObject implements Runnable {
 	 */
 	private class KeepAliveThread extends Thread {
 
+		@SuppressWarnings("unused")
 		private long max_timeout;
 		private PrintWriter outboundPlug;
 

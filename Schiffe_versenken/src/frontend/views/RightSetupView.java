@@ -15,6 +15,10 @@ import backend.Ship;
 
 public class RightSetupView extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4407417703284296206L;
 	private ActionController actController;
 	private ActionListener actionListener;
 	private JLabel myShipslabel;
@@ -37,7 +41,7 @@ public class RightSetupView extends JPanel {
 		this.setLayout(new GridBagLayout());
 		this.setBackground(Color.DARK_GRAY);
 		this.c = new GridBagConstraints();
-		this.c.fill = c.HORIZONTAL;
+		this.c.fill = GridBagConstraints.HORIZONTAL;
 	}
 	
 	/*
