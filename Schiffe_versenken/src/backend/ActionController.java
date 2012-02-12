@@ -357,6 +357,8 @@ public class ActionController {
 				this.getRemotePlayer().setIP(miscParts[0]);
 				this.getRemotePlayer().setName(miscParts[1]);
 			}
+			
+			this.bsg.getLeftSetupView().setEnemyName(this.getRemotePlayer().getName());
 
 			// set current Player
 			this.setCurrentPlayer(miscParts[4]);

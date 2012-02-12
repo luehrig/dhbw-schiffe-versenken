@@ -136,5 +136,9 @@ public class LeftSetupView extends JPanel {
 			}
 		};
 	}
+	
+	public void setEnemyName(String name) {
+		this.enemyShipslabel.setText(name);
+	}
 
 }
