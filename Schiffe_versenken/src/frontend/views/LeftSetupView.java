@@ -22,7 +22,7 @@ public class LeftSetupView extends JPanel {
 	private ActionController actController;
 	private ActionListener actionListener;
 	private JLabel enemyShipslabel;
-	private JButton playAgainButton;
+	private JButton toggleButton;
 	private GridBagConstraints c;
 	
 	/*
@@ -64,12 +64,13 @@ public class LeftSetupView extends JPanel {
 		
 		//give up button
 		this.c.gridy = 6;
-		this.playAgainButton = new JButton("Play Again!");
-		this.playAgainButton.setForeground(Color.DARK_GRAY);
-		this.playAgainButton.setBackground(Color.ORANGE);
-		this.playAgainButton.setName("playAgain");
-		this.playAgainButton.addActionListener(this.actionListener);
-		this.add(playAgainButton, c);
+		this.toggleButton = new JButton("Toggle!");
+		this.toggleButton.setForeground(Color.DARK_GRAY);
+		this.toggleButton.setBackground(Color.ORANGE);
+		this.toggleButton.setName("toggle");
+		this.toggleButton.setEnabled(false);
+		this.toggleButton.addActionListener(this.actionListener);
+		this.add(toggleButton, c);
 	}
 	
 	/*
@@ -124,6 +125,14 @@ public class LeftSetupView extends JPanel {
 			break;
 		}
 
+	}
+	
+	public void setToogleButtonEnabled() {
+		this.toggleButton.setEnabled(true);
+	}
+	
+	public void setToggleButtonDisabled() {
+		this.toggleButton.setEnabled(false);
 	}
 	
 	/*

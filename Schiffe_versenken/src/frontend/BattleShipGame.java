@@ -132,6 +132,36 @@ public class BattleShipGame extends JFrame {
 
 		this.revalidate();
 		this.repaint();
+		
+		
+	}
+	
+	
+	private class TimeThread extends Thread{
+		@Override public void run() {
+		    try {
+		    	
+		    	for(int i = 0; i < 10 ; i++) {
+		    		setBounds(getX()-20, getY()-20, 650, 500);
+		    		Thread.sleep( 20 );
+		    		setBounds(getX()+20, getY()+20, 600, 450);
+		    		Thread.sleep(20);
+		    	}
+		    		
+		    		
+		    		
+		    		
+		    } 
+		    catch ( InterruptedException e ) { 
+		    }
+		  }
+	}
+	
+	
+	
+	public void toggleGUI() {
+		TimeThread tt = new TimeThread();
+		tt.start();
 	}
 
 	public StatusBar getStatusBar() {

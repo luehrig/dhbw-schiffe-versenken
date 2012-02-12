@@ -28,6 +28,7 @@ public class Helper {
 	public static final String success = "SUCCESS";
 	public static final String nosuccess = "NOSUCCESS";
 	public static final String playername = "PLAYERNAME";
+	public static final String toggle = "TOGGLE";
 
 	/*
 	 * convert a byte array in integer value

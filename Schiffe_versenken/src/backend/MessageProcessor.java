@@ -235,6 +235,10 @@ public class MessageProcessor implements Runnable {
 			initialize.release();
 
 			break;
+		case Helper.toggle:
+			this.fireEvent(ir_event);
+			
+			break;
 		default:
 			System.err
 					.println("no specified Event received by Message Processor!");
