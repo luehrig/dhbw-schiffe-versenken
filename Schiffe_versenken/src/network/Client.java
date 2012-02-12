@@ -116,7 +116,18 @@ public class Client extends NetworkObject implements Runnable {
 
 		System.out.println("Connection to " + this.ip + " on port "
 				+ this.communicationPort + " established!");
-
+		
+		InetAddress ipAdr = null;
+		try {
+			ipAdr = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		if(!ipAdr.getHostAddress().equals(this.ip))
+			this.actController.setInfoOnStatusbar("You have connected to " + this.ip + "!");
+			
+		
+		
 		return rr_clientSocket;
 	}
 

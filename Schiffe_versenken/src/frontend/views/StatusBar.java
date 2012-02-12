@@ -26,13 +26,29 @@ public class StatusBar extends JPanel {
 	private ActionController actController;
 	
 
-	private class TimeThread extends Thread{
+	private class ClearThread extends Thread{
 		@Override public void run() {
 		    try {
 //		    	while(true){
 		    		Thread.sleep( 8000 );
 		    		
 		    		infoLabel.setText("");
+		    		
+//		    	}
+		    } 
+		    catch ( InterruptedException e ) { 
+		    }
+		  }
+	}
+	
+	private class WaitThread extends Thread{
+		@Override public void run() {
+		    try {
+//		    	while(true){
+		    		Thread.sleep( 8000 );
+		    		infoLabel.setFont(STATUS_FONT);
+		    		infoLabel.setForeground(Color.WHITE);
+		    		infoLabel.setText("Set your Ships!");
 		    		
 //		    	}
 		    } 
@@ -52,7 +68,7 @@ public class StatusBar extends JPanel {
 		this.setSize(getMaximumSize());
 		
 		// set Info Label
-		infoLabel = new JLabel("Info", JLabel.LEFT);
+		infoLabel = new JLabel("", JLabel.LEFT);
 		infoLabel.setForeground(Color.WHITE);
 		infoLabel.setBackground(Color.DARK_GRAY);
 		infoLabel.setFont(STATUS_FONT);
@@ -67,7 +83,7 @@ public class StatusBar extends JPanel {
 		playerLabel.setBackground(Color.DARK_GRAY);
 		playerLabel.setFont(STATUS_FONT);
 		playerLabel.setOpaque(true);
-		playerLabel.setBounds(250, 0, 150, 30);
+		playerLabel.setBounds(250, 0, 200, 30);
 		this.add(playerLabel);
 		
 		// set Label for IP adress
@@ -77,15 +93,15 @@ public class StatusBar extends JPanel {
 		
 	}
 	
-public void setGeneralInfo(String info){
+	public void setGeneralInfo(String info){
 		
 		infoLabel.setFont(STATUS_FONT);
 		infoLabel.setForeground(Color.WHITE);
 		infoLabel.setText(info);
 		
 		// clear text after 8 sec.
-		Thread timethread = new TimeThread();
-		timethread.start();
+		Thread clearthread = new ClearThread();
+		clearthread.start();
 		
 	}
 	
@@ -96,6 +112,14 @@ public void setGeneralInfo(String info){
 		infoLabel.setText(info);
 	}
 	
+	public void setInfoForInit(String info){
+			
+		// Set Text "Set your your ships!" after 8 sec, because info for connection should be displayed for 8 sec.
+		Thread waitthread = new WaitThread();
+		waitthread.start();
+		
+	}
+	
 
 	
 	public void setError(String info){
@@ -104,8 +128,8 @@ public void setGeneralInfo(String info){
 		infoLabel.setText(info);
 		
 		// clear text after 8 sec.
-		Thread timethread = new TimeThread();
-		timethread.start();
+		Thread clearthread = new ClearThread();
+		clearthread.start();
 		
 	}
 	

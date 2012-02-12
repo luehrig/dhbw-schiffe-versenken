@@ -91,7 +91,7 @@ public class ActionController {
 			this.bsg.getStatusBar().setPlayer("It큦 your turn!");
 		// TODO get remote IP and compare
 		else if(!currentPlayerIP.equals("Player"))
-			this.bsg.getStatusBar().setPlayer("It큦 the other큦 turn!");
+			this.bsg.getStatusBar().setPlayer("It큦 " + this.remote.getName() + "'s turn!");
 	}
 
 
@@ -108,11 +108,11 @@ public class ActionController {
 	
 		if(!miscParts[1].equals(this.getLocalIP())){ // an enemy ship is hit
 			if(miscParts.length == 3) {
-				this.bsg.getStatusBar().setGameInfo("Enemy's " + miscParts[0] + " sink!!!");
+				this.bsg.getStatusBar().setGameInfo(this.remote.getName() + "'s " + miscParts[0] + " sink!!!");
 				this.bsg.getLeftSetupView().setShipSink(miscParts[0]);
 			}	
 			else
-				this.bsg.getStatusBar().setGameInfo("You hit the " + miscParts[0] + "!!!");
+				this.bsg.getStatusBar().setGameInfo("You hit " + this.remote.getName() + "'s " + miscParts[0] + "!!!");
 		}
 		else{										// an own ship is hit
 			if(miscParts.length == 3){
@@ -244,7 +244,7 @@ public class ActionController {
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
 		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
-		this.setInfoOnStatusbar("Server was created successfully");
+		
 	}
 
 	/*
@@ -349,7 +349,8 @@ public class ActionController {
 		switch (action.getKey()) {
 		case Helper.start:
 			miscParts = Helper.splitString(action.getMisc());
-
+		
+			
 			if (miscParts[0].equals(this.getLocalPlayer().getIP())) {
 				this.getRemotePlayer().setIP(miscParts[2]);
 				this.getRemotePlayer().setName(miscParts[3]);
@@ -358,9 +359,11 @@ public class ActionController {
 				this.getRemotePlayer().setName(miscParts[1]);
 			}
 			
+
 			this.bsg.getLeftSetupView().setEnemyName(this.getRemotePlayer().getName() + "`s Ships:");
 			
 			this.bsg.getLeftSetupView().setToogleButtonEnabled();
+
 
 			// set current Player
 			this.setCurrentPlayer(miscParts[4]);
@@ -371,6 +374,9 @@ public class ActionController {
 				this.game.getPlayerTwo().getBattlefield()
 						.setBattlefieldShotable();
 			}
+			
+			this.bsg.getLeftSetupView().setEnemyName(this.getRemotePlayer().getName());
+			this.setInfoOnStatusbar("You play with " + this.getRemotePlayer().getName() + "!");
 
 			break;
 		case Helper.hit:
@@ -443,6 +449,8 @@ public class ActionController {
 			else
 				this.setInfoOnStatusbar("You lose!!! :(");
 			
+			this.bsg.getStatusBar().setPlayer("It큦 " + this.remote.getName() + "'s turn!");
+			
 			break;
 		case Helper.newgame:
 			if (action.getMisc().equals(Helper.success)) {
@@ -472,11 +480,18 @@ public class ActionController {
 				this.whenConnectionIsSetButtonsEnable();
 				this.game.getPlayerOne().getBattlefield()
 						.setBattlefieldShotable();
+				
+				this.setInfoOnStatusbar("A new Game with " + this.getRemotePlayer().getName() + " starts!");
+
 			}
 			break;
 		case Helper.toggle:
 			if(!action.getOrigin().equals(this.game.getPlayerOne().getIP())) {
 				this.bsg.toggleGUI();
+
+				
+				
+
 			}
 			break;
 		}
@@ -490,7 +505,8 @@ public class ActionController {
 		System.err.println(ir_exception.getClass().getSimpleName()
 				+ ir_exception.getMessage());
 
-		// TODO: react with gui methods..
+		// display exception on status bar
+		this.bsg.getStatusBar().setError (ir_exception.getMessage());
 	}
 
 	/*
