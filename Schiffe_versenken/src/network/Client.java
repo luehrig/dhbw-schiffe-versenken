@@ -153,7 +153,7 @@ public class Client extends NetworkObject implements Runnable {
 					break;
 				default:
 					// fire event to to GUI
-					this.actController.handleEvent(Helper.commandToEvent(receivedCommand));
+					this.actController.handleMessageEvent(Helper.commandToEvent(receivedCommand));
 				}
 			} catch (IOException e) {
 				throw new ConnectionIssueException();

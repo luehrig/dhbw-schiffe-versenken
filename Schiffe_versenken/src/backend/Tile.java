@@ -49,11 +49,6 @@ public class Tile extends JButton {
 			break;
 		}
 	}
-		
-	// initiates Tile
-	private void initTile() {
-		this.setWater();
-	}
 
 	
 	// sets Tile Water

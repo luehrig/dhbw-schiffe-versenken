@@ -68,6 +68,8 @@ public class Battlefield {
 	public JPanel getPanel() {
 		return this.panel;
 	}
+
+
 	
 	// Set all buttons on battlefield enabled
 	public void setBattlefieldShotable() {

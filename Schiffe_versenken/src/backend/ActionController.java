@@ -286,7 +286,7 @@ public class ActionController {
 	/*
 	 * react on event from Server
 	 */
-	public void handleEvent(AWTEvent ir_event) {
+	public void handleMessageEvent(AWTEvent ir_event) {
 		System.err.println("GUI instance received Action from Server!");
 
 		Action action = Helper.awtEventToAction(ir_event);
@@ -377,9 +377,10 @@ public class ActionController {
 				
 				// rebuild UI
 				this.bsg.rebuild();
-
+				
 				// unlock all UI elements that are necessary for setting up ships
-				this.whenConnectionIsSetButtonsEnable();	
+				this.whenConnectionIsSetButtonsEnable();
+				this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 				
 			}
 			break;
