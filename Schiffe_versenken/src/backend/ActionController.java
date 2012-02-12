@@ -475,6 +475,8 @@ public class ActionController {
 				this.whenConnectionIsSetButtonsEnable();
 				this.game.getPlayerOne().getBattlefield()
 						.setBattlefieldShotable();
+				
+				this.setInfoOnStatusbar("A new Game with " + this.getRemotePlayer().getName() + " starts!");
 			}
 			break;
 		}

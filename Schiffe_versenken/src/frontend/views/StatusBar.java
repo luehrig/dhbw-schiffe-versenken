@@ -26,13 +26,29 @@ public class StatusBar extends JPanel {
 	private ActionController actController;
 	
 
-	private class TimeThread extends Thread{
+	private class ClearThread extends Thread{
 		@Override public void run() {
 		    try {
 //		    	while(true){
 		    		Thread.sleep( 8000 );
 		    		
 		    		infoLabel.setText("");
+		    		
+//		    	}
+		    } 
+		    catch ( InterruptedException e ) { 
+		    }
+		  }
+	}
+	
+	private class WaitThread extends Thread{
+		@Override public void run() {
+		    try {
+//		    	while(true){
+		    		Thread.sleep( 8000 );
+		    		infoLabel.setFont(STATUS_FONT);
+		    		infoLabel.setForeground(Color.WHITE);
+		    		infoLabel.setText("Set your Ships!");
 		    		
 //		    	}
 		    } 
@@ -77,15 +93,15 @@ public class StatusBar extends JPanel {
 		
 	}
 	
-public void setGeneralInfo(String info){
+	public void setGeneralInfo(String info){
 		
 		infoLabel.setFont(STATUS_FONT);
 		infoLabel.setForeground(Color.WHITE);
 		infoLabel.setText(info);
 		
 		// clear text after 8 sec.
-		Thread timethread = new TimeThread();
-		timethread.start();
+		Thread clearthread = new ClearThread();
+		clearthread.start();
 		
 	}
 	
@@ -96,6 +112,14 @@ public void setGeneralInfo(String info){
 		infoLabel.setText(info);
 	}
 	
+	public void setInfoForInit(String info){
+			
+		// Set Text "Set your your ships!" after 8 sec, because info for connection should be displayed for 8 sec.
+		Thread waitthread = new WaitThread();
+		waitthread.start();
+		
+	}
+	
 
 	
 	public void setError(String info){
@@ -104,8 +128,8 @@ public void setGeneralInfo(String info){
 		infoLabel.setText(info);
 		
 		// clear text after 8 sec.
-		Thread timethread = new TimeThread();
-		timethread.start();
+		Thread clearthread = new ClearThread();
+		clearthread.start();
 		
 	}
 	
