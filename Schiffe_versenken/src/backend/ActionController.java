@@ -25,7 +25,8 @@ public class ActionController {
 
 	private Game game;
 	private static boolean horizontal;
-
+	private boolean firsttime = true;
+	
 	private Server server;
 	private Client client;
 	private Thread clientThread;
@@ -530,9 +531,11 @@ public class ActionController {
 		if (button.getText().equals("Ready!")) {
 			if (this.game.getPlayerOne().areAllShipsSet()) {
 
-				// transmit Player name to server
-
-				this.transmitPlayerName();
+				if (this.firsttime == true) {
+					// transmit Player name to server
+					this.transmitPlayerName();
+					this.firsttime = false;
+				}
 
 				this.game.getPlayerOne().getBattlefield()
 						.setBattlefieldNotShotable();
