@@ -25,7 +25,21 @@ public class StatusBar extends JPanel {
 	@SuppressWarnings("unused")
 	private ActionController actController;
 	
-	
+
+	private class TimeThread extends Thread{
+		@Override public void run() {
+		    try {
+//		    	while(true){
+		    		Thread.sleep( 8000 );
+		    		
+		    		infoLabel.setText("");
+		    		
+//		    	}
+		    } 
+		    catch ( InterruptedException e ) { 
+		    }
+		  }
+	}
 	/**
 	 * 
 	 */
@@ -43,7 +57,7 @@ public class StatusBar extends JPanel {
 		infoLabel.setBackground(Color.DARK_GRAY);
 		infoLabel.setFont(STATUS_FONT);
 		infoLabel.setOpaque(true);
-		infoLabel.setBounds(10, 0, 250, 30);
+		infoLabel.setBounds(10, 0, 240, 30);
 		infoLabel.setAlignmentY(LEFT_ALIGNMENT);
 		this.add(infoLabel);
 		
@@ -63,9 +77,35 @@ public class StatusBar extends JPanel {
 		
 	}
 	
-	public void setInfo(String info){
+public void setGeneralInfo(String info){
 		
+		infoLabel.setFont(STATUS_FONT);
+		infoLabel.setForeground(Color.WHITE);
 		infoLabel.setText(info);
+		
+		// clear text after 8 sec.
+		Thread timethread = new TimeThread();
+		timethread.start();
+		
+	}
+	
+	
+	public void setGameInfo(String info){
+		infoLabel.setFont(STATUS_FONT);
+		infoLabel.setForeground(Color.WHITE);
+		infoLabel.setText(info);
+	}
+	
+
+	
+	public void setError(String info){
+		infoLabel.setFont(new Font("Arial", Font.BOLD, 11));
+		infoLabel.setForeground(Color.red);
+		infoLabel.setText(info);
+		
+		// clear text after 8 sec.
+		Thread timethread = new TimeThread();
+		timethread.start();
 		
 	}
 	
@@ -104,6 +144,7 @@ public class StatusBar extends JPanel {
 		try {
 			ipAdr = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ipLabel.setText("My IP: " + ipAdr.getHostAddress() + " ");
@@ -113,3 +154,4 @@ public class StatusBar extends JPanel {
 	
 
 }
+

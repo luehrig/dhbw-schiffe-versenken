@@ -73,7 +73,7 @@ public class ActionController {
 	}
 
 	// returns local IP
-	public String getLocalID() {
+	public String getLocalIP() {
 		InetAddress ipAdr = null;
 		try {
 			ipAdr = InetAddress.getLocalHost();
@@ -84,39 +84,53 @@ public class ActionController {
 	}
 
 	// set current player
-	public void setCurrentPlayer(String currentPlayerIP) {
+	public void setCurrentPlayer(String currentPlayerIP){
+		
+		if(this.getLocalIP().equals(currentPlayerIP))
 
-		if (this.getLocalID() == currentPlayerIP)
 			this.bsg.getStatusBar().setPlayer("It´s your turn!");
-		else
+		// TODO get remote IP and compare
+		else if(!currentPlayerIP.equals("Player"))
 			this.bsg.getStatusBar().setPlayer("It´s the other´s turn!");
 	}
 
-	public void setNoHit(String shotTargetIP) {
 
-		if (this.getLocalID() != shotTargetIP) {
-			this.bsg.getStatusBar().setInfo("You didn´t hit :(");
-		}
-
+	public void setNoHit(String shotTargetIP){
+		
+		if(!this.getLocalIP().equals(shotTargetIP))
+			this.bsg.getStatusBar().setGameInfo("You didn´t hit!");
+		else
+			this.bsg.getStatusBar().setGameInfo("");
 	}
 
 	// set info at statusbar
-	public void setShipHit(String[] ship) {
-
-		if (this.getLocalID() == ship[1]) {
-			if (ship[2] == "0")
-				this.bsg.getStatusBar().setInfo(
-						"You hit the " + ship[0] + "!!!");
+	public void setShipHit(String[] miscParts ){
+	
+		if(!miscParts[1].equals(this.getLocalIP())){ // an enemy ship is hit
+			if(miscParts.length == 3) {
+				this.bsg.getStatusBar().setGameInfo("Enemy's " + miscParts[0] + " sink!!!");
+				this.bsg.getLeftSetupView().setShipSink(miscParts[0]);
+			}	
 			else
-				this.bsg.getStatusBar().setInfo(ship[0] + " sink!!!");
-		} else {
-			if (ship[2] == "0")
-				this.bsg.getStatusBar().setInfo("Your " + ship[0] + "was hit");
+				this.bsg.getStatusBar().setGameInfo("You hit the " + miscParts[0] + "!!!");
+		}
+		else{										// an own ship is hit
+			if(miscParts.length == 3){
+				this.bsg.getStatusBar().setGameInfo("Your " + miscParts[0] + " sink!");
+				this.bsg.getRightSetupView().setShipSink(miscParts[0]);
+			}
 			else
-				this.bsg.getStatusBar().setInfo("Your" + ship[0] + " sink");
+				this.bsg.getStatusBar().setGameInfo("Your " + miscParts[0] + " was hit!");
 		}
 
 	}
+
+	
+	// set info
+	public void setInfoOnStatusbar(String info){
+		this.bsg.getStatusBar().setGeneralInfo(info);
+	}
+
 
 	// set player
 	public void setPlayer(String name) throws UnknownHostException {
@@ -230,7 +244,7 @@ public class ActionController {
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
 		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
-		this.bsg.getStatusBar().setInfo("Server was created successfully");
+		this.setInfoOnStatusbar("Server was created successfully");
 	}
 
 	/*
@@ -256,7 +270,7 @@ public class ActionController {
 		whenConnectionIsSetButtonsEnable();
 		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 
-		this.bsg.getStatusBar().setInfo("You have connected successfully");
+		this.setInfoOnStatusbar("You have connected successfully");
 	}
 
 	/*
@@ -386,7 +400,9 @@ public class ActionController {
 				// Ship.Type.valueOf(miscParts[0])
 
 			}
-
+			
+			this.setShipHit(miscParts);
+			
 			break;
 		case Helper.nohit:
 			System.out.println("Shot hit NO ship!");
@@ -417,6 +433,12 @@ public class ActionController {
 					.setBattlefieldNotShotable();
 
 			this.bsg.getBattlefieldViewer().winner();
+			
+			if(action.getMisc().equals(this.game.getPlayerOne().getIP()))
+				this.setInfoOnStatusbar("You win!!! :)");
+			else
+				this.setInfoOnStatusbar("You lose!!! :(");
+			
 			break;
 		case Helper.newgame:
 			if (action.getMisc().equals(Helper.success)) {
