@@ -68,27 +68,8 @@ public class Battlefield {
 	public JPanel getPanel() {
 		return this.panel;
 	}
-
-	// Set all buttons on battlefield disabled
-	public void setButtonsDisable() {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				board[i][j].setEnabled(false);
-				board[i][j].setMargin(new Insets(3, 3, 3, 3));
-			}
-		}
-	}
-
-	// Set all buttons on battlefield enabled
-	public void setButtonsEnable() {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				board[i][j].setEnabled(true);
-				board[i][j].setMargin(new Insets(6, 6, 6, 6));
-			}
-		}
-	}
 	
+	// Set all buttons on battlefield enabled
 	public void setBattlefieldShotable() {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -98,6 +79,7 @@ public class Battlefield {
 		}
 	}
 	
+	// Set all buttons on battlefield disabled
 	public void setBattlefieldNotShotable() {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {

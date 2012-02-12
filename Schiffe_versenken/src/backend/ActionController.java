@@ -198,7 +198,7 @@ public class ActionController {
 		}
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
-		this.game.getPlayerOne().getBattlefield().setButtonsEnable();
+		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 		this.bsg.getStatusBar().setInfo("Server was created successfully");
 	}
 
@@ -222,7 +222,7 @@ public class ActionController {
 				InetAddress.getLocalHost().getHostAddress());
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
-		this.game.getPlayerOne().getBattlefield().setButtonsEnable();
+		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 		this.bsg.getStatusBar().setInfo("You have connected successfully");
 	}
 
