@@ -119,11 +119,12 @@ public class ActionController {
 	}
 
 	// set player
-	public void setPlayer(String name) {
+	public void setPlayer(String name) throws UnknownHostException {
 		// TODO
 		game.setPlayer(name);
 
 		local = new Player(name);
+		local.setIP(InetAddress.getLocalHost().getHostAddress().toString());
 		remote = new Player("remote");
 		game.addPlayer(local, local.getBattlefield());
 		game.addPlayer(remote, remote.getBattlefield());
@@ -185,6 +186,29 @@ public class ActionController {
 	}
 
 	/*
+	 * transmit local player name to server
+	 */
+	private void transmitPlayerName() {
+		// build action, pack into event that should be transfered to server
+		Action transmitAction = null;
+		ActionEvent rr_event = null;
+		String cmd = null;
+
+		try {
+			transmitAction = new Action(InetAddress.getLocalHost()
+					.getHostAddress().toString(), Helper.playername, 0, 0, this
+					.getLocalPlayer().getName());
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+		rr_event = new ActionEvent(transmitAction, 0, Helper.playername);
+
+		// convert event to command and transfer to server
+		cmd = Helper.eventToCommand(rr_event);
+		client.sendCommand(cmd);
+	}
+
+	/*
 	 * creates server on local machine (incl. save reference for Server object)
 	 * and connect local user to server
 	 */
@@ -192,7 +216,7 @@ public class ActionController {
 		// create new server instance on port 6200 in separate thread
 		Runnable server = null;
 		try {
-			server = new Server(6200,this);
+			server = new Server(6200, this);
 		} catch (UnknownHostException e1) {
 			this.handleException(new ServerException(e1.getMessage()));
 		}
@@ -231,6 +255,9 @@ public class ActionController {
 		whenConnectionIsSetButtonsEnable();
 
 		this.bsg.getStatusBar().setInfo("You have connected successfully");
+
+		// transmit Player name to server
+		this.transmitPlayerName();
 	}
 
 	/*
@@ -256,11 +283,11 @@ public class ActionController {
 		Action transmitAction = null;
 		ActionEvent rr_event = null;
 		String cmd = null;
-		
+
 		try {
 			transmitAction = new Action(InetAddress.getLocalHost()
-					.getHostAddress().toString(), Helper.newgame, 0, 0,
-					this.getLocalPlayer().getIP());
+					.getHostAddress().toString(), Helper.newgame, 0, 0, this
+					.getLocalPlayer().getIP());
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
@@ -296,16 +323,28 @@ public class ActionController {
 	public void handleEvent(AWTEvent ir_event) {
 		System.err.println("GUI instance received Action from Server!");
 
+		String[] miscParts;
+
 		Action action = Helper.awtEventToAction(ir_event);
 
 		switch (action.getKey()) {
 		case Helper.start:
-			// if IP address in message is local IP, start game
-			if (action.getMisc().equals(this.game.getPlayerOne().getIP()) == true) {
-				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
+			miscParts = Helper.splitString(action.getMisc());
+
+			if (miscParts[4].equals(this.getLocalPlayer().getIP())) {
+				this.getRemotePlayer().setIP(miscParts[2]);
+				this.getRemotePlayer().setName(miscParts[3]);
+			} else {
+				this.getRemotePlayer().setIP(miscParts[0]);
+				this.getRemotePlayer().setName(miscParts[1]);
 			}
+
 			// set current Player
-			this.setCurrentPlayer(action.getMisc());
+			this.setCurrentPlayer(miscParts[4]);
+			
+			if (miscParts[4].equals(this.game.getPlayerOne().getIP()) == true) {
+ 				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
+ 			}
 
 			break;
 		case Helper.hit:
@@ -313,7 +352,7 @@ public class ActionController {
 
 			Shot shot0 = new Shot(action.getXPos(), action.getYPos());
 
-			String[] miscParts = action.getMisc().split("\\,");
+			miscParts = action.getMisc().split("\\,");
 
 			// branch for local player
 			if (miscParts[1].equals(this.game.getPlayerOne().getIP())) {
@@ -366,28 +405,32 @@ public class ActionController {
 			this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
 			break;
 		case Helper.newgame:
-			if(action.getMisc().equals(Helper.success)) {
+			if (action.getMisc().equals(Helper.success)) {
 				// buffer local name and ip to start new game
 				String localIP = this.getLocalPlayer().getIP();
 				String localName = this.getLocalPlayer().getName();
-				
+
 				// clear game instance (local player and remote battlefield)
 				this.game.forceDestroyGame();
-				
-				
-				//this.remote = null;
-				//this.local = new Player(localName);
-				
+
+				// this.remote = null;
+				// this.local = new Player(localName);
+
 				// initialize new game instance
-				this.setPlayer(localName);
+				try {
+					this.setPlayer(localName);
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				}
 				this.game.getPlayerOne().setIP(localIP);
-				
+
 				// rebuild UI
 				this.bsg.rebuild();
 
-				// unlock all UI elements that are necessary for setting up ships
-				this.whenConnectionIsSetButtonsEnable();	
-				
+				// unlock all UI elements that are necessary for setting up
+				// ships
+				this.whenConnectionIsSetButtonsEnable();
+
 			}
 			break;
 		}
@@ -525,7 +568,7 @@ public class ActionController {
 			this.game.getPlayerOne().isMouseListenerActive = true;
 		}
 	}
-	
+
 	/*
 	 * handles all events of LeftSetupView
 	 */

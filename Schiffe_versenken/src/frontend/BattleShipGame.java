@@ -3,6 +3,7 @@ package frontend;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 
@@ -126,7 +127,11 @@ public class BattleShipGame extends JFrame {
 
 	// TODO: sollen die Player überhaupt ihren Namen eingeben?
 	private void newPlayer() {
-		this.actController.setPlayer("Erol");
+		try {
+			this.actController.setPlayer("Erol");
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*

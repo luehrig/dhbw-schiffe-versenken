@@ -27,6 +27,7 @@ public class Helper {
 	public static final String newgame = "NEWGAME";
 	public static final String success = "SUCCESS";
 	public static final String nosuccess = "NOSUCCESS";
+	public static final String playername = "PLAYERNAME";
 
 	/*
 	 * convert a byte array in integer value
@@ -159,6 +160,14 @@ public class Helper {
 	 */
 	public static Action awtEventToAction(AWTEvent ir_event) {
 		return (Action) ir_event.getSource();
+	}
+	
+	/*
+	 * split string at "," and return as String array
+	 */
+	public static String[] splitString(String iv_string) {
+		String[] stringParts = iv_string.split("\\,");
+		return stringParts;
 	}
 
 }

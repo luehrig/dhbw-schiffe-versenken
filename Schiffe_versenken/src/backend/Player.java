@@ -19,7 +19,7 @@ public class Player {
 	public Ship selectedShip;
 
 	private int availableShips = 5;
-	
+
 	public boolean isMouseListenerActive = true;
 
 	// Constructor
@@ -51,6 +51,16 @@ public class Player {
 	// set IP for player
 	public void setIP(String iv_ip) {
 		this.ip = iv_ip;
+	}
+
+	// set battlefield for player
+	public void setName(String iv_name) {
+		this.name = iv_name;
+	}
+
+	// set battlefield for player
+	public void setBattlefield(Battlefield ir_battlefield) {
+		this.battlefield = ir_battlefield;
 	}
 
 	// returns an array of ships
@@ -94,43 +104,42 @@ public class Player {
 	}
 
 	/*
-	 * method returns true if ship sink in case of the shot
-	 * method returns false if ship was hit but without sink
+	 * method returns true if ship sink in case of the shot method returns false
+	 * if ship was hit but without sink
 	 */
 	public boolean hitShip(Ship.Type shiptype) {
 		Ship workingShip = null;
-		
+
 		// find correct ship and set as working object
-		for(int i = 0; i < this.ships.length; i++) {
-			if( this.ships[i].getShipType().equals(shiptype) ) {
+		for (int i = 0; i < this.ships.length; i++) {
+			if (this.ships[i].getShipType().equals(shiptype)) {
 				workingShip = this.ships[i];
 				break;
 			}
 		}
-		
+
 		// decrement section count
 		workingShip.decrementSection();
-		
+
 		// calculate return value
-		if(workingShip.getSectionCount() > 0) {
+		if (workingShip.getSectionCount() > 0) {
 			return false;
 		}
-		// in case for sink operation, decrement available ships for player object
+		// in case for sink operation, decrement available ships for player
+		// object
 		else {
 			this.availableShips--;
 			return true;
 		}
 	}
 
-	
 	/*
 	 * method that returns true if ships are available
 	 */
 	public boolean shipsAvailable() {
-		if(this.availableShips > 0) {
+		if (this.availableShips > 0) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}

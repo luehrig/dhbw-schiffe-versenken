@@ -136,12 +136,26 @@ public class Game {
 			this.setGameReady();
 		}
 	}
+	
+	/*
+	 * add battlefield for specific player to game
+	 */
+	public void addBattlefieldToPlayer(Player ir_player, Battlefield ir_battlefield) {
+		// first player in game
+		if (this.playerOne == ir_player) {
+			this.battlefieldPlayerOne = ir_battlefield;
+		}
+		// second player in game
+		else {
+			this.battlefieldPlayerTwo = ir_battlefield;
+		}
+	}
 
 	/*
 	 * return true if game is ready return false if player missing
 	 */
 	public boolean isReady() {
-		if (this.status == gameStatus.ready) {
+		if (this.status == gameStatus.ready && this.battlefieldPlayerOne != null && this.battlefieldPlayerTwo != null) {
 			return true;
 		} else {
 			return false;

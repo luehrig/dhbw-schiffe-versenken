@@ -135,8 +135,8 @@ public class MessageProcessor implements Runnable {
 			// TODO: name
 			// Player player = new Player(action.getOrigin());
 
-			Player player = new Player("Player");
-			player.setIP(action.getOrigin());
+			// Player player = new Player("Player");
+			// player.setIP(action.getOrigin());
 
 			// build battlefield with received data
 			Battlefield rcvBattlefield = new Battlefield(action.getXPos(),
@@ -144,8 +144,14 @@ public class MessageProcessor implements Runnable {
 
 			// critical section begin
 			initialize.acquireUninterruptibly();
-			// set received data objects to game
-			game.addPlayer(player, rcvBattlefield);
+			// set received data object to game
+			Player player = this.game.getPlayerByIP(action.getOrigin());
+			
+			player.setBattlefield(rcvBattlefield);
+			
+			this.game.addBattlefieldToPlayer(player, rcvBattlefield);
+			
+			//game.addPlayer(player, rcvBattlefield);
 
 			// check if game is ready for first round
 			if (game.isReady() == true) {
@@ -175,7 +181,7 @@ public class MessageProcessor implements Runnable {
 							+ Helper.success;
 					this.fireEvent(Helper.commandToEvent(cmd));
 
-					//this.sendStartGame();
+					// this.sendStartGame();
 
 				} else {
 					cmd = Helper.server + "," + Helper.newgame + ",0,0,"
@@ -188,6 +194,20 @@ public class MessageProcessor implements Runnable {
 						.println(action.getOrigin()
 								+ " is NOT allowed to reset the game because NO game master!");
 			}
+
+			break;
+		case Helper.playername:
+
+			Player workingplayer = new Player(action.getMisc());
+			workingplayer.setIP(action.getOrigin());
+
+			// critical section begin
+			initialize.acquireUninterruptibly();
+			// set received data objects to game
+			game.addPlayer(workingplayer, null);
+
+			// critical section end
+			initialize.release();
 
 			break;
 		default:
@@ -218,6 +238,8 @@ public class MessageProcessor implements Runnable {
 		// send broadcast message to all clients and publish the
 		// decision
 		String cmd = Helper.server + "," + Helper.start + ",0,0,"
+				+ this.game.getPlayerOne().getIP() + "," + this.game.getPlayerOne().getName() + ","
+				+ this.game.getPlayerTwo().getIP() + "," + this.game.getPlayerTwo().getName() + ","
 				+ this.game.getCurrentPlayer().getIP(); // getName()
 		this.fireEvent(Helper.commandToEvent(cmd));
 		// switch game status to "started"
