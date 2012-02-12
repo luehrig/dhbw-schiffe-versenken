@@ -112,7 +112,7 @@ public class StatusBar extends JPanel {
 		infoLabel.setText(info);
 	}
 	
-	public void setInfoForInit(String info){
+	public void setInfoForInit(){
 			
 		// Set Text "Set your your ships!" after 8 sec, because info for connection should be displayed for 8 sec.
 		Thread waitthread = new WaitThread();

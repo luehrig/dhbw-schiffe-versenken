@@ -184,6 +184,7 @@ public class Server implements Runnable {
 
 		System.out.println("Communication Server successfully initiated");
 		this.actController.setInfoOnStatusbar("Server was created successfully!");
+		this.actController.setInfoForInit();
 		
 		return rr_serverSocket;
 	}

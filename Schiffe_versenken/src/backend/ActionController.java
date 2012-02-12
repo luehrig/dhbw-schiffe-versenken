@@ -1,6 +1,7 @@
 package backend;
 
 import java.awt.AWTEvent;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -129,6 +130,11 @@ public class ActionController {
 	// set info
 	public void setInfoOnStatusbar(String info){
 		this.bsg.getStatusBar().setGeneralInfo(info);
+	}
+	
+	// set info "Set your ships!"
+	public void setInfoForInit(){
+		this.bsg.getStatusBar().setInfoForInit();
 	}
 
 
@@ -476,7 +482,7 @@ public class ActionController {
 				this.game.getPlayerOne().getBattlefield()
 						.setBattlefieldShotable();
 				
-				this.setInfoOnStatusbar("A new Game with " + this.getRemotePlayer().getName() + " starts!");
+				this.setInfoOnStatusbar("A new Game starts!");
 			}
 			break;
 		}
@@ -562,7 +568,8 @@ public class ActionController {
 		// if ready button
 		if (button.getText().equals("Ready!")) {
 			if (this.game.getPlayerOne().areAllShipsSet()) {
-
+				
+				
 				if (this.firsttime == true) {
 					// transmit Player name to server
 					this.transmitPlayerName();
@@ -639,6 +646,7 @@ public class ActionController {
 		if (button.getName().equals("playAgain")) {
 			this.transmitNewGame();
 		}
+		
 	}
 
 	/*********************************

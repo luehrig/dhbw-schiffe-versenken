@@ -125,6 +125,7 @@ public class Client extends NetworkObject implements Runnable {
 		}
 		if(!ipAdr.getHostAddress().equals(this.ip))
 			this.actController.setInfoOnStatusbar("You have connected to " + this.ip + "!");
+			this.actController.setInfoForInit();
 			
 		
 		
