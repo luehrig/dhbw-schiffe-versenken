@@ -36,13 +36,13 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 		// add local player battlefieldpanel
 		c.gridx = 0;
 		c.gridy = 0;
-		this.actController.getLocalPlayer().getBattlefield().setButtonsDisable();
+		this.actController.getLocalPlayer().getBattlefield().setBattlefieldNotShotable();
 		this.add(this.actController.getLocalPlayer().getBattlefield().getPanel(), c);
 		
 		// add remote player battlefieldpanel
 		c.gridx = 1;
 		c.gridy = 1;
-		this.actController.getRemotePlayer().getBattlefield().setButtonsDisable();
+		this.actController.getRemotePlayer().getBattlefield().setBattlefieldNotShotable();
 		this.add(this.actController.getRemotePlayer().getBattlefield().getPanel(), c);
 		
 		this.addTilesListener();

@@ -88,6 +88,24 @@ public class Battlefield {
 			}
 		}
 	}
+	
+	public void setBattlefieldShotable() {
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				board[i][j].setBoardShotable();
+				board[i][j].setMargin(new Insets(6, 6, 6, 6));
+			}
+		}
+	}
+	
+	public void setBattlefieldNotShotable() {
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				board[i][j].setBoardNotShotable();
+				board[i][j].setMargin(new Insets(3, 3, 3, 3));
+			}
+		}
+	}
 
 	// returns board
 	public Tile[][] getBoard() {

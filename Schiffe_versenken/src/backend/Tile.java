@@ -125,6 +125,10 @@ public class Tile extends JButton {
 		this.isBoardShotable = true;
 	}
 	
+	public void setBoardNotShotable() {
+		this.isBoardShotable = false;
+	}
+	
 	// Enum to mark Tile as Water, Ship, Hit, Fail, Selected
 	public enum Status {
 		WATER, 

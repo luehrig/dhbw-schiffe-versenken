@@ -295,7 +295,7 @@ public class ActionController {
 		case Helper.start:
 			// if IP address in message is local IP, start game
 			if (action.getMisc().equals(this.game.getPlayerOne().getIP()) == true) {
-				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
+				this.game.getPlayerTwo().getBattlefield().setBattlefieldShotable();
 			}
 			// set current Player
 			this.setCurrentPlayer(action.getMisc());
@@ -341,12 +341,12 @@ public class ActionController {
 			// branch for local player handling
 			if (action.getMisc().equals(this.game.getPlayerOne().getIP())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot1);
-				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
+				this.game.getPlayerTwo().getBattlefield().setBattlefieldShotable();
 			}
 			// branch for remote player handling
 			else {
 				this.game.getPlayerTwo().getBattlefield().setFailInGUI(shot1);
-				this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
+				this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
 			}
 
 			this.setNoHit(action.getMisc());
@@ -355,8 +355,8 @@ public class ActionController {
 			break;
 		case Helper.winner:
 			System.out.println("one player wins the game");
-			this.game.getPlayerOne().getBattlefield().setButtonsDisable();
-			this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
+			this.game.getPlayerOne().getBattlefield().setBattlefieldNotShotable();
+			this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
 			break;
 		case Helper.newgame:
 			if(action.getMisc().equals(Helper.success)) {
@@ -466,17 +466,17 @@ public class ActionController {
 		if (button.getText().equals("Ready!")) {
 			if (this.game.getPlayerOne().areAllShipsSet()) {
 
-				this.game.getPlayerOne().getBattlefield().setButtonsDisable();
-				this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
+				this.game.getPlayerOne().getBattlefield().setBattlefieldNotShotable();
+				this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
 				((JButton) e.getSource()).setEnabled(false);
 
 				// activate tiles in enemies battlefield
-				for (int i = 0; i < 10; i++) {
-					for (int j = 0; j < 10; j++) {
-						this.game.getPlayerTwo().getBattlefield().getBoard()[i][j]
-								.setBoardShotable();
-					}
-				}
+//				for (int i = 0; i < 10; i++) {
+//					for (int j = 0; j < 10; j++) {
+//						this.game.getPlayerTwo().getBattlefield().getBoard()[i][j]
+//								.setBoardShotable();
+//					}
+//				}
 
 				// transfer local battlefield to server instance
 				transmitBattlefield();
