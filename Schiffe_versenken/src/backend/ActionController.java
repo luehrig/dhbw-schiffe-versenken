@@ -218,7 +218,7 @@ public class ActionController {
 		this.client.addController(this);
 		// save ip in player object
 		// TODO: Modify player name !!
-		this.game.getPlayerByName("Erol").setIP(
+		this.game.getPlayerByName(this.game.getPlayerOne().getName()).setIP(
 				InetAddress.getLocalHost().getHostAddress());
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
@@ -518,6 +518,11 @@ public class ActionController {
 					.getShips()[this.game.getPlayerOne().patrolboat];
 			this.game.getPlayerOne().isMouseListenerActive = true;
 		}
+		
+		if (button.getText().equals("Play")) {
+			this.bsg.initGUI();
+		}
+		
 	}
 	
 	/*

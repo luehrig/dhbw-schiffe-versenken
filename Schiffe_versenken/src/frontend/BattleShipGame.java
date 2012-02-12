@@ -20,41 +20,67 @@ public class BattleShipGame extends JFrame {
 	private LeftSetupView leftSV;
 	private BattlefieldViewer battlefieldV;
 	private Menu menu;
+	private EnterView enterV;
 
 	public BattleShipGame() {
 		this.actController = new ActionController();
 
-		this.newPlayer();
-		this.initGUI();
+		
+		this.initEnterGui();
+//		this.initGUI();
 	}
 
 	/*
 	 * initialize Main GUI
 	 */
-	private void initGUI() {
+	public void initGUI() {
+		
+		this.remove(enterV);
+		this.revalidate();
 
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setBounds(100, 100, 600, 450);
-
-		this.header = new Header(this.actController);
 		this.rightSV = new RightSetupView(this.actController);
-		this.statusBar = new StatusBar(this.actController);
 		this.leftSV = new LeftSetupView(this.actController);
 		this.battlefieldV = new BattlefieldViewer(this.actController);
 		this.menu = new Menu(this.actController);
+		
+		this.rightSV.repaint();
+		this.leftSV.repaint();
+		this.battlefieldV.repaint();
+		this.menu.repaint();
+		
+		this.revalidate();
+		this.repaint();
 
-		this.actController.setBattleShipGame(this);
 
 		// set Border Layout
-		this.setLayout(new BorderLayout());
-		this.add(this.header, BorderLayout.NORTH);
+		
 		this.add(this.rightSV, BorderLayout.EAST);
-		this.add(this.statusBar, BorderLayout.SOUTH);
+		
 		this.add(this.leftSV, BorderLayout.WEST);
 		this.add(this.battlefieldV, BorderLayout.CENTER);
 		this.setJMenuBar(this.menu);
 		this.setVisible(true);
 	}
+	
+	private void initEnterGui() {
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setBounds(100, 100, 600, 450);
+//		this.setResizable(false);
+		
+		this.header = new Header(this.actController);
+		this.statusBar = new StatusBar(this.actController);
+		this.enterV = new EnterView(this.actController);
+		
+		this.actController.setBattleShipGame(this);
+		
+		this.setLayout(new BorderLayout());
+		this.add(this.enterV, BorderLayout.CENTER);
+		this.add(this.statusBar, BorderLayout.SOUTH);
+		this.add(this.header, BorderLayout.NORTH);
+		this.setVisible(true);
+		
+	}
+	
 
 	/*
 	 * clear BattleShip Game UI and initialize it for a new round (incl. set correct menu values)
@@ -122,11 +148,6 @@ public class BattleShipGame extends JFrame {
 
 	public void winner() {
 
-	}
-
-	// TODO: sollen die Player überhaupt ihren Namen eingeben?
-	private void newPlayer() {
-		this.actController.setPlayer("Erol");
 	}
 
 	/*
