@@ -366,6 +366,11 @@ public class ActionController {
 			}
 			
 
+			this.bsg.getLeftSetupView().setEnemyName(this.getRemotePlayer().getName() + "`s Ships:");
+			
+			this.bsg.getLeftSetupView().setToogleButtonEnabled();
+
+
 			// set current Player
 			this.setCurrentPlayer(miscParts[4]);
 
@@ -444,13 +449,13 @@ public class ActionController {
 					.setBattlefieldNotShotable();
 
 			this.bsg.getBattlefieldViewer().winner();
-			
+			this.bsg.getLeftSetupView().setToggleButtonDisabled();
 			if(action.getMisc().equals(this.game.getPlayerOne().getIP()))
 				this.setInfoOnStatusbar("You win!!! :)");
 			else
 				this.setInfoOnStatusbar("You lose!!! :(");
 			
-			this.bsg.getStatusBar().setPlayer("It´s " + this.remote.getName() + "'s turn!");
+			this.bsg.getStatusBar().setPlayer("");
 			
 			break;
 		case Helper.newgame:
@@ -483,6 +488,13 @@ public class ActionController {
 						.setBattlefieldShotable();
 				
 				this.setInfoOnStatusbar("A new Game starts!");
+
+			}
+			break;
+		case Helper.toggle:
+			if(!action.getOrigin().equals(this.game.getPlayerOne().getIP())) {
+				this.bsg.toggleGUI();
+
 			}
 			break;
 		}
@@ -643,8 +655,26 @@ public class ActionController {
 		JButton button = (JButton) e.getSource();
 
 		// if ready button
-		if (button.getName().equals("playAgain")) {
-			this.transmitNewGame();
+		if (button.getName().equals("toggle")) {
+//			this.transmitNewGame();
+			
+			Action transmitAction = null;
+			ActionEvent rr_event = null;
+			String cmd = null;
+
+			try {
+				transmitAction = new Action(InetAddress.getLocalHost()
+						.getHostAddress().toString(), Helper.toggle, 0, 0, "");
+			} catch (UnknownHostException e1) {
+				e1.printStackTrace();
+			}
+			rr_event = new ActionEvent(transmitAction, 0, Helper.toggle);
+
+			// convert event to command and transfer to server
+			cmd = Helper.eventToCommand(rr_event);
+			client.sendCommand(cmd);
+
+			
 		}
 		
 	}
