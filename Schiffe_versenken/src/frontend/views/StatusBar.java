@@ -52,7 +52,7 @@ public class StatusBar extends JPanel {
 		this.setSize(getMaximumSize());
 		
 		// set Info Label
-		infoLabel = new JLabel("Info", JLabel.LEFT);
+		infoLabel = new JLabel("", JLabel.LEFT);
 		infoLabel.setForeground(Color.WHITE);
 		infoLabel.setBackground(Color.DARK_GRAY);
 		infoLabel.setFont(STATUS_FONT);
@@ -67,7 +67,7 @@ public class StatusBar extends JPanel {
 		playerLabel.setBackground(Color.DARK_GRAY);
 		playerLabel.setFont(STATUS_FONT);
 		playerLabel.setOpaque(true);
-		playerLabel.setBounds(250, 0, 150, 30);
+		playerLabel.setBounds(250, 0, 200, 30);
 		this.add(playerLabel);
 		
 		// set Label for IP adress
