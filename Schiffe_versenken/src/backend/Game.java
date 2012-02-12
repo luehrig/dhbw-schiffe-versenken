@@ -163,6 +163,15 @@ public class Game {
 	}
 
 	/*
+	 * check if all objects are initialized and set game as ready
+	 */
+	public void checkGameInitializing() {
+		if(this.playerOne != null && this.playerTwo != null && this.battlefieldPlayerOne != null && this.battlefieldPlayerTwo != null) {
+			this.setGameReady();
+		}
+	}
+	
+	/*
 	 * set game as ready to play
 	 */
 	private void setGameReady() {

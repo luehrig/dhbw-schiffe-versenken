@@ -115,11 +115,11 @@ public class MessageProcessor implements Runnable {
 
 					this.game.setCurrentPlayer(this.game.getSuspendedPlayer());
 
-					cmd = Helper.server + "," + Helper.start + ",0,0,"
-							+ this.game.getCurrentPlayer().getName();
-					this.fireEvent(Helper.commandToEvent(cmd));
+					//cmd = Helper.server + "," + Helper.start + ",0,0,"
+					//		+ this.game.getCurrentPlayer().getName();
+					//this.fireEvent(Helper.commandToEvent(cmd));
 					// switch game status to "started"
-					this.game.setGameStarted();
+					//this.game.setGameStarted();
 				}
 
 			} else {
@@ -150,9 +150,10 @@ public class MessageProcessor implements Runnable {
 			player.setBattlefield(rcvBattlefield);
 			
 			this.game.addBattlefieldToPlayer(player, rcvBattlefield);
+			this.game.checkGameInitializing();
 			
-			//game.addPlayer(player, rcvBattlefield);
-
+			//game.addPlayer(player, rcvBattlefield);			
+			
 			// check if game is ready for first round
 			if (game.isReady() == true) {
 				/*
@@ -175,8 +176,32 @@ public class MessageProcessor implements Runnable {
 
 			// check that only the game master can reset the game
 			if (this.gameMasterIP.equals(action.getOrigin())) {
+				
+				String playerOneName = this.game.getPlayerOne().getName();
+				String playerOneIP	 = this.game.getPlayerOne().getIP();
+				String playerTwoName = this.game.getPlayerTwo().getName();
+				String playerTwoIP 	 = this.game.getPlayerTwo().getIP();
+				
 				// try to reset game instance
 				if (this.game.destroyGame() == true) {
+					
+					// add swaped player to game
+					Player playerOne = new Player(playerOneName);
+					playerOne.setIP(playerOneIP);
+					
+					Player playerTwo = new Player(playerTwoName);
+					playerTwo.setIP(playerTwoIP);
+
+					// critical section begin
+					initialize.acquireUninterruptibly();
+					// set received data objects to game
+					game.addPlayer(playerOne, null);
+					game.addPlayer(playerTwo, null);
+
+					// critical section end
+					initialize.release();
+					
+					
 					cmd = Helper.server + "," + Helper.newgame + ",0,0,"
 							+ Helper.success;
 					this.fireEvent(Helper.commandToEvent(cmd));

@@ -86,6 +86,7 @@ public class Server implements Runnable {
 						this.errorCount++;
 					} else {
 						this.writerOut.println("BYE");
+						this.finalize();
 						break;
 					}
 				}
@@ -96,7 +97,7 @@ public class Server implements Runnable {
 				//		+ this.receivedCommand);
 				if(this.receivedCommand == null) {
 					actController.handleException(new ConnectionLostException("Connection to Client lost!"));
-					//this.finalize();
+					this.finalize();
 					return;
 				}
 				
@@ -219,6 +220,8 @@ public class Server implements Runnable {
 				} catch (IOException e) {
 					// if an error occurred escape whole server thread
 					// System.err.println("Accept failed.");
+					// TODO
+					// Still occurres when client quit connection
 					throw new ServerException("Client accept failed!");
 				}
 				catch( NullPointerException e) {
@@ -271,7 +274,6 @@ public class Server implements Runnable {
 			// System.out.println("Could not close server socket");
 			this.actController.handleException(new ServerException(
 					"Could not close server socket"));
-			return;
 		}
 	}
 
@@ -284,7 +286,9 @@ public class Server implements Runnable {
 		}
 		try {
 			this.listen();
-		} catch (ConnectionIssueException | ServerException e) {
+		} catch (ConnectionIssueException e) {
+			this.actController.handleException(e);
+		} catch (ServerException e) {
 			this.actController.handleException(e);
 		}
 		this.finalize();

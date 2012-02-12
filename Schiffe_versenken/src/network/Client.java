@@ -182,7 +182,9 @@ public class Client extends NetworkObject implements Runnable {
 			this.communicationSocket = this.initiateCommunicationSocket();
 		
 			this.listen();
-		} catch (ConnectionLostException | ConnectionIssueException e) {
+		} catch (ConnectionLostException e) {
+			this.actController.handleException(e);
+		} catch (ConnectionIssueException e) {
 			this.actController.handleException(e);
 		}
 	}

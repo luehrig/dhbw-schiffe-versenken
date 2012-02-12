@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
+import backend.exceptions.ConnectionIssueException;
 import backend.exceptions.NetworkException;
 import backend.exceptions.ServerException;
 
@@ -118,7 +119,7 @@ public class ActionController {
 
 	// set player
 	public void setPlayer(String name) throws UnknownHostException {
-		game.setPlayer(name);
+		//game.setPlayer(name);
 
 		local = new Player(name);
 		local.setIP(InetAddress.getLocalHost().getHostAddress().toString());
@@ -202,7 +203,7 @@ public class ActionController {
 
 		// convert event to command and transfer to server
 		cmd = Helper.eventToCommand(rr_event);
-		client.sendCommand(cmd);
+		this.client.sendCommand(cmd);
 	}
 
 	/*
@@ -234,7 +235,7 @@ public class ActionController {
 	 * connect to partner and save reference for Client object
 	 */
 	private void connectToPartner(String iv_ip, int iv_port)
-			throws UnknownHostException {
+			throws UnknownHostException, ConnectionIssueException {
 		// try to connect to server side
 		Runnable client = new Client(iv_ip, iv_port);
 		// start new thread
@@ -246,15 +247,21 @@ public class ActionController {
 		this.client.addController(this);
 		// save ip in player object
 		// TODO: Modify player name !!
-		this.game.getPlayerByName("Erol").setIP(
-				InetAddress.getLocalHost().getHostAddress());
-		// unlock all GUI elements
-		whenConnectionIsSetButtonsEnable();
-
-		this.bsg.getStatusBar().setInfo("You have connected successfully");
+		//this.game.getPlayerByName(this.getLocalPlayer().getName()).setIP(
+		//		InetAddress.getLocalHost().getHostAddress());
 
 		// transmit Player name to server
-		this.transmitPlayerName();
+		try {
+			this.transmitPlayerName();
+		}
+		catch(NullPointerException e) {
+			throw new ConnectionIssueException("Problem while connecting to server...");
+		}
+		
+		// unlock all GUI elements
+		whenConnectionIsSetButtonsEnable();
+		
+		this.bsg.getStatusBar().setInfo("You have connected successfully");
 	}
 
 	/*
@@ -299,6 +306,7 @@ public class ActionController {
 	 * ActionHandller
 	 * 
 	 * @throws UnknownHostException
+	 * @throws ConnectionIssueException 
 	 */
 
 	/*
@@ -309,7 +317,12 @@ public class ActionController {
 
 		tField = (JTextField) e.getSource();
 		this.ipAddress = tField.getText();
-		connectToPartner(this.ipAddress, 6200);
+		try {
+			connectToPartner(this.ipAddress, 6200);
+		} catch (ConnectionIssueException e1) {
+			this.handleException(e1);
+			return;
+		}
 
 		this.bsg.getMenu().disableItems();
 	}
@@ -328,7 +341,7 @@ public class ActionController {
 		case Helper.start:
 			miscParts = Helper.splitString(action.getMisc());
 
-			if (miscParts[4].equals(this.getLocalPlayer().getIP())) {
+			if (miscParts[0].equals(this.getLocalPlayer().getIP())) {
 				this.getRemotePlayer().setIP(miscParts[2]);
 				this.getRemotePlayer().setName(miscParts[3]);
 			} else {
@@ -339,7 +352,7 @@ public class ActionController {
 			// set current Player
 			this.setCurrentPlayer(miscParts[4]);
 			
-			if (miscParts[4].equals(this.game.getPlayerOne().getIP()) == true) {
+			if (miscParts[4].equals(this.getLocalPlayer().getIP()) == true) {
  				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
  			}
 
@@ -528,6 +541,11 @@ public class ActionController {
 				// transfer local battlefield to server instance
 				transmitBattlefield();
 			}
+		}
+		
+		// if Play button in enter view is clicked
+		if (button.getText().equals("Play")) {
+			this.bsg.initGUI();
 		}
 
 		// if destroyer button
