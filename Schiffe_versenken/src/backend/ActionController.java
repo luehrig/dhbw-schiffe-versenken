@@ -228,6 +228,7 @@ public class ActionController {
 		}
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
+		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 		this.bsg.getStatusBar().setInfo("Server was created successfully");
 	}
 
@@ -260,7 +261,7 @@ public class ActionController {
 		
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
-		
+		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 		this.bsg.getStatusBar().setInfo("You have connected successfully");
 	}
 
@@ -353,7 +354,9 @@ public class ActionController {
 			this.setCurrentPlayer(miscParts[4]);
 			
 			if (miscParts[4].equals(this.getLocalPlayer().getIP()) == true) {
- 				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
+				// TODO 
+				// check if buttons were enabled too?
+ 				this.game.getPlayerTwo().getBattlefield().setBattlefieldShotable();
  			}
 
 			break;
@@ -397,12 +400,12 @@ public class ActionController {
 			// branch for local player handling
 			if (action.getMisc().equals(this.game.getPlayerOne().getIP())) {
 				this.game.getPlayerOne().getBattlefield().setShot(shot1);
-				this.game.getPlayerTwo().getBattlefield().setButtonsEnable();
+				this.game.getPlayerTwo().getBattlefield().setBattlefieldShotable();
 			}
 			// branch for remote player handling
 			else {
 				this.game.getPlayerTwo().getBattlefield().setFailInGUI(shot1);
-				this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
+				this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
 			}
 
 			this.setNoHit(action.getMisc());
@@ -411,8 +414,10 @@ public class ActionController {
 			break;
 		case Helper.winner:
 			System.out.println("one player wins the game");
-			this.game.getPlayerOne().getBattlefield().setButtonsDisable();
-			this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
+			this.game.getPlayerOne().getBattlefield().setBattlefieldNotShotable();
+			this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
+						
+			this.bsg.getBattlefieldViewer().winner();
 			break;
 		case Helper.newgame:
 			if (action.getMisc().equals(Helper.success)) {
@@ -440,7 +445,7 @@ public class ActionController {
 				// unlock all UI elements that are necessary for setting up
 				// ships
 				this.whenConnectionIsSetButtonsEnable();
-
+				this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 			}
 			break;
 		}
@@ -526,26 +531,21 @@ public class ActionController {
 		if (button.getText().equals("Ready!")) {
 			if (this.game.getPlayerOne().areAllShipsSet()) {
 
-				this.game.getPlayerOne().getBattlefield().setButtonsDisable();
-				this.game.getPlayerTwo().getBattlefield().setButtonsDisable();
+				this.game.getPlayerOne().getBattlefield().setBattlefieldNotShotable();
+				this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
 				((JButton) e.getSource()).setEnabled(false);
 
 				// activate tiles in enemies battlefield
-				for (int i = 0; i < 10; i++) {
-					for (int j = 0; j < 10; j++) {
-						this.game.getPlayerTwo().getBattlefield().getBoard()[i][j]
-								.setBoardShotable();
-					}
-				}
+//				for (int i = 0; i < 10; i++) {
+//					for (int j = 0; j < 10; j++) {
+//						this.game.getPlayerTwo().getBattlefield().getBoard()[i][j]
+//								.setBoardShotable();
+//					}
+//				}
 
 				// transfer local battlefield to server instance
 				transmitBattlefield();
 			}
-		}
-		
-		// if Play button in enter view is clicked
-		if (button.getText().equals("Play")) {
-			this.bsg.initGUI();
 		}
 
 		// if destroyer button
@@ -582,8 +582,13 @@ public class ActionController {
 					.getShips()[this.game.getPlayerOne().patrolboat];
 			this.game.getPlayerOne().isMouseListenerActive = true;
 		}
+		
+		if (button.getText().equals("Play")) {
+			this.bsg.initGUI();
+		}
+		
 	}
-
+	
 	/*
 	 * handles all events of LeftSetupView
 	 */

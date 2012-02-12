@@ -145,23 +145,13 @@ public class BattleShipGame extends JFrame {
 	public LeftSetupView getLeftSetupView() {
 		return leftSV;
 	}
+	
+	public BattlefieldViewer getBattlefieldViewer() {
+		return this.battlefieldV;
+	}
 
 	public Menu getMenu() {
 		return this.menu;
-	}
-
-	public void winner() {
-
-	}
-
-	// TODO
-	// this method is marked as obsolete 
-	private void newPlayer() {
-		try {
-			this.actController.setPlayer("Erol");
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/*

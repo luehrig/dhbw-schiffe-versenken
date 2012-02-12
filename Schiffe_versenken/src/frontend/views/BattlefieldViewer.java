@@ -19,6 +19,7 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 	 */
 	private static final long serialVersionUID = 8865229600593407050L;
 	private ActionController actController;
+	private Thread thread;
 	
 	/*
 	 * BattlefieldViewer constructor
@@ -40,13 +41,13 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 		// add local player battlefieldpanel
 		c.gridx = 0;
 		c.gridy = 0;
-		this.actController.getLocalPlayer().getBattlefield().setButtonsEnable();
+		this.actController.getLocalPlayer().getBattlefield().setBattlefieldNotShotable();
 		this.add(this.actController.getLocalPlayer().getBattlefield().getPanel(), c);
 		
 		// add remote player battlefieldpanel
 		c.gridx = 1;
 		c.gridy = 1;
-		this.actController.getRemotePlayer().getBattlefield().setButtonsDisable();
+		this.actController.getRemotePlayer().getBattlefield().setBattlefieldNotShotable();
 		this.add(this.actController.getRemotePlayer().getBattlefield().getPanel(), c);
 		
 		this.addTilesListener();
@@ -68,6 +69,31 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 				});
 			}
 		}
+	}
+	
+
+	public void winner(){
+		this.thread = new Thread();
+		thread.start();
+		try {
+			thread.sleep(40);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		for(int i = 0; i < 10; i ++) {
+			for(int j = 0; j < 10; j++) {
+				this.actController.getLocalPlayer().getBattlefield().getBoard()[i][j].setWin();
+				this.actController.getRemotePlayer().getBattlefield().getBoard()[j][i].setWin();
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+		}
+		thread.interrupt();
 	}
 
 	

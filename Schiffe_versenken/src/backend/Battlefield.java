@@ -48,7 +48,7 @@ public class Battlefield {
 						Integer.parseInt(singleArguments[argCounter]),
 						Integer.parseInt(singleArguments[argCounter + 1]),
 						Tile.Status.valueOf(singleArguments[argCounter + 2]));
-				if ( Ship.Type.valueOf(singleArguments[argCounter + 3]) != Ship.Type.NOSHIP) {
+				if (Ship.Type.valueOf(singleArguments[argCounter + 3]) != Ship.Type.NOSHIP) {
 					this.board[Integer.parseInt(singleArguments[argCounter])][Integer
 							.parseInt(singleArguments[argCounter + 1])]
 							.setShip(Ship.Type
@@ -64,22 +64,22 @@ public class Battlefield {
 		return this.panel;
 	}
 
-	// Set all buttons on battlefield disabled
-	public void setButtonsDisable() {
+	// Set all buttons on battlefield enabled
+	public void setBattlefieldShotable() {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				board[i][j].setEnabled(false);
-				board[i][j].setMargin(new Insets(3, 3, 3, 3));
+				board[i][j].setBoardShotable();
+				board[i][j].setMargin(new Insets(6, 6, 6, 6));
 			}
 		}
 	}
 
-	// Set all buttons on battlefield enabled
-	public void setButtonsEnable() {
+	// Set all buttons on battlefield disabled
+	public void setBattlefieldNotShotable() {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				board[i][j].setEnabled(true);
-				board[i][j].setMargin(new Insets(6, 6, 6, 6));
+				board[i][j].setBoardNotShotable();
+				board[i][j].setMargin(new Insets(3, 3, 3, 3));
 			}
 		}
 	}

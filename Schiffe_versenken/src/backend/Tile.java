@@ -1,6 +1,8 @@
 package backend;
 
 import java.awt.Color;
+
+
 import javax.swing.JButton;
 
 public class Tile extends JButton {
@@ -8,7 +10,7 @@ public class Tile extends JButton {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2076309709112562577L;
+	private static final long serialVersionUID = 7908823516801310808L;
 	@SuppressWarnings("unused")
 	private int x;
 	@SuppressWarnings("unused")
@@ -24,14 +26,14 @@ public class Tile extends JButton {
 		this.initTile(iv_status);
 		this.shipStatus = Ship.Type.NOSHIP;
 	}
-	
+
 	public Tile(Status iv_status) {
 		this.initTile(iv_status);
 		this.shipStatus = Ship.Type.NOSHIP;
 	}
 
 	private void initTile(Status iv_status) {
-		//this.setWater();
+		// this.setWater();
 		switch (iv_status) {
 		case FAIL:
 			this.setFail();
@@ -51,21 +53,13 @@ public class Tile extends JButton {
 			break;
 		}
 	}
-	
-	// TODO
-	// this method is marked as obsolete
-	// initiates Tile
-	private void initTile() {
-		this.setWater();
-	}
 
-	
 	// sets Tile Water
 	public void setWater() {
 		this.setBackground(Color.BLUE);
 		this.status = Status.WATER;
 	}
-	
+
 	// returns true if Tile is Status Ship
 	public boolean isShip() {
 		if (this.status == Status.SHIP) {
@@ -81,17 +75,19 @@ public class Tile extends JButton {
 		this.status = Status.SHIP;
 		this.shipStatus = shipstatus;
 	}
-	
+
 	// sets Tile Hit
 	public void setHit() {
 		this.setBackground(Color.RED);
 		this.status = Status.HIT;
+		this.setEnabled(false);
 	}
-	
+
 	// sets Tile Fail
 	public void setFail() {
 		this.setBackground(Color.WHITE);
 		this.status = Status.FAIL;
+		this.setEnabled(false);
 	}
 
 	// sets Tile Selected (for MouseMoveListener in Class BattleShipViewer)
@@ -99,7 +95,7 @@ public class Tile extends JButton {
 		this.setBackground(Color.LIGHT_GRAY);
 		this.status = Status.SELECTED;
 	}
-	
+
 	// returns true if Tile Status is Selected
 	public boolean isSelected() {
 		if (this.status == Status.SELECTED) {
@@ -108,41 +104,67 @@ public class Tile extends JButton {
 			return false;
 		}
 	}
-	
+
 	// returns ShipStatus
 	public Ship.Type getShipStatus() {
 		return this.shipStatus;
 	}
-	
+
 	// returns Status
 	public String getStatus() {
 		return this.status.name().toString();
 	}
-	
+
 	public boolean isBoardShotable() {
 		return this.isBoardShotable;
 	}
-	
+
 	public void setBoardShotable() {
 		this.isBoardShotable = true;
 	}
-	
+
+	public void setBoardNotShotable() {
+		this.isBoardShotable = false;
+	}
+
+	public void setWin() {
+		int random = (int) (Math.random() * 10);
+		switch (random) {
+		case 0:
+			this.setBackground(Color.BLACK);
+			break;
+		case 1:
+			this.setBackground(Color.BLUE);
+			break;
+		case 2:
+			this.setBackground(Color.CYAN);
+			break;
+		case 3:
+			this.setBackground(Color.GREEN);
+			break;
+		case 4:
+			this.setBackground(Color.MAGENTA);
+			break;
+		case 5:
+			this.setBackground(Color.PINK);
+			break;
+		case 6:
+			this.setBackground(Color.RED);
+			break;
+		case 7:
+			this.setBackground(Color.WHITE);
+			break;
+		case 8:
+			this.setBackground(Color.YELLOW);
+			break;
+		case 9:
+			this.setBackground(Color.ORANGE);
+			break;
+		}
+	}
+
 	// Enum to mark Tile as Water, Ship, Hit, Fail, Selected
 	public enum Status {
-		WATER, 
-		SHIP,
-		HIT, 
-		FAIL, 
-		SELECTED;
+		WATER, SHIP, HIT, FAIL, SELECTED;
 	}
-	
-//	// Enum to mark a ShipTile as Dest, Batt, Patr, Airc, Subm
-//	public enum ShipStatus {
-//		DESTROYER,
-//		BATTLESHIP,
-//		PATROLBOAT,
-//		AIRCRAFTCARRIER,
-//		SUBMARINE,
-//		NOSHIP;
-//	}
 }
