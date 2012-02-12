@@ -33,9 +33,6 @@ public class ActionController {
 
 	private String currentPlayerName;
 
-	private Player local;
-	private Player remote;
-
 	private String ipAddress;
 
 	private BattleShipGame bsg;
@@ -123,11 +120,6 @@ public class ActionController {
 		// TODO
 		game.setPlayer(name);
 
-		local = new Player(name);
-		remote = new Player("remote");
-		game.addPlayer(local, local.getBattlefield());
-		game.addPlayer(remote, remote.getBattlefield());
-
 	}
 
 	// returns ship button which is asked of local player
@@ -206,6 +198,7 @@ public class ActionController {
 		}
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
+		this.game.getPlayerOne().getBattlefield().setButtonsEnable();
 		this.bsg.getStatusBar().setInfo("Server was created successfully");
 	}
 
@@ -229,7 +222,7 @@ public class ActionController {
 				InetAddress.getLocalHost().getHostAddress());
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
-
+		this.game.getPlayerOne().getBattlefield().setButtonsEnable();
 		this.bsg.getStatusBar().setInfo("You have connected successfully");
 	}
 

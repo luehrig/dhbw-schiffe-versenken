@@ -82,12 +82,14 @@ public class Tile extends JButton {
 	public void setHit() {
 		this.setBackground(Color.RED);
 		this.status = Status.HIT;
+		this.setEnabled(false);
 	}
 	
 	// sets Tile Fail
 	public void setFail() {
 		this.setBackground(Color.WHITE);
 		this.status = Status.FAIL;
+		this.setEnabled(false);
 	}
 
 	// sets Tile Selected (for MouseMoveListener in Class BattleShipViewer)
