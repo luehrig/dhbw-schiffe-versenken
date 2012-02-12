@@ -124,6 +124,22 @@ public class Tile extends JButton {
 		this.isBoardShotable = false;
 	}
 	
+	public void setWin() {
+		int random = (int) (Math.random() * 10);
+		switch(random) {
+			case 0: this.setBackground(Color.BLACK); break;
+			case 1: this.setBackground(Color.BLUE); break;
+			case 2: this.setBackground(Color.CYAN); break;
+			case 3: this.setBackground(Color.GREEN); break;
+			case 4: this.setBackground(Color.MAGENTA); break;
+			case 5: this.setBackground(Color.PINK); break;
+			case 6: this.setBackground(Color.RED); break;
+			case 7: this.setBackground(Color.WHITE); break;
+			case 8: this.setBackground(Color.YELLOW); break;
+			case 9: this.setBackground(Color.ORANGE); break;
+		}
+	}
+	
 	// Enum to mark Tile as Water, Ship, Hit, Fail, Selected
 	public enum Status {
 		WATER, 

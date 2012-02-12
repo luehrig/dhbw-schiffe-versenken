@@ -15,6 +15,7 @@ import backend.Tile;
 public class BattlefieldViewer extends JPanel implements MouseListener {
 	
 	private ActionController actController;
+	private Thread thread;
 	
 	/*
 	 * BattlefieldViewer constructor
@@ -64,6 +65,31 @@ public class BattlefieldViewer extends JPanel implements MouseListener {
 				});
 			}
 		}
+	}
+	
+
+	public void winner(){
+		this.thread = new Thread();
+		thread.start();
+		try {
+			thread.sleep(40);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		for(int i = 0; i < 10; i ++) {
+			for(int j = 0; j < 10; j++) {
+				this.actController.getLocalPlayer().getBattlefield().getBoard()[i][j].setWin();
+				this.actController.getRemotePlayer().getBattlefield().getBoard()[j][i].setWin();
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}
+		}
+		thread.interrupt();
 	}
 
 	

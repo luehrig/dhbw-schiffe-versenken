@@ -357,6 +357,8 @@ public class ActionController {
 			System.out.println("one player wins the game");
 			this.game.getPlayerOne().getBattlefield().setBattlefieldNotShotable();
 			this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
+			
+			this.bsg.getBattlefieldViewer().winner();
 			break;
 		case Helper.newgame:
 			if(action.getMisc().equals(Helper.success)) {
