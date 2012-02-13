@@ -381,7 +381,6 @@ public class ActionController {
 						.setBattlefieldShotable();
 			}
 			
-			this.bsg.getLeftSetupView().setEnemyName(this.getRemotePlayer().getName());
 			this.setInfoOnStatusbar("You play with " + this.getRemotePlayer().getName() + "!");
 
 			break;
