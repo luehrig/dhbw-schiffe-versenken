@@ -276,7 +276,7 @@ public class ActionController {
 		whenConnectionIsSetButtonsEnable();
 		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 
-		this.setInfoOnStatusbar("You have connected successfully");
+//		this.setInfoOnStatusbar("You have connected successfully");
 	}
 
 	/*

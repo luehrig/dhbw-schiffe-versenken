@@ -32,7 +32,7 @@ public class Header extends JLabel {
 		this.setBackground(Color.ORANGE);
 		this.setFont(new Font("Arial", Font.BOLD, 20));
 		this.setOpaque(true);
-		this.setText("The Captains");
+		this.setText("Captain Morgan");
 	}
 
 }
