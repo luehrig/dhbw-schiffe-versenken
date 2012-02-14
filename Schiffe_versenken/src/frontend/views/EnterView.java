@@ -44,7 +44,7 @@ public class EnterView extends JPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		
 		this.imageLabel = new JLabel();
-		this.imageLabel.setIcon(new ImageIcon("Image/logo.png"));
+		this.imageLabel.setIcon(new ImageIcon(this.getClass().getResource("logo.png")));
 		this.imageLabel.setPreferredSize(new Dimension(340, 300));
 		this.imageLabel.setMaximumSize(new Dimension(340, 60));;
 		this.imageLabel.setOpaque(true);

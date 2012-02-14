@@ -333,6 +333,7 @@ public class ActionController {
 			return;
 		}
 
+		this.bsg.getMenu().disableNewGame();
 		this.bsg.getMenu().disableItems();
 	}
 
