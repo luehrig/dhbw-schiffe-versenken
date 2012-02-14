@@ -133,12 +133,7 @@ public class ActionController {
 	public void setInfoOnStatusbar(String info) {
 		this.bsg.getStatusBar().setGeneralInfo(info);
 	}
-
-	// set info "Set your ships!"
-	public void setInfoForInit() {
-		this.bsg.getStatusBar().setInfoForInit();
-	}
-
+	
 	// set player
 	public void setPlayer(String name) throws UnknownHostException {
 		// game.setPlayer(name);
@@ -342,6 +337,7 @@ public class ActionController {
 			return;
 		}
 
+		this.bsg.getMenu().disableNewGame();
 		this.bsg.getMenu().disableItems();
 	}
 
