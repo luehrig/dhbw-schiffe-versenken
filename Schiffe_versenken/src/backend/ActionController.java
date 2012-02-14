@@ -27,7 +27,7 @@ public class ActionController {
 	private Game game;
 	private static boolean horizontal;
 	private boolean firsttime = true;
-	
+
 	private Server server;
 	private Client client;
 	private Thread clientThread;
@@ -85,58 +85,59 @@ public class ActionController {
 	}
 
 	// set current player
-	public void setCurrentPlayer(String currentPlayerIP){
-		
-		if(this.getLocalIP().equals(currentPlayerIP))
+	public void setCurrentPlayer(String currentPlayerIP) {
+
+		if (this.getLocalIP().equals(currentPlayerIP))
 
 			this.bsg.getStatusBar().setPlayer("It´s your turn!");
 		// TODO get remote IP and compare
-		else if(!currentPlayerIP.equals("Player"))
-			this.bsg.getStatusBar().setPlayer("It´s " + this.remote.getName() + "'s turn!");
+		else if (!currentPlayerIP.equals("Player"))
+			this.bsg.getStatusBar().setPlayer(
+					"It´s " + this.remote.getName() + "'s turn!");
 	}
 
+	public void setNoHit(String shotTargetIP) {
 
-	public void setNoHit(String shotTargetIP){
-		
-		if(!this.getLocalIP().equals(shotTargetIP))
+		if (!this.getLocalIP().equals(shotTargetIP))
 			this.bsg.getStatusBar().setGameInfo("You didn´t hit!");
 		else
 			this.bsg.getStatusBar().setGameInfo("");
 	}
 
 	// set info at statusbar
-	public void setShipHit(String[] miscParts ){
-	
-		if(!miscParts[1].equals(this.getLocalIP())){ // an enemy ship is hit
-			if(miscParts.length == 3) {
-				this.bsg.getStatusBar().setGameInfo(this.remote.getName() + "'s " + miscParts[0] + " sink!!!");
+	public void setShipHit(String[] miscParts) {
+
+		if (!miscParts[1].equals(this.getLocalIP())) { // an enemy ship is hit
+			if (miscParts.length == 3) {
+				this.bsg.getStatusBar().setGameInfo(
+						this.remote.getName() + "'s " + miscParts[0]
+								+ " sink!!!");
 				this.bsg.getLeftSetupView().setShipSink(miscParts[0]);
-			}	
-			else
-				this.bsg.getStatusBar().setGameInfo("You hit " + this.remote.getName() + "'s " + miscParts[0] + "!!!");
-		}
-		else{										// an own ship is hit
-			if(miscParts.length == 3){
-				this.bsg.getStatusBar().setGameInfo("Your " + miscParts[0] + " sink!");
+			} else
+				this.bsg.getStatusBar().setGameInfo(
+						"You hit " + this.remote.getName() + "'s "
+								+ miscParts[0] + "!!!");
+		} else { // an own ship is hit
+			if (miscParts.length == 3) {
+				this.bsg.getStatusBar().setGameInfo(
+						"Your " + miscParts[0] + " sink!");
 				this.bsg.getRightSetupView().setShipSink(miscParts[0]);
-			}
-			else
-				this.bsg.getStatusBar().setGameInfo("Your " + miscParts[0] + " was hit!");
+			} else
+				this.bsg.getStatusBar().setGameInfo(
+						"Your " + miscParts[0] + " was hit!");
 		}
 
 	}
 
-	
 	// set info
-	public void setInfoOnStatusbar(String info){
+	public void setInfoOnStatusbar(String info) {
 		this.bsg.getStatusBar().setGeneralInfo(info);
 	}
-	
+
 	// set info "Set your ships!"
-	public void setInfoForInit(){
+	public void setInfoForInit() {
 		this.bsg.getStatusBar().setInfoForInit();
 	}
-
 
 	// set player
 	public void setPlayer(String name) throws UnknownHostException {
@@ -250,7 +251,7 @@ public class ActionController {
 		// unlock all GUI elements
 		whenConnectionIsSetButtonsEnable();
 		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
-		
+
 	}
 
 	/*
@@ -276,7 +277,7 @@ public class ActionController {
 		whenConnectionIsSetButtonsEnable();
 		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 
-//		this.setInfoOnStatusbar("You have connected successfully");
+		// this.setInfoOnStatusbar("You have connected successfully");
 	}
 
 	/*
@@ -291,7 +292,9 @@ public class ActionController {
 		}
 		// call finalize methods to make sure that all objects are thrown away
 		client.finalize();
-		server.finalize();
+		if (server != null) {
+			server.finalize();
+		}
 	}
 
 	/*
@@ -355,8 +358,7 @@ public class ActionController {
 		switch (action.getKey()) {
 		case Helper.start:
 			miscParts = Helper.splitString(action.getMisc());
-		
-			
+
 			if (miscParts[0].equals(this.getLocalPlayer().getIP())) {
 				this.getRemotePlayer().setIP(miscParts[2]);
 				this.getRemotePlayer().setName(miscParts[3]);
@@ -364,12 +366,11 @@ public class ActionController {
 				this.getRemotePlayer().setIP(miscParts[0]);
 				this.getRemotePlayer().setName(miscParts[1]);
 			}
-			
 
-			this.bsg.getLeftSetupView().setEnemyName(this.getRemotePlayer().getName() + "`s Ships:");
-			
+			this.bsg.getLeftSetupView().setEnemyName(
+					this.getRemotePlayer().getName() + "`s Ships:");
+
 			this.bsg.getLeftSetupView().setToogleButtonEnabled();
-
 
 			// set current Player
 			this.setCurrentPlayer(miscParts[4]);
@@ -380,8 +381,9 @@ public class ActionController {
 				this.game.getPlayerTwo().getBattlefield()
 						.setBattlefieldShotable();
 			}
-			
-			this.setInfoOnStatusbar("You play with " + this.getRemotePlayer().getName() + "!");
+
+			this.setInfoOnStatusbar("You play with "
+					+ this.getRemotePlayer().getName() + "!");
 
 			break;
 		case Helper.hit:
@@ -415,9 +417,9 @@ public class ActionController {
 				// Ship.Type.valueOf(miscParts[0])
 
 			}
-			
+
 			this.setShipHit(miscParts);
-			
+
 			break;
 		case Helper.nohit:
 			System.out.println("Shot hit NO ship!");
@@ -449,13 +451,13 @@ public class ActionController {
 
 			this.bsg.getBattlefieldViewer().winner();
 			this.bsg.getLeftSetupView().setToggleButtonDisabled();
-			if(action.getMisc().equals(this.game.getPlayerOne().getIP()))
+			if (action.getMisc().equals(this.game.getPlayerOne().getIP()))
 				this.setInfoOnStatusbar("You win!!! :)");
 			else
 				this.setInfoOnStatusbar("You lose!!! :(");
-			
+
 			this.bsg.getStatusBar().setPlayer("");
-			
+
 			break;
 		case Helper.newgame:
 			if (action.getMisc().equals(Helper.success)) {
@@ -485,13 +487,13 @@ public class ActionController {
 				this.whenConnectionIsSetButtonsEnable();
 				this.game.getPlayerOne().getBattlefield()
 						.setBattlefieldShotable();
-				
+
 				this.setInfoOnStatusbar("A new Game starts!");
 
 			}
 			break;
 		case Helper.toggle:
-			if(!action.getOrigin().equals(this.game.getPlayerOne().getIP())) {
+			if (!action.getOrigin().equals(this.game.getPlayerOne().getIP())) {
 				this.bsg.toggleGUI();
 
 			}
@@ -508,7 +510,7 @@ public class ActionController {
 				+ ir_exception.getMessage());
 
 		// display exception on status bar
-		this.bsg.getStatusBar().setError (ir_exception.getMessage());
+		this.bsg.getStatusBar().setError(ir_exception.getMessage());
 	}
 
 	/*
@@ -579,8 +581,7 @@ public class ActionController {
 		// if ready button
 		if (button.getText().equals("Ready!")) {
 			if (this.game.getPlayerOne().areAllShipsSet()) {
-				
-				
+
 				if (this.firsttime == true) {
 					// transmit Player name to server
 					this.transmitPlayerName();
@@ -655,8 +656,8 @@ public class ActionController {
 
 		// if ready button
 		if (button.getName().equals("toggle")) {
-//			this.transmitNewGame();
-			
+			// this.transmitNewGame();
+
 			Action transmitAction = null;
 			ActionEvent rr_event = null;
 			String cmd = null;
@@ -673,9 +674,8 @@ public class ActionController {
 			cmd = Helper.eventToCommand(rr_event);
 			client.sendCommand(cmd);
 
-			
 		}
-		
+
 	}
 
 	/*********************************
