@@ -12,6 +12,49 @@ import backend.ActionController;
 
 public class StatusBar extends JPanel {
 	
+	
+private class MessageThread extends Thread{
+		
+		private String[] queue = new String[3];
+		
+		@Override public void run() {
+		    try {
+		    	while(true){
+	
+		    		if(!this.isEmpty()){
+						infoLabel.setText(this.queue[0]);
+						
+						for(int i=1; i<this.queue.length; i++){
+							this.queue[i-1] = this.queue[i];
+						}
+						queue[queue.length-1] = null;
+						Thread.sleep( 8000 );
+					}
+					else
+						infoLabel.setText("");	
+		    	}
+		    } 
+		    catch ( InterruptedException e ) { 
+		    }
+		  }
+		
+		public void addMessage(String text){	
+			for(int i=0; i<this.queue.length; i++){
+				if(this.queue[i] == null){
+					this.queue[i] = text;
+					return;
+				}
+			}
+		}
+		
+		public boolean isEmpty(){
+			if(this.queue[0] == null)
+				return true;
+			return false;
+		}
+	}
+
+	
 	/**
 	 * 
 	 */
@@ -24,41 +67,9 @@ public class StatusBar extends JPanel {
 	private JLabel ipLabel;	
 	@SuppressWarnings("unused")
 	private ActionController actController;
+	private MessageThread messageThread;
 	
 
-	private class ClearThread extends Thread{
-		@Override public void run() {
-		    try {
-//		    	while(true){
-		    		Thread.sleep( 8000 );
-		    		
-		    		infoLabel.setText("");
-		    		
-//		    	}
-		    } 
-		    catch ( InterruptedException e ) { 
-		    }
-		  }
-	}
-	
-	private class WaitThread extends Thread{
-		@Override public void run() {
-		    try {
-//		    	while(true){
-		    		Thread.sleep( 8000 );
-		    		infoLabel.setFont(STATUS_FONT);
-		    		infoLabel.setForeground(Color.WHITE);
-		    		infoLabel.setText("Set your Ships!");
-		    		
-//		    	}
-		    } 
-		    catch ( InterruptedException e ) { 
-		    }
-		  }
-	}
-	/**
-	 * 
-	 */
 	public StatusBar(ActionController actController ) {
 		
 		this.actController = actController;
@@ -89,20 +100,21 @@ public class StatusBar extends JPanel {
 		// set Label for IP adress
 		this.setIpAdr();
 		
-	
+		// start message thread
+		this.messageThread = new MessageThread();
+		this.messageThread.start();
 		
 	}
+	
+	
 	
 	public void setGeneralInfo(String info){
 		
 		infoLabel.setFont(STATUS_FONT);
 		infoLabel.setForeground(Color.WHITE);
-		infoLabel.setText(info);
 		
-		// clear text after 8 sec.
-		Thread clearthread = new ClearThread();
-		clearthread.start();
-		
+		// add Info to message queue
+		this.messageThread.addMessage(info);		
 	}
 	
 	
@@ -112,24 +124,14 @@ public class StatusBar extends JPanel {
 		infoLabel.setText(info);
 	}
 	
-	public void setInfoForInit(){
-			
-		// Set Text "Set your your ships!" after 8 sec, because info for connection should be displayed for 8 sec.
-		Thread waitthread = new WaitThread();
-		waitthread.start();
-		
-	}
-	
-
 	
 	public void setError(String info){
 		infoLabel.setFont(new Font("Arial", Font.BOLD, 11));
 		infoLabel.setForeground(Color.red);
 		infoLabel.setText(info);
 		
-		// clear text after 8 sec.
-		Thread clearthread = new ClearThread();
-		clearthread.start();
+		// add info to message queue
+		this.messageThread.addMessage(info);
 		
 	}
 	
@@ -139,23 +141,7 @@ public class StatusBar extends JPanel {
 		
 	}
 	
-	
-	
-//	public void setTime(){
-//		timeLabel = new JLabel("", JLabel.CENTER);
-//		
-//		timeLabel.setForeground(Color.WHITE);
-//		timeLabel.setBackground(Color.DARK_GRAY);
-//		timeLabel.setFont(STATUS_FONT);
-//		timeLabel.setOpaque(true);
-//		timeLabel.setBounds(300, 0, 100, 30);
-//		
-//		timeLabel.setText("Time");
-//		
-//		this.add(timeLabel);
-//		
-//	}
-	
+		
 	public void setIpAdr(){
 		ipLabel = new JLabel("", JLabel.RIGHT);
 		ipLabel.setForeground(Color.WHITE);
@@ -175,7 +161,5 @@ public class StatusBar extends JPanel {
 		this.add(ipLabel);
 	}
 	
-	
-
 }
 
