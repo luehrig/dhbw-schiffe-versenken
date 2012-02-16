@@ -59,6 +59,7 @@ public class BattleShipGame extends JFrame {
 		// set Border Layout
 		
 		this.add(this.rightSV, BorderLayout.EAST);
+		this.rightSV.disableReadyButton();
 		
 		this.add(this.leftSV, BorderLayout.WEST);
 		this.add(this.battlefieldV, BorderLayout.CENTER);

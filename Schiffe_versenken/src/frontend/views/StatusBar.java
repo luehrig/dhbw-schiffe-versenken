@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -12,43 +15,59 @@ import backend.ActionController;
 
 public class StatusBar extends JPanel {
 
-	private class MessageThread extends Thread {
+	/*
+	 * implements a message display thread that use a queue to store messages
+	 */
+	private static class MessageThread extends Thread {
 
-		private String[] queue = new String[3];
+		private Queue<String> queue = new LinkedList<String>();
+
+		private static MessageThread instance = null;
+
+		private MessageThread() {
+
+		}
+
+		public static MessageThread getInstance() {
+			if (instance == null) {
+				instance = new MessageThread();
+			}
+			return instance;
+		}
 
 		@Override
 		public void run() {
 			try {
 				while (true) {
-
-					if (!this.isEmpty()) {
-						infoLabel.setText(this.queue[0]);
-
-						for (int i = 1; i < this.queue.length; i++) {
-							this.queue[i - 1] = this.queue[i];
-						}
-						queue[queue.length - 1] = null;
-						Thread.sleep(8000);
-					} else
+					// check if message waits for display
+					if (!this.queue.isEmpty()) {
+						infoLabel.setText(this.queue.poll());
+					}
+					// clear label if NO message waits for display
+					else {
 						infoLabel.setText("");
+					}
+					// wait 8 seconds before next round starts
+					Thread.sleep(8000);
+
 				}
 			} catch (InterruptedException e) {
 			}
 		}
 
-		public void addMessage(String text) {
-			for (int i = 0; i < this.queue.length; i++) {
-				if (this.queue[i] == null) {
-					this.queue[i] = text;
-					return;
-				}
-			}
+		/*
+		 * adds message to queue
+		 */
+		public void addMessage(String iv_text) {
+			this.queue.add(iv_text);
+			this.interrupt();
 		}
 
-		public boolean isEmpty() {
-			if (this.queue[0] == null)
-				return true;
-			return false;
+		/*
+		 * clear waiting messages
+		 */
+		protected void resetQueue() {
+			this.queue.clear();
 		}
 	}
 
@@ -59,7 +78,7 @@ public class StatusBar extends JPanel {
 
 	private static Font STATUS_FONT = new Font("Arial", Font.BOLD, 12);
 
-	private JLabel infoLabel;
+	private static JLabel infoLabel;
 	private JLabel playerLabel;
 	private JLabel ipLabel;
 	@SuppressWarnings("unused")
@@ -80,7 +99,7 @@ public class StatusBar extends JPanel {
 		infoLabel.setBackground(Color.DARK_GRAY);
 		infoLabel.setFont(STATUS_FONT);
 		infoLabel.setOpaque(true);
-		infoLabel.setBounds(10, 0, 240, 30);
+		infoLabel.setBounds(10, 0, 350, 30);
 		infoLabel.setAlignmentY(LEFT_ALIGNMENT);
 		this.add(infoLabel);
 
@@ -97,8 +116,14 @@ public class StatusBar extends JPanel {
 		this.setIpAdr();
 
 		// start message thread
-		this.messageThread = new MessageThread();
-		this.messageThread.start();
+		// this.messageThread = new MessageThread();
+		this.messageThread = MessageThread.getInstance();
+		try {
+			this.messageThread.resetQueue();
+			this.messageThread.start();
+		} catch (IllegalThreadStateException e) {
+			// message Thread still exist!
+		}
 
 	}
 
