@@ -226,7 +226,7 @@ public class MessageProcessor implements Runnable {
 			Player workingplayer = new Player(action.getMisc());
 			workingplayer.setIP(action.getOrigin());
 
-			// critical section begin
+			// critical section beginjerry251636
 			initialize.acquireUninterruptibly();
 			// set received data objects to game
 			game.addPlayer(workingplayer, null);

@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.UnknownHostException;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -68,7 +69,23 @@ public class Menu extends JMenuBar {
 		this.add(help);
 		this.initDescription();
 		this.initSupport();
-		this.initDevelopedBy();
+		//this.initDevelopedBy();
+		
+		
+		JMenuItem devTeam = new JMenuItem("Development Team");
+		
+		ActionListener actListenerTeam = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AboutDialog dlg = new AboutDialog(actController.getUIInstance(), "Development Team", "<html>This game was developed through a case study of the Cooperative State University of Mannheim <br> by Jana Keim, Erol Gül and Max Lührig.</html>");
+			}
+		};
+		
+		devTeam.addActionListener(actListenerTeam);
+		
+		this.help.add(devTeam);
+		
+		
+		
 	}
 	
 	private void initDescription() {
@@ -108,7 +125,7 @@ public class Menu extends JMenuBar {
 	}
 	
 	private void initDevelopedBy() {
-		this.developedBy = new JMenu("Developed By");
+		/*this.developedBy = new JMenu("Developed By");
 		
 		JLabel d = new JLabel();
 		d.setFont(font);
@@ -120,9 +137,10 @@ public class Menu extends JMenuBar {
 		d.setPreferredSize(dim);
 		d.setMaximumSize(dim);
 		
+		
 		this.developedBy.add(d);
 		
-		this.help.add(this.developedBy);
+		this.help.add(this.developedBy); */
 	}
 	
 	/*

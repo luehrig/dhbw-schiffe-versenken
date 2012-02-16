@@ -81,7 +81,6 @@ public class Server implements Runnable {
 				try {
 					this.receivedCommand = this.readerIn.readLine();
 				} catch (IOException e) {
-					System.err.println("Could not read from network!");
 					if (this.errorCount < this.maxErrorCount) {
 						this.errorCount++;
 					} else {

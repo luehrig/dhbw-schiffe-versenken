@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
@@ -84,6 +85,11 @@ public class ActionController {
 		return ipAdr.getHostAddress();
 	}
 
+	// return main JFrame
+	public JFrame getUIInstance() {
+		return this.bsg;
+	}
+	
 	// set current player
 	public void setCurrentPlayer(String currentPlayerIP) {
 
@@ -290,6 +296,13 @@ public class ActionController {
 		if (server != null) {
 			server.finalize();
 		}
+		
+		// buffer local player
+		Player localPlayer = this.game.getPlayerOne();
+		
+		this.game.forceDestroyGame();
+		
+		this.game.setPlayer(localPlayer.getName());
 	}
 
 	/*
@@ -507,6 +520,19 @@ public class ActionController {
 
 		// display exception on status bar
 		this.bsg.getStatusBar().setError(ir_exception.getMessage());
+		
+		
+		Throwable test = ir_exception.getCause();
+		
+		
+		
+		// if connection lost exception occurs, rebuild gui
+		/*if( test.equals(ConnectionLostException) {
+			this.cancelGame();
+			this.bsg.rebuild();
+			this.bsg.getMenu().enableItems();
+		}*/
+		
 	}
 
 	/*
@@ -533,7 +559,9 @@ public class ActionController {
 		// if disconnect
 		if (item.getText().equals("Disconnect")) {
 			this.cancelGame();
+			this.bsg.rebuild();
 			this.bsg.getMenu().enableItems();
+			//this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
 		}
 
 		// if exit game
