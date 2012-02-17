@@ -97,6 +97,7 @@ public class Server implements Runnable {
 				if(this.receivedCommand == null) {
 					actController.handleException(new ConnectionLostException("Connection to Client lost!"));
 					this.finalize();
+					actController.resetUIAfterIssue();
 					return;
 				}
 				

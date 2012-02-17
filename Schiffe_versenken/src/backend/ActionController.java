@@ -91,7 +91,7 @@ public class ActionController {
 	public JFrame getUIInstance() {
 		return this.bsg;
 	}
-	
+
 	// set current player
 	public void setCurrentPlayer(String currentPlayerIP) {
 
@@ -141,7 +141,7 @@ public class ActionController {
 	public void setInfoOnStatusbar(String info) {
 		this.bsg.getStatusBar().setGeneralInfo(info);
 	}
-	
+
 	// set player
 	public void setPlayer(String name) throws UnknownHostException {
 		// game.setPlayer(name);
@@ -175,6 +175,18 @@ public class ActionController {
 		for (int i = 0; i < 5; i++) {
 			this.game.getPlayerOne().getShips()[i].getButton().setEnabled(true);
 		}
+	}
+
+	/*
+	 * set all buttons in correct state if client establish connection to server
+	 */
+	public void whenConnectionIsEstablished() {
+		whenConnectionIsSetButtonsEnable();
+		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
+
+		this.bsg.getRightSetupView().enableReadyButton();
+		this.bsg.getMenu().disableNewGame();
+		this.bsg.getMenu().disableItems();
 	}
 
 	/*
@@ -277,8 +289,8 @@ public class ActionController {
 		// InetAddress.getLocalHost().getHostAddress());
 
 		// unlock all GUI elements
-		whenConnectionIsSetButtonsEnable();
-		this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
+		// whenConnectionIsSetButtonsEnable();
+		// this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
 
 		// this.setInfoOnStatusbar("You have connected successfully");
 	}
@@ -298,13 +310,21 @@ public class ActionController {
 		if (server != null) {
 			server.finalize();
 		}
-		
+
 		// buffer local player
 		Player localPlayer = this.game.getPlayerOne();
-		
+
 		this.game.forceDestroyGame();
-		
-		this.game.setPlayer(localPlayer.getName());
+
+		this.game.setPlayer(this.local.getName());
+	}
+
+	private void cancelGameByClient() {
+		// buffer local player
+		Player localPlayer = this.game.getPlayerOne();
+
+		this.game.forceDestroyGame();
+		this.game.setPlayer(this.local.getName());
 	}
 
 	/*
@@ -352,8 +372,13 @@ public class ActionController {
 			return;
 		}
 
-		this.bsg.getMenu().disableNewGame();
-		this.bsg.getMenu().disableItems();
+		/*
+		 * whenConnectionIsSetButtonsEnable();
+		 * this.game.getPlayerOne().getBattlefield().setBattlefieldShotable();
+		 * 
+		 * this.bsg.getMenu().disableNewGame();
+		 * this.bsg.getMenu().disableItems();
+		 */
 	}
 
 	/*
@@ -498,6 +523,10 @@ public class ActionController {
 				this.whenConnectionIsSetButtonsEnable();
 				this.game.getPlayerOne().getBattlefield()
 						.setBattlefieldShotable();
+				if (this.server != null) {
+					this.bsg.getMenu().disableItemsServer();
+					this.bsg.getMenu().stopServer();
+				}
 
 				this.setInfoOnStatusbar("A new Game starts!");
 
@@ -524,19 +553,21 @@ public class ActionController {
 
 		// display exception on status bar
 		this.bsg.getStatusBar().setError(ir_exception.getMessage());
-		
-		
-		Throwable test = ir_exception.getCause();
-		
-		
-		
-		// if connection lost exception occurs, rebuild gui
-		/*if( test.equals(ConnectionLostException) {
-			this.cancelGame();
-			this.bsg.rebuild();
-			this.bsg.getMenu().enableItems();
-		}*/
-		
+
+	}
+
+	public void resetUIAfterIssue() {
+		this.cancelGame();
+		this.bsg.rebuild();
+		this.bsg.getRightSetupView().disableReadyButton();
+		this.bsg.getMenu().enableItems();
+	}
+
+	public void resetUIAfterIssueByClient() {
+		this.cancelGameByClient();
+		this.bsg.rebuild();
+		this.bsg.getRightSetupView().disableReadyButton();
+		this.bsg.getMenu().enableItems();
 	}
 
 	/*
@@ -545,32 +576,41 @@ public class ActionController {
 	public void handleMenuAction(ActionEvent e) {
 		JMenuItem item = (JMenuItem) e.getSource();
 
-		// if new game item
-		if (item.getText().equals("New Game")) {
-			this.transmitNewGame();
-		}
+		String button = item.getText();
 
+		switch (button) {
+		// if new game item
+		case "New Game":
+			this.transmitNewGame();
+			this.bsg.getRightSetupView().disableReadyButton();
+			break;
 		// if new server
-		if (item.getText().equals("New Server")) {
+		case "New Server":
 			try {
 				this.createServer();
 			} catch (NetworkException e1) {
 				this.handleException(e1);
 			}
-			this.bsg.getMenu().disableItems();
-		}
-
+			this.bsg.getMenu().disableItemsServer();
+			this.bsg.getMenu().stopServer();
+			this.bsg.getRightSetupView().enableReadyButton();
+			break;
+		// if close server
+		case "Close Server":
+			this.resetUIAfterIssue();
+			// this.server.switchOff();
+			this.bsg.getMenu().startServer();
+			break;
 		// if disconnect
-		if (item.getText().equals("Disconnect")) {
-			this.cancelGame();
-			this.bsg.rebuild();
-			this.bsg.getMenu().enableItems();
-			//this.game.getPlayerTwo().getBattlefield().setBattlefieldNotShotable();
-		}
-
+		case "Disconnect":
+			this.resetUIAfterIssue();
+			this.game.getPlayerTwo().getBattlefield()
+					.setBattlefieldNotShotable();
+			break;
 		// if exit game
-		if (item.getText().equals("Exit Game")) {
+		case "Exit Game":
 			System.exit(0);
+			break;
 		}
 
 	}

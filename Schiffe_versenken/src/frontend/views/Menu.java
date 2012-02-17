@@ -221,6 +221,13 @@ public class Menu extends JMenuBar {
 		this.newGame.setEnabled(true);
 	}
 	
+	public void disableItemsServer() {
+		this.newServer.setEnabled(true);
+		this.newConnect.setEnabled(false);
+		this.exitConnect.setEnabled(false);
+		this.newGame.setEnabled(true);
+	}
+	
 	public void enableItems() {
 		this.newServer.setEnabled(true);
 		this.newConnect.setEnabled(true);
@@ -273,5 +280,12 @@ public class Menu extends JMenuBar {
 		}
 	}
 
+	public void startServer() {
+		this.newServer.setText("New Server");
+	}
+	
+	public void stopServer() {
+		this.newServer.setText("Close Server");
+	}
 
 }

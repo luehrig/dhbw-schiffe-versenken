@@ -140,5 +140,20 @@ public class RightSetupView extends JPanel {
 			}
 		};
 	}
+	
+	
+	/*
+	 * disable ready button
+	 */
+	public void disableReadyButton() {
+		this.readyButton.setEnabled(false);
+	}
+	
+	/*
+	 * enable ready button
+	 */
+	public void enableReadyButton() {
+		this.readyButton.setEnabled(true);
+	}
 
 }

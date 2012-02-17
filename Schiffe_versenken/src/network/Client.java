@@ -104,7 +104,7 @@ public class Client extends NetworkObject implements Runnable {
 			//System.err.println("Don't know about host: " + this.ip);
 			//System.exit(1);
 		} catch (IOException e) {
-			throw new ConnectionIssueException("Couldn't get I/O for the connection to: " + this.ip + this.communicationPort);
+			throw new ConnectionIssueException("Couldn't establish connection to: " + this.ip + ":" + this.communicationPort);
 			//System.err.println("Couldn't get I/O for the connection to: "
 			//		+ this.ip + this.communicationPort);
 			//System.exit(1);
@@ -127,7 +127,7 @@ public class Client extends NetworkObject implements Runnable {
 			this.actController.setInfoOnStatusbar("You have connected to " + this.ip + "!");
 		this.actController.setInfoOnStatusbar("Set your ships!");
 			
-		
+		this.actController.whenConnectionIsEstablished();
 		
 		return rr_clientSocket;
 	}
@@ -145,6 +145,7 @@ public class Client extends NetworkObject implements Runnable {
 						this.errorCount++;
 					} else {
 						//System.err.println("connection to server lost...");
+						actController.resetUIAfterIssue();
 						throw new ConnectionLostException();
 						//break;
 					}
@@ -152,6 +153,12 @@ public class Client extends NetworkObject implements Runnable {
 //				System.out.println("Client received command: "
 //						+ this.receivedCommand);
 				
+				if(this.receivedCommand == null) {
+					this.switchOff();
+					this.finalize();
+					actController.resetUIAfterIssue();
+					throw new ConnectionLostException("Connection to server lost...");
+				}
 				
 				switch(this.receivedCommand) {
 				case Helper.resend:
@@ -198,6 +205,8 @@ public class Client extends NetworkObject implements Runnable {
 			this.actController.handleException(e);
 		} catch (ConnectionIssueException e) {
 			this.actController.handleException(e);
+			//this.actController.resetUIAfterIssueByClient();
+			return;
 		}
 	}
 
