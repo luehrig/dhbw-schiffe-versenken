@@ -123,9 +123,10 @@ public class Client extends NetworkObject implements Runnable {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		if(!ipAdr.getHostAddress().equals(this.ip))
+		if(!ipAdr.getHostAddress().equals(this.ip)){
 			this.actController.setInfoOnStatusbar("You have connected to " + this.ip + "!");
-		this.actController.setInfoOnStatusbar("Set your ships!");
+			this.actController.setInfoOnStatusbar("Set your ships!");
+		}
 			
 		this.actController.whenConnectionIsEstablished();
 		

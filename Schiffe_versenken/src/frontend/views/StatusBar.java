@@ -23,7 +23,7 @@ public class StatusBar extends JPanel {
 		private Queue<String> queue = new LinkedList<String>();
 
 		private static MessageThread instance = null;
-
+		
 		private MessageThread() {
 
 		}
@@ -37,19 +37,19 @@ public class StatusBar extends JPanel {
 
 		@Override
 		public void run() {
+			
 			try {
 				while (true) {
 					// check if message waits for display
 					if (!this.queue.isEmpty()) {
 						infoLabel.setText(this.queue.poll());
-					}
-					// clear label if NO message waits for display
-					else {
+						// wait 8 seconds, then clear text
+						Thread.sleep(8000);
 						infoLabel.setText("");
 					}
-					// wait 8 seconds before next round starts
-					Thread.sleep(8000);
-
+					// if no message is waiting, check again after 50 milliseconds 
+					Thread.sleep(50);
+	
 				}
 			} catch (InterruptedException e) {
 			}
@@ -60,7 +60,8 @@ public class StatusBar extends JPanel {
 		 */
 		public void addMessage(String iv_text) {
 			this.queue.add(iv_text);
-			this.interrupt();
+//			this.interrupt();
+			
 		}
 
 		/*
