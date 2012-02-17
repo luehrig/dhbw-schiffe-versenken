@@ -98,8 +98,7 @@ public class ActionController {
 		if (this.getLocalIP().equals(currentPlayerIP))
 
 			this.bsg.getStatusBar().setPlayer("It´s your turn!");
-		// TODO get remote IP and compare
-		else if (!currentPlayerIP.equals("Player"))
+		else if (this.getRemotePlayer().getIP().equals(currentPlayerIP))
 			this.bsg.getStatusBar().setPlayer(
 					"It´s " + this.remote.getName() + "'s turn!");
 	}
@@ -488,9 +487,9 @@ public class ActionController {
 			this.bsg.getBattlefieldViewer().winner();
 			this.bsg.getLeftSetupView().setToggleButtonDisabled();
 			if (action.getMisc().equals(this.game.getPlayerOne().getIP()))
-				this.setInfoOnStatusbar("You win!!! :)");
+				this.bsg.getStatusBar().setGameInfo("You win!!! :)");
 			else
-				this.setInfoOnStatusbar("You lose!!! :(");
+				this.bsg.getStatusBar().setGameInfo("You lose!!! :(");
 
 			this.bsg.getStatusBar().setPlayer("");
 

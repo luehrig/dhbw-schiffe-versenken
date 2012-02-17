@@ -99,7 +99,7 @@ public class StatusBar extends JPanel {
 		infoLabel.setBackground(Color.DARK_GRAY);
 		infoLabel.setFont(STATUS_FONT);
 		infoLabel.setOpaque(true);
-		infoLabel.setBounds(10, 0, 350, 30);
+		infoLabel.setBounds(10, 0, 240, 30);
 		infoLabel.setAlignmentY(LEFT_ALIGNMENT);
 		this.add(infoLabel);
 
