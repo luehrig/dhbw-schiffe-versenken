@@ -135,6 +135,14 @@ public class LeftSetupView extends JPanel {
 		this.toggleButton.setEnabled(false);
 	}
 	
+	public boolean isToggleButtonEnabled(){
+		if(this.toggleButton.isEnabled())
+			return true;
+		else
+			return false;
+		
+	}
+	
 	/*
 	 * actionlistener for all button of this view
 	 */

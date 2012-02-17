@@ -1,20 +1,25 @@
 package frontend.views;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.reflect.Method;
 import java.net.UnknownHostException;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+//import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+//import java.lang.reflect.Method;
+//import java.util.Arrays;
+//import javax.swing.JOptionPane;
 
 import backend.ActionController;
 
@@ -35,9 +40,6 @@ public class Menu extends JMenuBar {
 	private JMenuItem ipItem;
 	
 	private JMenu help;
-	private JMenu description;
-	private JMenu support;
-	private JMenu developedBy;
 	
 	private Dimension dim = new Dimension(200, 50); 
 	private Font font = new Font("Arial", Font.BOLD, 10);
@@ -67,81 +69,66 @@ public class Menu extends JMenuBar {
 	private void initHelp() {
 		this.help = new JMenu("Help");
 		this.add(help);
-		this.initDescription();
-		this.initSupport();
-		//this.initDevelopedBy();
-		
-		
-		JMenuItem devTeam = new JMenuItem("Development Team");
-		
-		ActionListener actListenerTeam = new ActionListener() {
+
+		// Init Game Instruction
+		JMenuItem instruct = new JMenuItem("Game Instruction");
+		ActionListener actListenerInstruct = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AboutDialog dlg = new AboutDialog(actController.getUIInstance(), "Development Team", "<html>This game was developed through a case study of the Cooperative State University of Mannheim <br> by Jana Keim, Erol Gül and Max Lührig.</html>");
+				AboutDialog dlgInstr = new AboutDialog(actController.getUIInstance(), "Game Instruction",
+										"<html>'Captain Morgan' is a variant of the classic game Battleship. <br>The target of the game is to destroy all enemy ships.<br>"+
+												"Left up you can see your own battlefield. Right down you can see the enemy.<br><br>"+
+												
+												"Initialisation:<br>"+
+												"Before game begins, you have to set your ship. On the right side you see your ships.<br>"+
+												"Click there at one of your ships. If you move the mouse over your battlefield you see the shadow of the ship.<br>"+
+												"With right-mouse-click you can change the alignment. Choose your favoured position and confirm with left-mouse-click.<br>"+
+												"You can set each ship one time. The number of squares for each ship is determined by the type of the ship.<br>"+
+												"The ships cannot overlap.<br><br>"+
+												
+												"Playing:<br>"+
+												"If it´s your turn click on a square of the enemy battlefield, where you want to shoot.<br>"+
+												"If you hit an enemy ship the square will be colored red, if not white.<br>"+
+												"If you hit you can shoot again.<br><br>"+
+												
+												"End:<br>"+
+												"The game is finished if someone destroys all enemy ships.<br><br>"+
+												
+												"Feature:<br>"+
+												"If you think your game partner is fallen asleep,<br>"+
+												"you can wake him up with the 'toggle' button on the left side. ;)<br></html>");
 			}
 		};
+		instruct.addActionListener(actListenerInstruct);
+		this.help.add(instruct);
 		
+		
+		// Init support link
+		JMenuItem devSupport = new JMenuItem("Support");
+		ActionListener actListenerSupport = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openURL("www.battleship.bymaxe.de");  // if clicked on menu item "Support" this URL will be opened in default browser
+			}
+		};
+		devSupport.addActionListener(actListenerSupport);
+		this.help.add(devSupport);
+		
+		
+		// Init Development Team
+		JMenuItem devTeam = new JMenuItem("Development Team");
+		ActionListener actListenerTeam = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AboutDialog dlg = new AboutDialog(actController.getUIInstance(), "Development Team", "<html><br>This game was developed through a case study"+
+																									 " of the Cooperative State University of Mannheim <br>"+
+																									 "by Jana Keim, Erol Gül and Max Lührig.<br><br></html>");
+			}
+		};		
 		devTeam.addActionListener(actListenerTeam);
-		
 		this.help.add(devTeam);
 		
 		
-		
 	}
 	
-	private void initDescription() {
-		this.description = new JMenu("Description");
-		
-		JLabel d = new JLabel();
-		d.setFont(font);
-		d.setText(															"<html>	Many students are familiar with the childhood game Battleship." +
-																			"This is a electronic version of this game which is designd and implemented" +
-																			"for two players in a network." +
-																			"In focus are the Cooperative State students ." +
-																			"</html>");
-		d.setPreferredSize(dim);
-		d.setMaximumSize(dim);
 
-		this.description.add(d);
-		
-		this.help.add(this.description);
-	}
-	
-	private void initSupport() {
-		this.support = new JMenu("Support");
-		
-		JLabel d = new JLabel();
-		d.setFont(font);
-		d.setText(															"<html>	bla bla line 1 " +
-																			"<br>	bla bla line 1 " +
-																			"<br>	bla bla line 2 " +
-																			"<br>	bla bla line 3 " +
-																			"</html>");
-		d.setPreferredSize(dim);
-		d.setMaximumSize(dim);
-		
-		this.support.add(d);
-		
-		this.help.add(this.support);
-	}
-	
-	private void initDevelopedBy() {
-		/*this.developedBy = new JMenu("Developed By");
-		
-		JLabel d = new JLabel();
-		d.setFont(font);
-		d.setText(															"<html>	Many students are familiar with the childhood game Battleship. <br> " +
-																			"<br>	This is a electronic version of this game which is designd and implemented" +
-																			"<br>	for two players in a network." +
-																			"<br>	In focus are the Cooperative State students ." +
-																			"</html>");
-		d.setPreferredSize(dim);
-		d.setMaximumSize(dim);
-		
-		
-		this.developedBy.add(d);
-		
-		this.help.add(this.developedBy); */
-	}
 	
 	/*
 	 * create item option with other items
@@ -247,6 +234,43 @@ public class Menu extends JMenuBar {
 	
 	public void enableNewGame() {
 		this.newGame.setEnabled(true);
+	}
+	
+	
+	// open URL in default browser 
+	public void openURL(String url) {
+		
+		final String errMsg = "Error attempting to launch web browser";
+		String osName = System.getProperty("os.name");
+		try {
+			if (osName.startsWith("Mac OS")) {
+				Class fileMgr = Class.forName("com.apple.eio.FileManager");
+				Method openURL = fileMgr.getDeclaredMethod("openURL",
+						new Class[] {String.class});
+				openURL.invoke(null, new Object[] {url});
+			}
+			else if (osName.startsWith("Windows"))
+				Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+			else { //assume Unix or Linux
+				String[] browsers = {
+						"firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape" };
+				String browser = null;
+				for (int count = 0; count < browsers.length && browser == null; count++)
+					if (Runtime.getRuntime().exec(
+							new String[] {"which", browsers[count]}).waitFor() == 0)
+						browser = browsers[count];
+				if (browser == null)
+					throw new Exception("Could not find web browser");
+				else
+					Runtime.getRuntime().exec(new String[] {browser, url});
+			}
+		}
+		catch (Exception e) {
+//			JOptionPane.showMessageDialog(null, errMsg + ":\n" + e.getLocalizedMessage());
+			AboutDialog dlgSupport = new AboutDialog(actController.getUIInstance(), "Support", 	"<html> Couldn't find web browser!"+ 
+																								"<br> Please start your browser and type in the following URL:"+
+																								"<br> www.battleship.bymaxe.de</html>");
+		}
 	}
 
 

@@ -34,6 +34,7 @@ public class ActionController {
 	private Thread clientThread;
 	private Thread serverThread;
 
+
 	private String currentPlayerName;
 
 	private Player local;
@@ -42,6 +43,7 @@ public class ActionController {
 	private String ipAddress;
 
 	private BattleShipGame bsg;
+	
 
 	/*
 	 * ActionContoller constructor
@@ -509,6 +511,8 @@ public class ActionController {
 			break;
 		}
 	}
+	
+
 
 	/*
 	 * handle all exceptions that occurres while client is running
@@ -681,6 +685,7 @@ public class ActionController {
 		// if ready button
 		if (button.getName().equals("toggle")) {
 			// this.transmitNewGame();
+			
 
 			Action transmitAction = null;
 			ActionEvent rr_event = null;
